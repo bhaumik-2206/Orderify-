@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form } from 'formik'; // Remove Field and ErrorMessage
 import { validationSchema } from './Validation';
 import CommonInput from './CommonInput';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const Registration = () => {
+    let [stopApi,SetStopApi] = useState(true);
+    const navigate = useNavigate(); 
     const initialValues = {
         user_fname: '',
         user_lname: '',
@@ -31,9 +36,15 @@ const Registration = () => {
                 body: JSON.stringify(postData)
             });
             let result = await response.json();
-            console.log(result);
+            SetStopApi(true)
+            if(result.status === 200){
+                toast.success("Registration Successfully");
+                navigate("/logIn");
+            }else{
+                toast.error(result.message)
+            }
         } catch (error) {
-
+            console.log(error)
         }
         console.log(postData);
         console.log(values);
@@ -51,7 +62,12 @@ const Registration = () => {
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
+                    onSubmit={(values)=>{
+                        if(stopApi){
+                            handleSubmit(values)
+                            SetStopApi(false)
+                        }
+                    }}
                 >
                     {formik => (
                         <Form className="space-y-6">
@@ -75,6 +91,7 @@ const Registration = () => {
                     )}
                 </Formik>
             </div>
+            <p className="text-gray-500 text-md">Already Register? <Link to="/login" className="text-blue-500 hover:text-blue-600">Login</Link></p>
         </div>
     );
 };
