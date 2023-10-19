@@ -7,6 +7,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route index element={<LogIn />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/register" element={<Registration />} />
       </Routes>
