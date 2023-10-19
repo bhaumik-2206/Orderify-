@@ -2,18 +2,40 @@ import { Formik } from 'formik';
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import logo from "../../LOGO.png"
+import { toast } from 'react-toastify';
+import { validationSchema } from './Validation';
 
 const LogIn = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (values, action) => {
-        console.log(values)
+        try {
+            let response = await fetch(`https://orderify-qebp.onrender.com/login`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(values)
+            });
+            let result = await response.json();
+            console.log(result);
+            if (result.status === 200) {
+                toast.success("Logged in successfully");
+            } else {
+                toast.error(result.message);
+            }
+        } catch (error) {
+            console.log("ERROR: " + error);
+            toast.warning("ERROR");
+        }
     }
+
 
     return (
         <Formik
-            initialValues={{ email: "", password: "" }}
+            initialValues={{ user_email: "", user_pass: "" }}
             onSubmit={handleSubmit}
+            validationSchema={validationSchema}
         >
             {props => (
                 <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -34,19 +56,19 @@ const LogIn = () => {
                                 <label htmlFor="email" className="block text-lg font-medium leading-6 text-gray-900">
                                     Email address
                                 </label>
-                                <input id="email" name="email" type="email"
+                                <input id="email" name="user_email" type="email"
                                     value={props.values.email}
                                     onChange={props.handleChange}
                                     className="mt-3 ps-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
                                 />
                             </div>
-                            <div className='relative'>
+                            <div style={{ marginTop: "10px" }} className='relative'>
                                 <label htmlFor="password" className="block text-lg font-medium leading-6 text-gray-900">
                                     Password</label>
-                                <input id="password" name="password" type={showPassword ? "text" : "password"}
-                                value={props.values.password}
-                                onChange={props.handleChange}
-                                className="mt-3 ps-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
+                                <input id="password" name="user_pass" type={showPassword ? "text" : "password"}
+                                    value={props.values.password}
+                                    onChange={props.handleChange}
+                                    className="mt-3 ps-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
                                 />
                                 {showPassword ? (<i className="fa-solid fa-eye absolute right-4 top-10 text-xl cursor-pointer" onClick={() => setShowPassword(pre => !pre)}></i>) : (
                                     <i className="fa-solid fa-eye-slash absolute right-4 top-10 text-xl cursor-pointer" onClick={() => setShowPassword(pre => !pre)}></i>)
