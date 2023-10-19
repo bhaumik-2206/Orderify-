@@ -1,22 +1,41 @@
 import React from 'react';
 import { Formik, Form } from 'formik'; // Remove Field and ErrorMessage
-import * as Yup from 'yup';
 import { validationSchema } from './Validation';
 import CommonInput from './CommonInput';
 
 const Registration = () => {
     const initialValues = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
+        user_fname: '',
+        user_lname: '',
+        user_email: '',
+        user_pass: '',
+        user_confirmPassword: '',
         user_phone: '',
     };
 
 
-    const handleSubmit = (values) => {
-        // You can handle form submission logic here
+    const handleSubmit = async (values) => {
+        const postData = {
+            user_fname: values.user_fname,
+            user_lname: values.user_lname,
+            user_email: values.user_email,
+            user_pass: values.user_pass,
+            user_phone: String(values.user_phone),
+        };
+        try {
+            let response = await fetch("https://orderify-qebp.onrender.com/register", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify(postData)
+            });
+            let result = await response.json();
+            console.log(result);
+        } catch (error) {
+
+        }
+        console.log(postData);
         console.log(values);
     };
 
@@ -28,7 +47,7 @@ const Registration = () => {
                 </h2>
             </div>
 
-            <div className="mt-7 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
@@ -37,13 +56,13 @@ const Registration = () => {
                     {formik => (
                         <Form className="space-y-6">
                             <div className="flex justify-between">
-                                <CommonInput name="firstName" label="First Name" type="text" formik={formik} />
-                                <CommonInput name="lastName" label="Last Name" type="text" formik={formik} />
+                                <CommonInput name="user_fname" label="First Name" type="text" formik={formik} />
+                                <CommonInput name="user_lname" label="Last Name" type="text" formik={formik} />
                             </div>
                             <CommonInput name="user_phone" label="Mobile Number" type="number" formik={formik} />
-                            <CommonInput name="email" label="Email address" type="email" formik={formik} />
-                            <CommonInput name="password" label="Password" type="password" formik={formik} />
-                            <CommonInput name="confirmPassword" label="Confirm Password" type="password" formik={formik} />
+                            <CommonInput name="user_email" label="Email address" type="email" formik={formik} />
+                            <CommonInput name="user_pass" label="Password" type="password" formik={formik} />
+                            <CommonInput name="user_confirmPassword" label="Confirm Password" type="password" formik={formik} />
                             <div>
                                 <button
                                     type="submit"
