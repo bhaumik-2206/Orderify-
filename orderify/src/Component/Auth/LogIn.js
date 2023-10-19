@@ -1,12 +1,13 @@
 import { Formik } from 'formik';
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from "../../LOGO.png"
 import { toast } from 'react-toastify';
-import { validationSchema } from './Validation';
 
 const LogIn = () => {
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [stopAPIRequest, setStopAPIRequest] = useState(true);
 
     const handleSubmit = async (values, action) => {
         try {
@@ -20,10 +21,13 @@ const LogIn = () => {
             let result = await response.json();
             console.log(result);
             if (result.status === 200) {
+                localStorage.setItem("auth", result.token)
+                navigate("/user");
                 toast.success("Logged in successfully");
             } else {
                 toast.error(result.message);
             }
+            setStopAPIRequest(true);
         } catch (error) {
             console.log("ERROR: " + error);
             toast.warning("ERROR");
@@ -34,8 +38,12 @@ const LogIn = () => {
     return (
         <Formik
             initialValues={{ user_email: "", user_pass: "" }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
+            onSubmit={(values) => {
+                if (stopAPIRequest) {
+                    handleSubmit(values);
+                    setStopAPIRequest(false);
+                }
+            }}
         >
             {props => (
                 <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
