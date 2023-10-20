@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Formik, Form } from 'formik'; // Remove Field and ErrorMessage
+import { Formik, Form } from 'formik';
 import { validationSchema } from './Validation';
 import CommonInput from './CommonInput';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
+import fetchApi from '../../util/apiService';
 
 const Registration = () => {
     let [stopApi, SetStopApi] = useState(true);
@@ -27,25 +28,30 @@ const Registration = () => {
             user_pass: values.user_pass,
             user_phone: String(values.user_phone),
         };
-        try {
-            let response = await fetch("https://orderify-qebp.onrender.com/register", {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json"
-                },
-                body: JSON.stringify(postData)
-            });
-            let result = await response.json();
-            SetStopApi(true)
-            if (result.status === 200) {
-                toast.success("Registration Successfully");
-                navigate("/logIn");
-            } else {
-                toast.error(result.message)
-            }
-        } catch (error) {
-            console.log(error)
+        let a = await fetchApi("register", postData);
+        console.log(a)
+        if (a.status === 200) {
+            navigate("/login");
         }
+        // try {
+        //     let response = await fetch("https://orderify-qebp.onrender.com/register", {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-type": "application/json"
+        //         },
+        //         body: JSON.stringify(postData)
+        //     });
+        //     let result = await response.json();
+        //     SetStopApi(true)
+        //     if (result.status === 200) {
+        //         toast.success("Registration Successfully");
+        //         navigate("/logIn");
+        //     } else {
+        //         toast.error(result.message)
+        //     }
+        // } catch (error) {
+        //     console.log(error)
+        // }
     };
 
     return (
@@ -61,10 +67,7 @@ const Registration = () => {
                     initialValues={initialValues}
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
-                        if (stopApi) {
-                            handleSubmit(values)
-                            SetStopApi(false)
-                        }
+                        handleSubmit(values)
                     }}
                 >
                     {formik => (
