@@ -3,7 +3,7 @@ import * as Yup from "yup";
 export const validationSchema = Yup.object().shape({
     user_fname: Yup.string().required('First Name is required'),
     user_lname: Yup.string().required('Last Name is required'),
-    user_phone: Yup.string()
+    user_phone: Yup.number()
         .test(
             "is-ten-digits",
             "Number must be exactly 10 digits",
