@@ -18,6 +18,8 @@ export const fetchApi = async (endpoint, data) => {
             } else {
                 toast.error(result.message);
             }
+        }else{
+            toast.error(result.message);
         }
         return result;
     } catch (error) {

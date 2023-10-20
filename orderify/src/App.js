@@ -5,6 +5,7 @@ import Registration from './Component/Auth/Registration';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Home from './Component/User Page/Home/Home';
+import Dashboard from './Component/User Page/Dashboard';
 
 function App() {
   return (
@@ -14,7 +15,12 @@ function App() {
         <Route index element={<LogIn />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/register" element={<Registration />} />
-        <Route path="/home" element={<Home />} />
+        <Route path='/' element={<Dashboard />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/order" element={<Home />} />
+          <Route path="/history" element={<Home />} />
+          <Route path="/profile" element={<Home />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
