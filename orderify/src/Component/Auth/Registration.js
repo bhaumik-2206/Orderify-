@@ -5,7 +5,7 @@ import CommonInput from './CommonInput';
 // import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
-import fetchApi from '../../util/apiService';
+import fetchApi from '../../util/helper';
 
 const Registration = () => {
     let [stopApi, SetStopApi] = useState(true);
@@ -33,25 +33,7 @@ const Registration = () => {
         if (a.status === 200) {
             navigate("/login");
         }
-        // try {
-        //     let response = await fetch("https://orderify-qebp.onrender.com/register", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-type": "application/json"
-        //         },
-        //         body: JSON.stringify(postData)
-        //     });
-        //     let result = await response.json();
-        //     SetStopApi(true)
-        //     if (result.status === 200) {
-        //         toast.success("Registration Successfully");
-        //         navigate("/logIn");
-        //     } else {
-        //         toast.error(result.message)
-        //     }
-        // } catch (error) {
-        //     console.log(error)
-        // }
+        SetStopApi(true);
     };
 
     return (
@@ -67,7 +49,10 @@ const Registration = () => {
                     initialValues={initialValues}
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
-                        handleSubmit(values)
+                        if (stopApi) {
+                            handleSubmit(values)
+                            SetStopApi(false);
+                        }
                     }}
                 >
                     {formik => (

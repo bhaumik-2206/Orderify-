@@ -9,12 +9,12 @@ import Home from './Component/User Page/Home/Home';
 function App() {
   return (
     <BrowserRouter>
-      <ToastContainer />
+      <ToastContainer pauseOnHover={false} autoClose={2000} />
       <Routes>
         <Route index element={<LogIn />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/register" element={<Registration />} />
-        <Route path="/user" element={<Home />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

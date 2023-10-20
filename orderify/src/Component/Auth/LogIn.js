@@ -2,7 +2,8 @@ import { Formik } from 'formik';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import logo from "../../LOGO.png"
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import fetchApi from '../../util/helper';
 
 const LogIn = () => {
     const navigate = useNavigate();
@@ -10,28 +11,14 @@ const LogIn = () => {
     const [stopAPIRequest, setStopAPIRequest] = useState(true);
 
     const handleSubmit = async (values, action) => {
-        try {
-            let response = await fetch(`https://orderify-qebp.onrender.com/login`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(values)
-            });
-            let result = await response.json();
-            console.log(result);
-            if (result.status === 200) {
-                localStorage.setItem("auth", result.token)
-                navigate("/user");
-                toast.success("Logged in successfully");
-            } else {
-                toast.error(result.message);
-            }
-            setStopAPIRequest(true);
-        } catch (error) {
-            console.log("ERROR: " + error);
-            toast.warning("ERROR");
+        let a = await fetchApi("login", values);
+        console.log(a);
+        if (a.status === 200) {
+            navigate("/home");
+            localStorage.setItem("auth", a.token);
+            localStorage.setItem("userData", JSON.stringify(a.data));
         }
+        setStopAPIRequest(true);
     }
 
 
