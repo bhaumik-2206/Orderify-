@@ -39,7 +39,7 @@ const LogIn = () => {
                             <img className="h-10" alt="Your Company"
                                 src={logo}
                             />
-                            <p className='text-3xl font-bold ms-2'>Orderify</p>
+                             <p className='text-3xl font-bold ms-0.5 text-amber-600 pt-1'>rderify</p>
                         </span>
                         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                             Sign in to your account

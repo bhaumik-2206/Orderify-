@@ -18,7 +18,7 @@ export const fetchApi = async (endpoint, data) => {
             } else {
                 toast.error(result.message);
             }
-        }else{
+        } else {
             toast.error(result.message);
         }
         return result;
