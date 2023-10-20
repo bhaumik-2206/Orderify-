@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
 const Registration = () => {
-    let [stopApi,SetStopApi] = useState(true);
-    const navigate = useNavigate(); 
+    let [stopApi, SetStopApi] = useState(true);
+    const navigate = useNavigate();
     const initialValues = {
         user_fname: '',
         user_lname: '',
@@ -37,17 +37,15 @@ const Registration = () => {
             });
             let result = await response.json();
             SetStopApi(true)
-            if(result.status === 200){
+            if (result.status === 200) {
                 toast.success("Registration Successfully");
                 navigate("/logIn");
-            }else{
+            } else {
                 toast.error(result.message)
             }
         } catch (error) {
             console.log(error)
         }
-        console.log(postData);
-        console.log(values);
     };
 
     return (
@@ -62,8 +60,8 @@ const Registration = () => {
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
-                    onSubmit={(values)=>{
-                        if(stopApi){
+                    onSubmit={(values) => {
+                        if (stopApi) {
                             handleSubmit(values)
                             SetStopApi(false)
                         }
@@ -90,8 +88,8 @@ const Registration = () => {
                         </Form>
                     )}
                 </Formik>
+                <p className="text-gray-500 text-md">Already Register? <Link to="/login" className="text-blue-500 hover:text-blue-600">Login</Link></p>
             </div>
-            <p className="text-gray-500 text-md">Already Register? <Link to="/login" className="text-blue-500 hover:text-blue-600">Login</Link></p>
         </div>
     );
 };
