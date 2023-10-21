@@ -79,7 +79,7 @@ const Registration = () => {
                         <p className="text-gray-500 text-md text-center p-2">Already Register? <Link to="/login" className="text-blue-500 hover:text-blue-600">Login</Link></p>
                     </div>
                 </div>
-                <div className='lg:w-4/6 hidden lg:block  '>
+                <div className='lg:w-4/6 hidden lg:block'>
                     <img src={img} alt="" className='w-full h-full object-cover object-left' />
                 </div>
             </div>
