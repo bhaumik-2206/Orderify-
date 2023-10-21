@@ -37,10 +37,10 @@ const Registration = () => {
     };
 
     return (
-        <div className='flex h-screen'>
+        <div className='flex flex-col lg:flex-row h-screen'>
 
 
-            <div className="flex min-h-full  flex-1 flex-col justify-center px-6 py-1 lg:px-8 p-4 w-2/6 ">
+            <div className="lg:w-2/6 flex-1 flex flex-col justify-center px-6 py-1 lg:px-8 p-4 ">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                         Registration Form
@@ -81,7 +81,7 @@ const Registration = () => {
                     <p className="text-gray-500 text-md text-center p-2">Already Register? <Link to="/login" className="text-blue-500 hover:text-blue-600">Login</Link></p>
                 </div>
             </div>
-            <div className=' w-2/3 '>
+            <div className='lg:w-4/6'>
                 <img src={img} alt="" className='w-full h-full object-cover object-left' />
             </div>
         </div>

@@ -21,10 +21,9 @@ const CommonInput = ({ name, label, type, formik }) => {
             {touched[name] && errors[name] && (
                 <p className="text-md text-red-600">{errors[name]}</p>
             )}
-            {type === "password" ? (
-                show ? (<i className="fa-solid fa-eye absolute right-4 top-8 text-xl cursor-pointer" onClick={() => setShow(pre => !pre)}></i>) : (
-                    <i className="fa-solid fa-eye-slash absolute right-4 top-8 text-xl cursor-pointer" onClick={() => setShow(pre => !pre)}></i>)
-            ) : (false)}
+            {type === "password" && (
+                <i className={`fa-solid ${show ? 'fa-eye' : 'fa-eye-slash'} absolute right-4 top-8 text-xl cursor-pointer`} onClick={() => setShow(pre => !pre)}></i>   
+            )}
         </div>
     );
 };
