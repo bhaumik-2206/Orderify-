@@ -9,6 +9,7 @@ import Dashboard from './Component/User Page/Dashboard';
 import ProtectedHome from './Component/Private/ProtectedHome';
 import ProtectedLogIn from './Component/Private/ProtectedLogIn';
 import Auth from './Component/Auth/Auth';
+import Profile from './Component/User Page/profile/Profile';
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/order" element={<Home />} />
           <Route path="/history" element={<Home />} />
-          <Route path="/profile" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -66,12 +66,12 @@ const Registration = () => {
                                     <CommonInput name="user_pass" label="Password" type="password" formik={formik} />
                                     <CommonInput name="user_confirmPassword" label="Confirm Password" type="password" formik={formik} />
                                     <div>
-                                        <button
-                                            type="submit"
-                                            className="mt-2 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                        >
-                                            Sign up
-                                        </button>
+                                    <button type="submit"
+                                        className="mt-3 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-md font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                    >
+                                        {stopApi ? "" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
+                                        {stopApi ? "Sign up" : ""}
+                                    </button>
                                     </div>
                                 </Form>
                             )}

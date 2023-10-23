@@ -4,10 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from "../../LOGO.png"
 import img from "../../register.jpg"
 import fetchApi from '../../util/helper';
+import CommonInput from './CommonInput';
+import { validationSchema } from './Validation';
 
 const LogIn = () => {
     const navigate = useNavigate();
-    const [showPassword, setShowPassword] = useState(false);
     const [stopAPIRequest, setStopAPIRequest] = useState(true);
 
     const handleSubmit = async (values, action) => {
@@ -25,6 +26,7 @@ const LogIn = () => {
     return (
         <Formik
             initialValues={{ user_email: "", user_pass: "" }}
+            // validationSchema={validationSchema}
             onSubmit={(values) => {
                 if (stopAPIRequest) {
                     handleSubmit(values);
@@ -32,7 +34,7 @@ const LogIn = () => {
                 }
             }}
         >
-            {props => (
+            {formik => (
                 <div className='flex flex-col lg:flex-row h-screen'>
                     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -47,36 +49,17 @@ const LogIn = () => {
                             </h2>
                         </div>
                         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                            <form className="space-y-6" onSubmit={props.handleSubmit}>
-                                <div>
-                                    <label htmlFor="email" className="block text-lg font-medium leading-6 text-gray-900">
-                                        Email address
-                                    </label>
-                                    <input id="email" name="user_email" type="email"
-                                        value={props.values.email}
-                                        onChange={props.handleChange}
-                                        className="mt-3 ps-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
-                                    />
-                                </div>
-                                <div style={{ marginTop: "10px" }} className='relative'>
-                                    <div className='flex justify-between align-middle'>
-                                        <label htmlFor="password" className="block text-lg font-medium leading-6 text-gray-900">
-                                            Password</label>
-                                            {/* <p className='text-sm'>forgot Password</p> */}
-                                    </div>
-                                    <input id="password" name="user_pass" type={showPassword ? "text" : "password"}
-                                        value={props.values.password}
-                                        onChange={props.handleChange}
-                                        className="mt-3 ps-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
-                                    />
-                                    {showPassword ? (<i className="fa-solid fa-eye absolute right-4 top-10 text-xl cursor-pointer" onClick={() => setShowPassword(pre => !pre)}></i>) : (
-                                        <i className="fa-solid fa-eye-slash absolute right-4 top-10 text-xl cursor-pointer" onClick={() => setShowPassword(pre => !pre)}></i>)
-                                    }
-                                </div>
+                            <form className="space-y-6" onSubmit={formik.handleSubmit}>
+                                <CommonInput name="user_email" label="Email" type="email" formik={formik} />
+                                <CommonInput name="user_pass" label="Password" type="password" formik={formik} />
+
                                 <div>
                                     <button type="submit"
                                         className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-md font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                    >Sign in</button>
+                                    >
+                                        {stopAPIRequest ? "" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
+                                        {stopAPIRequest ? "Sign in" : ""}
+                                    </button>
                                 </div>
                                 <div className="mt-4 text-center">
                                     <p className="text-gray-500 text-md">Don't have an account? <Link to="/register" className="text-blue-500 hover:text-blue-600">Register</Link></p>
@@ -90,7 +73,7 @@ const LogIn = () => {
                 </div>
             )
             }
-        </Formik >
+        </Formik>
     )
 }
 

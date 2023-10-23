@@ -7,6 +7,7 @@ const ProtectedHome = ({ Component }) => {
     useEffect(() => {
         let auth = localStorage.getItem("auth");
         setAuth(auth);
+        console.log(auth)
         if (!auth) {
             navigate("/logIn");
         }
