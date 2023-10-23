@@ -4,7 +4,7 @@ const Home = () => {
     let data = JSON.parse(localStorage.getItem("userData"));
     return (
         <div className='text-5xl text-center font-bold'>
-            Welcome {data.user_fname} {data.user_lname}
+            Welcome {data.fullName}
         </div>
     )
 }
