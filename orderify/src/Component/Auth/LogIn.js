@@ -5,19 +5,19 @@ import logo from "../../LOGO.png"
 import img from "../../register.jpg"
 import fetchApi from '../../util/helper';
 import CommonInput from './CommonInput';
-import { validationSchema } from './Validation';
+import { LogInValidation } from './Validation';
 
 const LogIn = () => {
     const navigate = useNavigate();
     const [stopAPIRequest, setStopAPIRequest] = useState(true);
 
     const handleSubmit = async (values, action) => {
-        let a = await fetchApi("login", values);
-        console.log(a);
-        if (a.status === 200) {
+        let response = await fetchApi("login", values);
+        console.log(response);
+        if (response.status === 200) {
             navigate("/home");
-            localStorage.setItem("auth", a.token);
-            localStorage.setItem("userData", JSON.stringify({ fullName: a.data.user_fname + " " + a.data.user_lname }));
+            localStorage.setItem("auth", response.token);
+            localStorage.setItem("userData", JSON.stringify(response));
         }
         setStopAPIRequest(true);
     }
@@ -26,7 +26,7 @@ const LogIn = () => {
     return (
         <Formik
             initialValues={{ user_email: "", user_pass: "" }}
-            // validationSchema={validationSchema}
+            validationSchema={LogInValidation}
             onSubmit={(values) => {
                 if (stopAPIRequest) {
                     handleSubmit(values);

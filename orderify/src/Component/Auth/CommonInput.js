@@ -5,7 +5,7 @@ const CommonInput = ({ name, label, type, formik }) => {
     const { handleChange, handleBlur, values, errors, touched, } = formik;
 
     return (
-        <div className="p-0.5 relative"  style={{ marginTop: "10px" }}>
+        <div className="p-0.5 relative" style={{ marginTop: "10px" }}>
             <label htmlFor={name} className="block text-lg font-medium leading-5 text-gray-700 p-0.5">
                 {label}
             </label>
@@ -22,7 +22,7 @@ const CommonInput = ({ name, label, type, formik }) => {
                 <p className="text-md text-red-600">{errors[name]}</p>
             )}
             {type === "password" && (
-                <i className={`fa-solid ${show ? 'fa-eye' : 'fa-eye-slash'} absolute right-4 top-8 text-xl cursor-pointer`} onClick={() => setShow(pre => !pre)}></i>   
+                <i className={`fa-solid ${show ? 'fa-eye' : 'fa-eye-slash'} absolute right-4 top-8 text-xl cursor-pointer`} onClick={() => setShow(pre => !pre)}></i>
             )}
         </div>
     );
