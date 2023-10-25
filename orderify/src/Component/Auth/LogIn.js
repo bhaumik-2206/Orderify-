@@ -1,42 +1,34 @@
 import { Formik } from 'formik';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import logo from "../../LOGO.png"
-import img from "../../register.jpg"
 import fetchApi from '../../util/helper';
 import CommonInput from './CommonInput';
+import { API_ENDPOINTS } from '../../config/api';
+import { toast } from 'react-toastify';
 import { LogInValidation } from '../../config/Validation';
 
 const LogIn = () => {
     const navigate = useNavigate();
     const [stopAPIRequest, setStopAPIRequest] = useState(true);
 
-    // const handleSubmit = async (values, action) => {
-    //     let response = await fetchApi("login", values);
-    //     console.log(response);
-    //     if (response.status === 200) {
-    //         navigate("/home");
-    //         localStorage.setItem("auth", response.token);
-    //         localStorage.setItem("userData", JSON.stringify(response));
-    //     }
-    //     setStopAPIRequest(true);
-    // }    
-    
     const handleSubmit = async (values) => {
         try {
-          const response = await fetchApi("login",'POST', values);
-          if (response.status === 200) {
-            localStorage.setItem("auth", response.token);
-            localStorage.setItem("userData", JSON.stringify(response.data));
-            navigate("/home");
-          }
+            const response = await fetchApi({ url: API_ENDPOINTS.LOGIN, method: 'POST', data: values });
+            if (response.status === 200) {
+                localStorage.setItem("auth", response.token);
+                localStorage.setItem("userData", JSON.stringify(response.data));
+                navigate("/home");
+                toast.success("Log In Successfully");
+            } else {
+                toast.error(response.message);
+            }
         } catch (error) {
-          console.log( error);
+            toast.error("Error To Fetch API");
         } finally {
-          setStopAPIRequest(true);
+            setStopAPIRequest(true);
         }
-      };
-      
+    };
+
 
     return (
         <Formik
@@ -55,7 +47,7 @@ const LogIn = () => {
                         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                             <span className='flex mb-10 justify-center align-baseline'>
                                 <img className="h-10" alt="Your Company"
-                                    src={logo}
+                                    src="/LOGO.png"
                                 />
                                 <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1'>rderify</p>
                             </span>
@@ -83,7 +75,7 @@ const LogIn = () => {
                         </div>
                     </div>
                     <div className='lg:w-4/6 hidden lg:block'>
-                        <img src={img} alt="" className='w-full h-full object-cover object-left' />
+                        <img src="register.jpg" alt="" className='w-full h-full object-cover object-left' />
                     </div>
                 </div>
             )

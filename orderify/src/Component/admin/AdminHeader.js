@@ -1,4 +1,3 @@
-import logo from "../../LOGO.png"
 import { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -33,7 +32,7 @@ export default function AdminHeader() {
                         <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                             <div>
                                 <div onClick={() => navigate("/home")} className='cursor-pointer flex justify-center align-baseline'>
-                                    <img className="h-10" alt="Your Company" src={logo} />
+                                    <img className="h-10" alt="Your Company" src="LOGO.png" />
                                     <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1'>rderify</p>
                                 </div>
                             </div>

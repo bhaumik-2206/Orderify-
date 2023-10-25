@@ -18,7 +18,7 @@ const Profile = () => {
 
     return (
         <div className='w-10/12 mx-auto'>
-            <div className="bg-gray-100 my-4 rounded-lg border-black border-2 shadow-lg">
+            <div className="bg-gray-700 text-white my-4 rounded-lg">
                 <div className='w-full flex border-b-2 border-black p-3 justify-between align-middle'>
                     <div>
                         <h1 className='ps-3 text-2xl font-bold'>Primary Details</h1>

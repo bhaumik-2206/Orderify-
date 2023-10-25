@@ -5,9 +5,9 @@ import CommonInput from './CommonInput';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import fetchApi from '../../util/helper';
-import img from '../../register.jpg'
 import { initialRegistrationValue } from '../../config/InitialValue';
 import { toast } from 'react-toastify';
+import { API_ENDPOINTS } from '../../config/api';
 
 const Registration = () => {
     let [stopApi, SetStopApi] = useState(true);
@@ -22,17 +22,17 @@ const Registration = () => {
             user_phone: values.user_phone,
         };
         try {
-            const response = await fetchApi("register", 'POST', postData);
+            const response = await fetchApi({ url: API_ENDPOINTS.REGISTER, method: 'POST', data: postData });
             if (response.status === 200) {
                 localStorage.setItem("auth", response.token);
                 localStorage.setItem("userData", JSON.stringify(response.data));
                 navigate("/home");
-                toast.error("registration Successfully");
+                toast.success("registration Successfully");
             } else {
                 toast.error(response.message);
             }
         } catch (error) {
-            console.log(error);
+            toast.error("Error To Fetch API");
         } finally {
             SetStopApi(true);
         }
@@ -82,7 +82,7 @@ const Registration = () => {
                 </div>
             </div>
             <div className='lg:w-4/6 hidden lg:block'>
-                <img src={img} alt="" className='w-full h-full object-cover object-left' />
+                <img src="register.jpg" alt="" className='w-full h-full object-cover object-left' />
             </div>
         </div>
     );
