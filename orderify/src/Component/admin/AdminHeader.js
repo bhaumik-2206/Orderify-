@@ -1,16 +1,17 @@
-import logo from "../../../LOGO.png"
+import logo from "../../LOGO.png"
 import { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import LogOut from '../profile/LogOut';
+import { NavLink, useNavigate } from 'react-router-dom';
+import LogOut from '../User Page/profile/LogOut';
 
 const navigation = [
-    { name: 'Home', to: '/home', current: true },
+    { name: 'Dashboard', to: '/home', current: false },
     { name: 'Order', to: '/order', current: false },
+    { name: 'Payment', to: '/profile', current: false },
     { name: 'History', to: '/history', current: false },
 ]
 
-export default function Header() {
+export default function AdminHeader() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
@@ -23,7 +24,10 @@ export default function Header() {
                         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                             {/* Mobile menu button*/}
                             <button className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'>
-                                <i onClick={() => setOpen(!open)} className={`block px-2 text-lg text-white fa-solid ${open ? "fa-xmark" : "fa-bars"}`}></i>
+                                {open ?
+                                    (<i onClick={() => setOpen(!open)} className="block px-2 text-lg text-white fa-solid fa-xmark"></i>) :
+                                    (<i onClick={() => setOpen(!open)} className="block px-2 text-lg text-white fa-solid fa-bars"></i>)
+                                }
                             </button>
                         </div>
                         <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -44,11 +48,6 @@ export default function Header() {
                             </div>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                            <button type="button"
-                                className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                            >
-                                <i className="fa-solid fa-cart-shopping"></i>
-                            </button>
 
                             {/* Profile dropdown */}
                             <Menu as="div" className="relative ml-3">
@@ -59,31 +58,31 @@ export default function Header() {
                                 </div>
                                 <Transition
                                     as={Fragment}
-                                // enter="transition ease-out duration-100"
-                                // enterFrom="transform opacity-0 scale-95"
-                                // enterTo="transform opacity-100 scale-100"
-                                // leave="transition ease-in duration-75"
-                                // leaveFrom="transform opacity-100 scale-100"
-                                // leaveTo="transform opacity-0 scale-95"
                                 >
                                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <Menu.Item>
-                                            <Link
+                                            <NavLink
                                                 to="/profile"
-                                                className={`block px-4 py-2 text-sm text-gray-700 hover:bg-slate-200 bg-slate-50`}
-                                            >Your Profile</Link>
+                                                className={({ isActive }) =>
+                                                    `${isActive ? "bg-gray-100" : ""} block px-4 py-2 text-sm text-gray-700 hover:bg-slate-200`
+                                                }
+                                            >Your Profile</NavLink>
                                         </Menu.Item>
                                         <Menu.Item>
-                                            <Link
+                                            <NavLink
                                                 to="#"
-                                                className={`block px-4 py-2 text-sm text-gray-700 hover:bg-slate-200 bg-slate-50`}
-                                            >Change Password</Link>
+                                                className={({ isActive }) =>
+                                                    `${isActive ? "bg-gray-100" : ""} block px-4 py-2 text-sm text-gray-700 hover:bg-slate-200`
+                                                }
+                                            >Change Password</NavLink>
                                         </Menu.Item>
                                         <Menu.Item>
-                                            <Link
-                                                className={`block px-4 py-2 text-sm text-gray-700 hover:bg-slate-200 bg-slate-50`}
+                                            <NavLink
+                                                className={({ isActive }) =>
+                                                    `${isActive ? "bg-gray-100" : ""} block px-4 py-2 text-sm text-gray-700 hover:bg-slate-200`
+                                                }
                                                 onClick={() => setIsModalOpen(true)}
-                                            > Sign out</Link >
+                                            > Sign out</NavLink >
                                         </Menu.Item>
                                     </Menu.Items>
                                 </Transition>

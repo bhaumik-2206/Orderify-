@@ -1,7 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import LogIn from './Component/Auth/LogIn';
-import Registration from './Component/Auth/Registration';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Home from './Component/User Page/Home/Home';
@@ -10,6 +8,8 @@ import ProtectedHome from './Component/Private/ProtectedHome';
 import ProtectedLogIn from './Component/Private/ProtectedLogIn';
 import Auth from './Component/Auth/Auth';
 import Profile from './Component/User Page/profile/Profile';
+import LogIn from './Component/Auth/LogIn';
+import Registration from './Component/Auth/Registration';
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
       <Routes>
         {/* Log In Routes */}
         <Route path="/" element={<ProtectedLogIn Component={Auth} />}>
+          <Route index element={<LogIn />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/register" element={<Registration />} />
         </Route>

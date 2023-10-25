@@ -11,7 +11,7 @@ export const validationSchema = Yup.object({
         )
         .required("Number must be 10 digits"),
     user_email: Yup.string().email('Invalid email address').required('Email is required'),
-    user_pass: Yup.string().trim().matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*+=!])(?!.*\s).{8,}$/, "Enter Atleast 8n character,One Uppercase,Lowercase,Special Character,Number").required("Required"),
+    user_pass: Yup.string().trim().matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*+=!])(?!.*\s).{8,25}$/, "Password Contains 8-25 character,One Uppercase,Lowercase,Special Character,Number").required("Required"),
     user_confirmPassword: Yup.string()
         .oneOf([Yup.ref('user_pass'), null], 'Passwords must match')
         .required('Confirm Password is required'),
@@ -19,5 +19,5 @@ export const validationSchema = Yup.object({
 
 export const LogInValidation = Yup.object({
     user_email: Yup.string().email('Invalid email address').required('Email is required'),
-    user_pass: Yup.string().trim().matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*+=!])(?!.*\s).{8,}$/, "Enter Atleast 8n character,One Uppercase,Lowercase,Special Character,Number").required("Required"),
+    user_pass: Yup.string().trim().matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*+=!])(?!.*\s).{8,}$/, "Password Contains 8-25 character,One Uppercase,Lowercase,Special Character,Number").required("Required"),
 });

@@ -5,7 +5,7 @@ import logo from "../../LOGO.png"
 import img from "../../register.jpg"
 import fetchApi from '../../util/helper';
 import CommonInput from './CommonInput';
-import { LogInValidation } from './Validation';
+import { LogInValidation } from '../../config/Validation';
 
 const LogIn = () => {
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ const LogIn = () => {
           const response = await fetchApi("login",'POST', values);
           if (response.status === 200) {
             localStorage.setItem("auth", response.token);
-            localStorage.setItem("userData", JSON.stringify(response));
+            localStorage.setItem("userData", JSON.stringify(response.data));
             navigate("/home");
           }
         } catch (error) {

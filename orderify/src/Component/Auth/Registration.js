@@ -1,41 +1,17 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
-import { validationSchema } from './Validation';
+import { validationSchema } from '../../config/Validation';
 import CommonInput from './CommonInput';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import fetchApi from '../../util/helper';
 import img from '../../register.jpg'
+import { initialRegistrationValue } from '../../config/InitialValue';
+import { toast } from 'react-toastify';
 
 const Registration = () => {
     let [stopApi, SetStopApi] = useState(true);
     const navigate = useNavigate();
-    const initialValues = {
-        user_fname: '',
-        user_lname: '',
-        user_email: '',
-        user_pass: '',
-        user_confirmPassword: '',
-        user_phone: '',
-    };
-
-    // const handleSubmit = async (values) => {
-    //     const postData = {
-    //         user_fname: values.user_fname,
-    //         user_lname: values.user_lname,
-    //         user_email: values.user_email,
-    //         user_pass: values.user_pass,
-    //         user_phone: values.user_phone,
-    //     };
-    //     let response = await fetchApi("register",'POST', postData);
-    //     console.log(response)
-    //     if (response.status === 200) {
-    //         navigate("/home");
-    //         localStorage.setItem("auth", response.token);
-    //         localStorage.setItem("userData", JSON.stringify(response));
-    //     }
-    //     SetStopApi(true);
-    // };
 
     const handleSubmit = async (values) => {
         const postData = {
@@ -49,8 +25,11 @@ const Registration = () => {
             const response = await fetchApi("register", 'POST', postData);
             if (response.status === 200) {
                 localStorage.setItem("auth", response.token);
-                localStorage.setItem("userData", JSON.stringify(response));
+                localStorage.setItem("userData", JSON.stringify(response.data));
                 navigate("/home");
+                toast.error("registration Successfully");
+            } else {
+                toast.error(response.message);
             }
         } catch (error) {
             console.log(error);
@@ -69,7 +48,7 @@ const Registration = () => {
                 </div>
                 <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
                     <Formik
-                        initialValues={initialValues}
+                        initialValues={initialRegistrationValue}
                         validationSchema={validationSchema}
                         onSubmit={(values) => {
                             if (stopApi) {
@@ -92,8 +71,8 @@ const Registration = () => {
                                     <button type="submit"
                                         className="mt-3 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-md font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                     >
-                                        {stopApi ? "" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
-                                        {stopApi ? "Sign up" : ""}
+                                        {stopApi ? "Sign Up" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
+                                        {/* {stopApi ? "Sign up" : ""} */}
                                     </button>
                                 </div>
                             </Form>
