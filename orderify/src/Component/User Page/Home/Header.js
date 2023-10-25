@@ -3,6 +3,7 @@ import { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import LogOut from '../profile/LogOut';
+import Cart from "./Cart";
 
 const navigation = [
     { name: 'Home', to: '/home', current: true },
@@ -12,6 +13,7 @@ const navigation = [
 
 export default function Header() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCartModalShow, setIsCartModalShow] = useState(false);
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -45,10 +47,12 @@ export default function Header() {
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                             <button type="button"
+                                onClick={()=>setIsCartModalShow(pv=>!pv)}
                                 className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                             >
                                 <i className="fa-solid fa-cart-shopping"></i>
                             </button>
+                            <Cart isCartModalShow={isCartModalShow} setIsCartModalShow={setIsCartModalShow}/>
 
                             {/* Profile dropdown */}
                             <Menu as="div" className="relative ml-3">
@@ -91,7 +95,6 @@ export default function Header() {
                         </div>
                     </div>
                 </div>
-
                 {open &&
                     <div className='space-y-1 px-2 pb-3 pt-2'>
                         {navigation.map((item, index) => (

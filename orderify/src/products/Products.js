@@ -4,12 +4,11 @@ import fetchApi from '../util/helper';
 function Products() {
     const [products, setProducts] = useState([]);
     const [order, setOrder] = useState([]);
-    const [quntity,setQuntity] = useState(1)
     const token = localStorage.getItem('auth');
     const customHeaders = {
         'Auth': token,
     };
-
+   
     const fetchData = async () => {
         try {
             const response = await fetchApi('products', 'GET', null, customHeaders);
@@ -22,20 +21,40 @@ function Products() {
     useEffect(() => {
         fetchData();
     }, []);
-
     const addItem = (productId) => {
+        let addProduct =products.find(item => item._id === productId);
         if (!order.some(item => item.id === productId)) {
-            setOrder([...order, { id: productId }]);
+            setOrder([...order, { id: productId, quantity: 1,name:addProduct.prd_name , price: addProduct.prd_price[0] }]);
         }
     };
-    console.log(order)
-    // const removeItem = (productId) => {
-    //     const updatedOrder = order.filter(item => item.id !== productId);
-    //     setOrder(updatedOrder);
-    // };
+    const incrementQuantity = (productId) => {
+        setOrder((pre) => {
+            return pre.map(item =>
+                item.id === productId
+                    ? { ...item, quantity: item.quantity + 1 }
+                    : item
+            );
+        });
+    };
+    const decrementQuantity = (productId) => {
+        setOrder((pre) => {
+            return pre.map(item =>
+                item.id === productId
+                    ? { ...item, quantity: Math.max(item.quantity - 1, 1) }
+                    : item
+            );
+        });
+    };
 
+    const addPrice = (productId, price) => {
+        setOrder((pre) => {
+            return pre.map(item => item.id === productId ? { ...item, price: Number(price) } : item)
+        })
+    }
+    console.log(order) 
+    localStorage.setItem("orderItems", JSON.stringify(order));
     return (
-        <ul role="list" className="divide-y divide-gray-100">
+        <ul className="divide-y divide-gray-100">
             {products.map((product) => (
                 <li key={product._id} className="flex justify-between gap-x-6 py-5 p-3">
                     <div className="flex min-w-0 gap-x-4">
@@ -44,9 +63,9 @@ function Products() {
                     <div className="block shrink-0 sm:flex sm:flex-col sm:items-center">
                         <div className='flex items-center'>
                             <p className="leading-6 text-gray-900 text-xl text-center p-1">Price</p>
-                            <select name="price" id="" className='border-2 rounded-md p-1'>
+                            <select name="price" id="" className='border-2 rounded-md p-1' onChange={(e) => addPrice(product._id, e.target.value)}>
                                 {product.prd_price.map((price, index) => (
-                                    <option key={index} value="">{price}</option>
+                                    <option key={index} value={price} >{price}</option>
                                 ))}
                             </select>
                         </div>
@@ -56,14 +75,10 @@ function Products() {
                             {order.some(item => item.id === product._id) ? (
                                 <>
                                     <button id="incrementButton" className="bg-gray-300 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-md mr-4"
-                                    onClick={()=>setQuntity((pre)=>pre+1)}>+</button>
-                                    <p id="counter" className="text-xl font-semibold">{quntity}</p>
+                                        onClick={() => incrementQuantity(product._id)}>+</button>
+                                    <p id="counter" className="text-xl font-semibold">{order.find(item => item.id === product._id).quantity}</p>
                                     <button id="decrementButton" className="bg-gray-300 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-md ml-4"
-                                    onClick={()=>{
-                                        if(quntity!=0){
-                                            setQuntity((pre)=>pre-1)
-                                        }
-                                    }}>-</button>
+                                        onClick={() => decrementQuantity(product._id)}>-</button>
                                 </>
                             ) : (
                                 <button onClick={() => addItem(product._id)}>Add Item</button>
