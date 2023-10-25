@@ -19,6 +19,23 @@ const Registration = () => {
         user_phone: '',
     };
 
+    // const handleSubmit = async (values) => {
+    //     const postData = {
+    //         user_fname: values.user_fname,
+    //         user_lname: values.user_lname,
+    //         user_email: values.user_email,
+    //         user_pass: values.user_pass,
+    //         user_phone: values.user_phone,
+    //     };
+    //     let response = await fetchApi("register",'POST', postData);
+    //     console.log(response)
+    //     if (response.status === 200) {
+    //         navigate("/home");
+    //         localStorage.setItem("auth", response.token);
+    //         localStorage.setItem("userData", JSON.stringify(response));
+    //     }
+    //     SetStopApi(true);
+    // };
 
     const handleSubmit = async (values) => {
         const postData = {
@@ -28,14 +45,18 @@ const Registration = () => {
             user_pass: values.user_pass,
             user_phone: values.user_phone,
         };
-        let response = await fetchApi("register", postData);
-        console.log(response)
-        if (response.status === 200) {
-            navigate("/home");
-            localStorage.setItem("auth", response.token);
-            localStorage.setItem("userData", JSON.stringify(response));
+        try {
+            const response = await fetchApi("register", 'POST', postData);
+            if (response.status === 200) {
+                localStorage.setItem("auth", response.token);
+                localStorage.setItem("userData", JSON.stringify(response));
+                navigate("/home");
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            SetStopApi(true);
         }
-        SetStopApi(true);
     };
 
     return (

@@ -11,17 +11,32 @@ const LogIn = () => {
     const navigate = useNavigate();
     const [stopAPIRequest, setStopAPIRequest] = useState(true);
 
-    const handleSubmit = async (values, action) => {
-        let response = await fetchApi("login", values);
-        console.log(response);
-        if (response.status === 200) {
-            navigate("/home");
+    // const handleSubmit = async (values, action) => {
+    //     let response = await fetchApi("login", values);
+    //     console.log(response);
+    //     if (response.status === 200) {
+    //         navigate("/home");
+    //         localStorage.setItem("auth", response.token);
+    //         localStorage.setItem("userData", JSON.stringify(response));
+    //     }
+    //     setStopAPIRequest(true);
+    // }    
+    
+    const handleSubmit = async (values) => {
+        try {
+          const response = await fetchApi("login",'POST', values);
+          if (response.status === 200) {
             localStorage.setItem("auth", response.token);
             localStorage.setItem("userData", JSON.stringify(response));
+            navigate("/home");
+          }
+        } catch (error) {
+          console.log( error);
+        } finally {
+          setStopAPIRequest(true);
         }
-        setStopAPIRequest(true);
-    }
-
+      };
+      
 
     return (
         <Formik
