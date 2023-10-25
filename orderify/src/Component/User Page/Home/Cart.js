@@ -1,59 +1,92 @@
-import React, { useEffect,useState } from 'react'
+import { Fragment, useState } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
-function Cart({ isCartModalShow, setIsCartModalShow }) {
-    const [orderItems, setOrderItems] = useState([]);
-    function handleOrderBtn() {
-        console.log('order')
-    }
-    useEffect(() => {
-        getOrderItems()
-    }, []);
-    
-    function getOrderItems() {
-        let data = localStorage.getItem('orderItems')
-        setOrderItems(data || [])
-    }
+export default function Cart({open,setOpen}) {
+//   const [open, setOpen] = useState(true) 
+  const manualData = [
+    {name:'dahi',quantity:2,price:20},
+    {name:'monoco',quantity:2,price:10},
+    {name:'choco',quantity:2,price:40},
+    {name:'coffee',quantity:2,price:100},
+  ]
+
   return (
-    <>
-    {
-        isCartModalShow && (
-            <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-                <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-                    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                                <div className="sm:flex sm:items-start">
-                                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                    </div>
-                                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                        <h3 className="text-base font-semibold leading-6 text-gray-900" id="modal-title">Cart</h3>
-                                        <div className="mt-2">
-                                            {
-                                                orderItems.map((item,index)=>(
-                                                    <div key={index}>
-                                                        <span>{item.name}</span>
-                                                        <span>{item.qty}</span>
-                                                        <span>{item.price}</span>
-                                                    </div>
-                                                ))
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                                <button type="button" onClick={handleOrderBtn}  className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">{orderItems.length!=0?'Order':'Discard'}</button>
-                                <button type="button" onClick={() => setIsCartModalShow(false)} className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover-bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
-                            </div>
-                        </div>
+    <Transition.Root show={open} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-in-out duration-500"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in-out duration-500"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </Transition.Child>
+
+        <div className="fixed inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+              <Transition.Child
+                as={Fragment}
+                enter="transform transition ease-in-out duration-500 sm:duration-700"
+                enterFrom="translate-x-full"
+                enterTo="translate-x-0"
+                leave="transform transition ease-in-out duration-500 sm:duration-700"
+                leaveFrom="translate-x-0"
+                leaveTo="translate-x-full"
+              >
+                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-in-out duration-500"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in-out duration-500"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
+                      <button
+                        type="button"
+                        className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                        onClick={() => setOpen(false)}
+                      >
+                        <span className="absolute -inset-2.5" />
+                        <span className="sr-only">Close panel</span>
+                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                      </button>
                     </div>
-                </div>
+                  </Transition.Child>
+                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                    <div className="px-4 sm:px-6">
+                      <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
+                        Card Items
+                      </Dialog.Title>
+                    </div>
+                    <div className="relative mt-6 flex-1 px-4 sm:px-6 w-100">
+                        {
+                            manualData.map((item,index) => (
+                                <div key={index} className='flex justify-between bg-gray-700 text-white rounded p-3 m-2 w-50'>
+                                    <div className="col">
+                                    <h1 className='text-amber-700 font-bold'>{item.name.toUpperCase()}</h1>
+                                    <h4>Qty : {item.quantity}</h4>
+                                    <h4>Price: {item.price}</h4>
+                                    </div>
+                                    <i className="cursor-pointer text-amber-700 fa-solid fa-xmark"></i>
+                                </div>
+                            ))
+                        }
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
             </div>
-        )
-    }
-</>
+          </div>
+        </div>
+      </Dialog>
+    </Transition.Root>
   )
 }
-
-export default Cart

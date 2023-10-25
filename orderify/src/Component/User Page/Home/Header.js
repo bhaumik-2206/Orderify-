@@ -52,7 +52,7 @@ export default function Header() {
                             >
                                 <i className="fa-solid fa-cart-shopping"></i>
                             </button>
-                            <Cart isCartModalShow={isCartModalShow} setIsCartModalShow={setIsCartModalShow}/>
+                            <Cart open={isCartModalShow} setOpen={setIsCartModalShow}/>
 
                             {/* Profile dropdown */}
                             <Menu as="div" className="relative ml-3">
