@@ -1,6 +1,7 @@
-// import jwtDecode from 'jwt-decode';
+// import jwtDecode from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+// import jwtDecode from "jwt-decode";
 
 const ProtectedHome = ({ Component }) => {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ const ProtectedHome = ({ Component }) => {
         setAuth(auth);
         console.log(auth)
         if (!auth) {
+            navigate("/login");
         }
     }, [])
 
@@ -35,4 +37,36 @@ const ProtectedHome = ({ Component }) => {
     )
 }
 
-export default ProtectedHome
+export default ProtectedHome;
+
+
+// import jwtDecode from 'jwt-decode';
+// import React, { Fragment } from 'react';
+// import { Route, useNavigate } from 'react-router-dom';
+
+// const ProtectedRoute = ({ component: Component, ...rest }) => {
+//     const navigate = useNavigate();
+//     const checkValidToken = () => {
+//         const token = localStorage.getItem('auth');
+//         let decode;
+//         try {
+//             decode = jwtDecode(token);
+//         } catch (error) {
+//             console.log("first")
+//         }
+//         if (decode) {
+//             return true;
+//         } else {
+//             return false;
+//         }
+//     }
+//     return (
+//         <Fragment>
+//             {checkValidToken()
+//                 ? <Route {...rest} render={props => <Component {...rest} {...props} />} />
+//                 : navigate("login")
+//             }
+//         </Fragment>
+//     );
+// }
+// export default ProtectedRoute
