@@ -6,7 +6,7 @@ import ConfirmationModal from "./common components/ConfirmationModal.js";
 export default function Cart({ open, setOpen }) {
   const [isConfDeleteShow, setIsConfDeleteShow] = useState(false);
   const [idForRemoveItm, setIdForRemoveItm] = useState(null);
-  
+
   let exampleData = [
     { name: "dahi", quantity: 2, price: 20, _id: 1 },
     { name: "monoco", quantity: 2, price: 10, _id: 2 },

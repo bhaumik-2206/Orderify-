@@ -2,14 +2,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import Home from './Component/User Page/Home/Home';
-import ProtectedHome from './Component/Private/ProtectedHome';
-import ProtectedLogIn from './Component/Private/ProtectedLogIn';
-import Auth from './Component/Auth/Auth';
-import LogIn from './Component/Auth/LogIn';
-import Registration from './Component/Auth/Registration';
+import ProtectedLogIn from './route/ProtectedLogIn';
+import Auth from './Component/auth/Auth';
+import Registration from './Component/auth/Registration';
 import Profile from './Component/user/profile/Profile';
 import Dashboard from './Component/user/Dashboard';
+import ProtectedHome from './route/ProtectedHome';
+import LogIn from './Component/auth/LogIn';
+import Home from './Component/user/Home/Home';
 
 function App() {
   return (
@@ -39,3 +39,27 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+// import React from 'react';
+// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+// import ProtectedRoute from './route/ProtectedRoute';
+// // import Home from './Home';
+// // import Login from './Login';
+
+// function App() {
+//   return (
+//     <Router>
+//       <Routes>
+//         <Route path="/login" component={LogIn} />
+//         <ProtectedRoute path="/" component={Home} />
+//       </Routes>
+//     </Router>
+//   );
+// }
+
+// export default App;

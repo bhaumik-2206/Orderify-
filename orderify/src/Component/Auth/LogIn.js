@@ -61,8 +61,7 @@ const LogIn = () => {
                                     <button type="submit"
                                         className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-md font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                     >
-                                        {lodding ? "" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
-                                        {lodding ? "Sign in" : ""}
+                                        {lodding ? "Sign in" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
                                     </button>
                                 </div>
                                 <div className="mt-4 text-center">
