@@ -5,13 +5,15 @@ import fetchApi from '../../util/helper';
 import CommonInput from './CommonInput';
 import { API_ENDPOINTS } from '../../config/api';
 import { toast } from 'react-toastify';
-import { LogInValidation } from '../../config/Validation';
+import { initialLogInValue } from '../../config/initialValue';
+import { LogInValidation } from '../../config/validation';
 
 const LogIn = () => {
     const navigate = useNavigate();
-    const [stopAPIRequest, setStopAPIRequest] = useState(true);
+    const [lodding, setLoadding] = useState(true);
 
     const handleSubmit = async (values) => {
+        setLoadding(false);
         try {
             const response = await fetchApi({ url: API_ENDPOINTS.LOGIN, method: 'POST', data: values });
             if (response.status === 200) {
@@ -25,21 +27,16 @@ const LogIn = () => {
         } catch (error) {
             toast.error("Error To Fetch API");
         } finally {
-            setStopAPIRequest(true);
+            setLoadding(true);
         }
     };
 
 
     return (
         <Formik
-            initialValues={{ user_email: "", user_pass: "" }}
+            initialValues={initialLogInValue}
             validationSchema={LogInValidation}
-            onSubmit={(values) => {
-                if (stopAPIRequest) {
-                    handleSubmit(values);
-                    setStopAPIRequest(false);
-                }
-            }}
+            onSubmit={(values) => lodding && handleSubmit(values)}
         >
             {formik => (
                 <div className='flex flex-col lg:flex-row h-screen'>
@@ -64,8 +61,8 @@ const LogIn = () => {
                                     <button type="submit"
                                         className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-md font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                     >
-                                        {stopAPIRequest ? "" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
-                                        {stopAPIRequest ? "Sign in" : ""}
+                                        {lodding ? "" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
+                                        {lodding ? "Sign in" : ""}
                                     </button>
                                 </div>
                                 <div className="mt-4 text-center">

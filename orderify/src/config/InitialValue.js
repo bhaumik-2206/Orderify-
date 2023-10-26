@@ -6,3 +6,5 @@ export const initialRegistrationValue = {
     user_confirmPassword: '',
     user_phone: '',
 };
+
+export const initialLogInValue = { user_email: "", user_pass: "" }

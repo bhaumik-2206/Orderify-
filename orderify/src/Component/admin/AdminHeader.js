@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { NavLink, useNavigate } from 'react-router-dom';
-import LogOut from '../User Page/profile/LogOut';
+import LogOut from '../user/profile/LogOut';
 
 const navigation = [
     { name: 'Dashboard', to: '/home', current: false },

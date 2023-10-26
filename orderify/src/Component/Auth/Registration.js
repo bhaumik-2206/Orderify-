@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
-import { validationSchema } from '../../config/Validation';
 import CommonInput from './CommonInput';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import fetchApi from '../../util/helper';
-import { initialRegistrationValue } from '../../config/InitialValue';
+import { initialRegistrationValue } from '../../config/initialValue';
 import { toast } from 'react-toastify';
 import { API_ENDPOINTS } from '../../config/api';
+import { validationSchema } from '../../config/validation';
 
 const Registration = () => {
-    let [stopApi, SetStopApi] = useState(true);
+    let [lodding, setLodding] = useState(true);
     const navigate = useNavigate();
 
     const handleSubmit = async (values) => {
+        setLodding(false);
         const postData = {
             user_fname: values.user_fname,
             user_lname: values.user_lname,
@@ -34,7 +35,7 @@ const Registration = () => {
         } catch (error) {
             toast.error("Error To Fetch API");
         } finally {
-            SetStopApi(true);
+            setLodding(true);
         }
     };
 
@@ -50,12 +51,7 @@ const Registration = () => {
                     <Formik
                         initialValues={initialRegistrationValue}
                         validationSchema={validationSchema}
-                        onSubmit={(values) => {
-                            if (stopApi) {
-                                handleSubmit(values)
-                                SetStopApi(false);
-                            }
-                        }}
+                        onSubmit={(values) => lodding && handleSubmit(values)}
                     >
                         {formik => (
                             <Form className="">
@@ -71,8 +67,8 @@ const Registration = () => {
                                     <button type="submit"
                                         className="mt-3 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-md font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                     >
-                                        {stopApi ? "Sign Up" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
-                                        {/* {stopApi ? "Sign up" : ""} */}
+                                        {lodding ? "Sign Up" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
+                                        {/* {lodding ? "Sign up" : ""} */}
                                     </button>
                                 </div>
                             </Form>

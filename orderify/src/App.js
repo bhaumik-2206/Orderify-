@@ -3,13 +3,13 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Home from './Component/User Page/Home/Home';
-import Dashboard from './Component/User Page/Dashboard';
 import ProtectedHome from './Component/Private/ProtectedHome';
 import ProtectedLogIn from './Component/Private/ProtectedLogIn';
 import Auth from './Component/Auth/Auth';
-import Profile from './Component/User Page/profile/Profile';
 import LogIn from './Component/Auth/LogIn';
 import Registration from './Component/Auth/Registration';
+import Profile from './Component/user/profile/Profile';
+import Dashboard from './Component/user/Dashboard';
 
 function App() {
   return (
