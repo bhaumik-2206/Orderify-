@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from '../../../config/api';
 
 
 function Products() {
+    const [lodding, setLoadding] = useState(true);
     const [products, setProducts] = useState([]);
     const [order, setOrder] = useState({});
     const [cartData, setCartData] = useState([]);
@@ -33,6 +34,8 @@ function Products() {
             fetchCart();
         } catch (error) {
             console.log("Error To Fetch API");
+        } finally {
+            setLoadding(true);
         }
     };
 
@@ -43,17 +46,18 @@ function Products() {
     };
 
     const incrementQuantity = (productId) => {
+        setLoadding(false);
         const currentQuantity = cartData.find((item) => item.cartitm_fk_prd_id._id === productId).cartitm_prd_qty + 1;
         const updatedOrder = { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity };
         setOrder(updatedOrder);
-        orderProduct();
+        orderProduct(updatedOrder);
     };
 
     const decrementQuantity = (productId) => {
         const currentQuantity = cartData.find((item) => item.cartitm_fk_prd_id._id === productId).cartitm_prd_qty - 1;
         const updatedOrder = { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity };
         setOrder(updatedOrder);
-        orderProduct();
+        orderProduct(updatedOrder);
     };
 
     const fetchCart = async () => {
@@ -82,10 +86,11 @@ function Products() {
                             <div className="flex border-2 border-blue-700 flex-col sm:flex-row items-center justify-center mt-2">
                                 {cartData.some((item) => item.cartitm_fk_prd_id._id === product._id) ? (
                                     <div className="flex items-center">
+
                                         <button
                                             id="decrementButton"
                                             className=" text-blue-700 border-r-2 border-blue-700 font-bold py-1 px-1 sm:py-2 sm:px-4  mb-1 sm:mb-0"
-                                            onClick={() => { decrementQuantity(product._id) }}
+                                            onClick={() => { decrementQuantity(product._id);  }}
                                         >
                                             -
                                         </button>
@@ -101,12 +106,18 @@ function Products() {
                                         </button>
                                     </div>
                                 ) : (
-                                    <button
-                                        onClick={() => addItem(product._id)}
-                                        className="text-blue-700  font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md"
-                                    >
-                                        Add Item
-                                    </button>
+                                    <div>
+                                        {
+                                            lodding ? <button
+                                                onClick={() => {addItem(product._id);setLoadding(false)}}
+                                                className="text-blue-700  font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md"
+                                            >
+                                                Add Item
+                                            </button> :
+                                                <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>
+                                        }
+                                    </div>
+
                                 )}
 
                             </div>
