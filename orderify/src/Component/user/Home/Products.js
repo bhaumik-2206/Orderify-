@@ -5,11 +5,17 @@ import { API_ENDPOINTS } from '../../../config/api';
 
 function Products() {
     const [products, setProducts] = useState([]);
-    const [order, setOrder] = useState([]);
+    const [order, setOrder] = useState({});
+    const [cartData, setCartData] = useState([]);
     const token = localStorage.getItem('auth');
     const customHeaders = {
         'Auth': token,
     };
+
+    useEffect(() => {
+        fetchData();
+        fetchCart();
+    }, []);
 
     const fetchData = async () => {
         try {
@@ -20,52 +26,45 @@ function Products() {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-    const addItem = (productId) => {
-        let addProduct = products.find(item => item._id === productId);
-        if (!order.some(item => item.id === productId)) {
-            setOrder([...order, { id: productId, quantity: 1, name: addProduct.prd_name, price: addProduct.prd_price }]);
-        }
-    };
-    const incrementQuantity = (productId) => {
-        setOrder((pre) => {
-            return pre.map(item =>
-                item.id === productId
-                    ? { ...item, quantity: item.quantity + 1 }
-                    : item
-            );
-        });
-    };
-    const decrementQuantity = (productId) => {
-        setOrder((pre) => {
-            return pre.map(item =>
-                item.id === productId
-                    ? { ...item, quantity: Math.max(item.quantity - 1, 1) }
-                    : item
-            );
-        });
-    };
-    const orderData = {
-        orders: order,
-    };
-    const orderProduct = async (values) => {
+    const orderProduct = async (itemData) => {
         try {
-            if (order.length > 0) {
-                const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'POST', data: orderData, customHeaders });
-                console.log(response);
-            }
+            const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'POST', data: itemData, customHeaders });
+            console.log(response);
+            fetchCart();
         } catch (error) {
             console.log("Error To Fetch API");
         }
     };
-    useEffect(() => {
-        orderProduct();
-    }, [order])
 
-    console.log(order)
-    localStorage.setItem("orderItems", JSON.stringify(order));
+    const addItem = (productId) => {
+        const updatedOrder = { cartitm_fk_prd_id: productId, cartitm_prd_qty: 1 };
+        orderProduct(updatedOrder);
+        setOrder(updatedOrder);
+    };
+
+    const incrementQuantity = (productId) => {
+        const currentQuantity = cartData.find((item) => item.cartitm_fk_prd_id._id === productId).cartitm_prd_qty + 1;
+        const updatedOrder = { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity };
+        setOrder(updatedOrder);
+        orderProduct();
+    };
+
+    const decrementQuantity = (productId) => {
+        const currentQuantity = cartData.find((item) => item.cartitm_fk_prd_id._id === productId).cartitm_prd_qty - 1;
+        const updatedOrder = { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity };
+        setOrder(updatedOrder);
+        orderProduct();
+    };
+
+    const fetchCart = async () => {
+        try {
+            const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'GET', customHeaders });
+            setCartData(response.data.cart_items);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -81,22 +80,22 @@ function Products() {
                             <h2 className="mt-2 text-sm sm:text-sm text-gray-700">{product.prd_name}</h2>
                             <p className="mt-1 text-sm sm:text-base font-bold text-gray-900 p-1">₨ : ₹ {product.prd_price}</p>
                             <div className="flex border-2 border-blue-700 flex-col sm:flex-row items-center justify-center mt-2">
-                                {order.some((item) => item.id === product._id) ? (
+                                {cartData.some((item) => item.cartitm_fk_prd_id._id === product._id) ? (
                                     <div className="flex items-center">
                                         <button
                                             id="decrementButton"
                                             className=" text-blue-700 border-r-2 border-blue-700 font-bold py-1 px-1 sm:py-2 sm:px-4  mb-1 sm:mb-0"
-                                            onClick={() => decrementQuantity(product._id)}
+                                            onClick={() => { decrementQuantity(product._id) }}
                                         >
                                             -
                                         </button>
                                         <p id="counter" className="text-xl font-semibold mx-2 sm:mx-4">
-                                            {order.find((item) => item.id === product._id).quantity}
+                                            {cartData.find((item) => item.cartitm_fk_prd_id._id === product._id).cartitm_prd_qty}
                                         </p>
                                         <button
                                             id="incrementButton"
                                             className="text-blue-700 border-l-2 border-blue-700 font-bold py-1 px-1 sm:py-2 sm:px-4 "
-                                            onClick={() => incrementQuantity(product._id)}
+                                            onClick={() => { incrementQuantity(product._id) }}
                                         >
                                             +
                                         </button>
@@ -109,6 +108,7 @@ function Products() {
                                         Add Item
                                     </button>
                                 )}
+
                             </div>
                         </div>
                     ))}
@@ -119,10 +119,3 @@ function Products() {
 }
 
 export default Products;
-
-
-// const addPrice = (productId, price) => {
-//     setOrder((pre) => {
-//         return pre.map(item => item.id === productId ? { ...item, price: Number(price) } : item)
-//     })
-// }
