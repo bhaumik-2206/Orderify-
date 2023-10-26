@@ -5,7 +5,7 @@ const Home = () => {
     let data = JSON.parse(localStorage.getItem("userData"));
     return (
         <>
-            {/* <Products /> */}
+            <Products />
         </>
     )
 }
