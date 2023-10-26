@@ -72,7 +72,7 @@ const Registration = () => {
                                         className="mt-3 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-md font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                     >
                                         {stopApi ? "Sign Up" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
-                                        {/* {stopApi ? "Sign up" : ""} */}
+                                        {stopApi ? "Sign up" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
                                     </button>
                                 </div>
                             </Form>

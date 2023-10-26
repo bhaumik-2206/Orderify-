@@ -2,18 +2,18 @@ import { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import LogOut from '../profile/LogOut';
-import Cart from "./Cart";
+import Cart from './Cart';
 
 const navigation = [
-    { name: 'Home', to: '/home', current: true },
+    { name: 'Product', to: '/home', current: true },
     { name: 'Order', to: '/order', current: false },
     { name: 'History', to: '/history', current: false },
 ]
 
 export default function Header() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLogoutShow, setIsLogoutShow] = useState(false);
     const [isCartModalShow, setIsCartModalShow] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [isOpenMenu, setIsOpenMenu] = useState(false);
     const navigate = useNavigate();
 
     return (
@@ -24,7 +24,7 @@ export default function Header() {
                         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                             {/* Mobile menu button*/}
                             <button className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'>
-                                <i onClick={() => setOpen(!open)} className={`block px-2 text-lg text-white fa-solid ${open ? "fa-xmark" : "fa-bars"}`}></i>
+                                <i onClick={() => setIsOpenMenu(!isOpenMenu)} className={`block px-2 text-lg text-white fa-solid ${isOpenMenu ? "fa-xmark" : "fa-bars"}`}></i>
                             </button>
                         </div>
                         <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -85,7 +85,7 @@ export default function Header() {
                                         <Menu.Item>
                                             <Link
                                                 className={`block px-4 py-2 text-sm text-gray-700 hover:bg-slate-200 bg-slate-50`}
-                                                onClick={() => setIsModalOpen(true)}
+                                                onClick={() => setIsLogoutShow(true)}
                                             > Sign out</Link >
                                         </Menu.Item>
                                     </Menu.Items>
@@ -94,17 +94,17 @@ export default function Header() {
                         </div>
                     </div>
                 </div>
-                {open &&
+                {isOpenMenu &&
                     <div className='space-y-1 px-2 pb-3 pt-2'>
                         {navigation.map((item, index) => (
                             <NavLink key={index} to={item.to} className={({ isActive }) =>
                                 `block rounded-md px-3 py-2 text-base font-medium ${isActive ? "bg-gray-900 text-white  " : "text-gray-300 hover:bg-gray-700 hover:text-white"} `
-                            } onClick={() => setOpen(false)} >{item.name}</NavLink>
+                            } onClick={() => setIsOpenMenu(false)} >{item.name}</NavLink>
                         ))}
                     </div>
                 }
             </>
-            <LogOut isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+            <LogOut isModalOpen={isLogoutShow} setIsModalOpen={setIsLogoutShow} />
         </Disclosure >
     )
 }
