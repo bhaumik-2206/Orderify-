@@ -4,10 +4,11 @@ import CommonInput from './CommonInput';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import fetchApi from '../../util/helper';
-import { initialRegistrationValue } from '../../config/initialValue';
+import { initialRegistrationValue } from '../../config/InitialValue';
 import { toast } from 'react-toastify';
 import { API_ENDPOINTS } from '../../config/api';
-import { validationSchema } from '../../config/validation';
+import { validationSchema } from '../../config/Validation';
+
 
 const Registration = () => {
     let [lodding, setLodding] = useState(true);

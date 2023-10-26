@@ -5,8 +5,8 @@ import fetchApi from '../../util/helper';
 import CommonInput from './CommonInput';
 import { API_ENDPOINTS } from '../../config/api';
 import { toast } from 'react-toastify';
-import { initialLogInValue } from '../../config/initialValue';
-import { LogInValidation } from '../../config/validation';
+import { initialLogInValue } from '../../config/InitialValue';
+import { LogInValidation } from '../../config/Validation';
 
 const LogIn = () => {
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ const LogIn = () => {
             if (response.status === 200) {
                 localStorage.setItem("auth", response.token);
                 localStorage.setItem("userData", JSON.stringify(response.data));
-                navigate("/home");
+                navigate("/products");
                 toast.success("Log In Successfully");
             } else {
                 toast.error(response.message);

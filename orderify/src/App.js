@@ -4,12 +4,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import ProtectedLogIn from './route/ProtectedLogIn';
 import Auth from './Component/auth/Auth';
-import Registration from './Component/auth/Registration';
+
 import Profile from './Component/user/profile/Profile';
 import Dashboard from './Component/user/Dashboard';
 import ProtectedHome from './route/ProtectedHome';
+
+
 import LogIn from './Component/auth/LogIn';
-import Home from './Component/user/Home/Home';
+import Registration from './Component/auth/Registration';
+import Products from './Component/user/Home/Products';
+
+
 
 function App() {
   return (
@@ -28,9 +33,9 @@ function App() {
 
         {/* Main Dashboard Routes */}
         <Route path='/' element={<ProtectedHome Component={Dashboard} />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/order" element={<Home />} />
-          <Route path="/history" element={<Home />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/order" element={<Products />} />
+          <Route path="/history" element={<Products />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
