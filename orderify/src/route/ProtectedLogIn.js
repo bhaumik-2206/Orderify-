@@ -8,7 +8,7 @@ const ProtectedLogIn = ({ Component }) => {
         let auth = localStorage.getItem("auth");
         setAuth(auth);
         if (auth) {
-            navigate("/home");
+            navigate("/products");
         }
     }, []);
 
