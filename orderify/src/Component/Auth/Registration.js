@@ -11,11 +11,11 @@ import { validationSchema } from '../../config/Validation';
 
 
 const Registration = () => {
-    let [lodding, setLodding] = useState(true);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const handleSubmit = async (values) => {
-        setLodding(false);
+        setLoading(false);
         const postData = {
             user_fname: values.user_fname,
             user_lname: values.user_lname,
@@ -36,7 +36,7 @@ const Registration = () => {
         } catch (error) {
             toast.error("Error To Fetch API");
         } finally {
-            setLodding(true);
+            setLoading(true);
         }
     };
 
@@ -52,7 +52,7 @@ const Registration = () => {
                     <Formik
                         initialValues={initialRegistrationValue}
                         validationSchema={validationSchema}
-                        onSubmit={(values) => lodding && handleSubmit(values)}
+                        onSubmit={(values) => loading && handleSubmit(values)}
                     >
                         {formik => (
                             <Form className="">
@@ -68,7 +68,7 @@ const Registration = () => {
                                     <button type="submit"
                                         className="mt-3 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-md font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                     >
-                                       {lodding ? "Sign Up" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
+                                       {loading ? "Sign Up" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
                                     </button>
                                 </div>
                             </Form>

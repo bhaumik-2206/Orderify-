@@ -29,9 +29,6 @@ function App() {
             <Route path="/login" element={<LogIn />} />
             <Route path="/register" element={<Registration />} />
           </Route>
-          {/* <Route index element={<ProtectedLogIn Component={LogIn} />} />
-        <Route path="/login" element={<ProtectedLogIn Component={LogIn} />} />
-        <Route path="/register" element={<ProtectedLogIn Component={Registration} />} /> */}
 
           {/* Main Dashboard Routes */}
           <Route path='/' element={<ProtectedHome Component={Dashboard} />}>

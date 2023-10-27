@@ -10,10 +10,10 @@ import { LogInValidation } from '../../config/Validation';
 
 const LogIn = () => {
     const navigate = useNavigate();
-    const [lodding, setLoadding] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     const handleSubmit = async (values) => {
-        setLoadding(false);
+        setLoading(false);
         try {
             const response = await fetchApi({ url: API_ENDPOINTS.LOGIN, method: 'POST', data: values });
             if (response.status === 200) {
@@ -27,7 +27,7 @@ const LogIn = () => {
         } catch (error) {
             toast.error("Error To Fetch API");
         } finally {
-            setLoadding(true);
+            setLoading(true);
         }
     };
 
@@ -36,7 +36,7 @@ const LogIn = () => {
         <Formik
             initialValues={initialLogInValue}
             validationSchema={LogInValidation}
-            onSubmit={(values) => lodding && handleSubmit(values)}
+            onSubmit={(values) => loading && handleSubmit(values)}
         >
             {formik => (
                 <div className='flex flex-col lg:flex-row h-screen'>
@@ -61,7 +61,7 @@ const LogIn = () => {
                                     <button type="submit"
                                         className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-md font-semibold leading-6 text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                     >
-                                        {lodding ? "Sign in" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
+                                        {loading ? "Sign in" : <div className="animate-spin me-2"><i className="fa-solid fa-spinner"></i></div>}
                                     </button>
                                 </div>
                                 <div className="mt-4 text-center">

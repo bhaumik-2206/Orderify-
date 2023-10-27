@@ -82,8 +82,8 @@ export default function Cart({ open, setOpen }) {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
-          <div className="fixed inset-0  overflow-hidden">
-            <div className="absolute inset-0  overflow-hidden">
+          <div className="fixed inset-0 ">
+            <div className="absolute inset-0 ">
               <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
                 <Transition.Child
                   as={Fragment}
@@ -94,16 +94,18 @@ export default function Cart({ open, setOpen }) {
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full"
                 >
-                  <Dialog.Panel className="pointer-events-auto  w-screen max-w-md">
+                  <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
                     <div className="flex h-full flex-col bg-white shadow-xl">
-                      <div className="flex-1 bg-white overflow-y-auto px-4 sm:px-6">
-                        <div className="sticky top-0 py-4 bg-white flex items-start justify-between">
-                          <Dialog.Title className="text-lg font-medium text-gray-900">
+                      <div className="flex-1 bg-white overflow-y-auto sm:px-6">
+                        <div className="sticky top-0 py-4 bg-white block sm:flex px-4 items-start justify-between">
+                          <Dialog.Title className="text-2xl text-center font-medium text-gray-900">
                             Shopping cart
                           </Dialog.Title>
-                          <div className="ml-3 flex h-7 items-center">
-                            <button className="text-red-700 text-lg px-3"
-                              onClick={() => cartData.length > 0 && removeData(cartData.map(item => item.cartitm_fk_prd_id._id))}>
+                          <div className=" flex justify-between h-7 items-center">
+                            <button
+                              className="text-red-700 text-lg px-0  sm:px-3"
+                              onClick={() => cartData.length > 0 && removeData(cartData.map(item => item.cartitm_fk_prd_id._id))}
+                            >
                               Remove all
                             </button>
                             <button
@@ -113,25 +115,19 @@ export default function Cart({ open, setOpen }) {
                             >
                               <span className="absolute -inset-0.5" />
                               <span className="sr-only">Close panel</span>
-                              <XMarkIcon
-                                className="h-6 w-6"
-                                aria-hidden="true"
-                              />
+                              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                             </button>
                           </div>
                         </div>
 
-                        <div className="mt-8">
+                        <div className="mt-8 px-4">
                           <div className="flow-root">
-                            <ul
-                              role="list"
-                              className="-my-6 divide-y"
-                            >
+                            <ul role="list" className="-my-6 divide-y">
                               {cartData.length > 0 ? cartData.map((item, index) => (
                                 <div key={index}
-                                  className="flex py-3  m-1 px-2"
+                                  className="flex flex-col sm:flex-row py-3 m-1 px-2"
                                 >
-                                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border">
+                                  <div className="mb-3 sm:mb-0 w-1/2 block mx-auto sm:h-24 sm:w-24  flex-shrink-0 overflow-hidden rounded-md border">
                                     <img
                                       src={item.cartitm_fk_prd_id.prd_img}
                                       alt="item image"
@@ -139,10 +135,10 @@ export default function Cart({ open, setOpen }) {
                                     />
                                   </div>
 
-                                  <div className="ml-4 flex flex-1 flex-col w-60">
+                                  <div className="w-full ml-4 flex flex-1 flex-col w-60">
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
-                                        <p className="text-md text-ellipsis overflow-hidden">
+                                        <p className="text-md text-ellipsis">
                                           {item.cartitm_fk_prd_id.prd_name}
                                         </p>
                                         <div className="flex border-2 h-8 border-blue-700 rounded justify-between item-center space-x-2">
@@ -189,12 +185,12 @@ export default function Cart({ open, setOpen }) {
                                     </div>
                                   </div>
                                 </div>
-                              )) :
+                              )) : (
                                 <div className="text-center">
                                   <img className="block mx-auto w-4/6" src="https://cdn.kekastatic.net/shared/assets/images/components/placeholder/thinking-face.svg" alt="" />
                                   <p className="text-xl">Empty</p>
                                 </div>
-                              }
+                              )}
                             </ul>
                           </div>
                         </div>

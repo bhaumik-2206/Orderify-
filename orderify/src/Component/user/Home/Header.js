@@ -21,7 +21,7 @@ export default function Header() {
     return (
         <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-10">
             <>
-                <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl px-2 py-2 sm:py-0 sm:px-6 lg:px-8">
                     <div className="relative flex h-16 items-center justify-between">
                         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                             {/* Mobile menu button*/}
@@ -33,7 +33,7 @@ export default function Header() {
                             <div>
                                 <div onClick={() => navigate("/products")} className='cursor-pointer flex justify-center align-baseline'>
                                     <img className="h-10" alt="Your Company" src="images/LOGO.png" />
-                                    <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1'>rderify</p>
+                                    <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1 mr-10 sm:mr-0'>rderify</p>
                                 </div>
                             </div>
                             <div className="hidden sm:ml-6 sm:block">
