@@ -13,33 +13,36 @@ import ProtectedHome from './route/ProtectedHome';
 import LogIn from './Component/auth/LogIn';
 import Registration from './Component/auth/Registration';
 import Products from './Component/user/Home/Products';
+import CartContext from './context/CartContext';
 
 
 
 function App() {
   return (
-    <BrowserRouter>
-      <ToastContainer pauseOnHover={false} autoClose={2000} />
-      <Routes>
-        {/* Log In Routes */}
-        <Route path="/" element={<ProtectedLogIn Component={Auth} />}>
-          <Route index element={<LogIn />} />
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/register" element={<Registration />} />
-        </Route>
-        {/* <Route index element={<ProtectedLogIn Component={LogIn} />} />
+    <CartContext>
+      <BrowserRouter>
+        <ToastContainer pauseOnHover={false} autoClose={2000} />
+        <Routes>
+          {/* Log In Routes */}
+          <Route path="/" element={<ProtectedLogIn Component={Auth} />}>
+            <Route index element={<LogIn />} />
+            <Route path="/login" element={<LogIn />} />
+            <Route path="/register" element={<Registration />} />
+          </Route>
+          {/* <Route index element={<ProtectedLogIn Component={LogIn} />} />
         <Route path="/login" element={<ProtectedLogIn Component={LogIn} />} />
         <Route path="/register" element={<ProtectedLogIn Component={Registration} />} /> */}
 
-        {/* Main Dashboard Routes */}
-        <Route path='/' element={<ProtectedHome Component={Dashboard} />}>
-          <Route path="/products" element={<Products />} />
-          <Route path="/order" element={<Products />} />
-          <Route path="/history" element={<Products />} />
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          {/* Main Dashboard Routes */}
+          <Route path='/' element={<ProtectedHome Component={Dashboard} />}>
+            <Route path="/products" element={<Products />} />
+            <Route path="/order" element={<Products />} />
+            <Route path="/history" element={<Products />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </CartContext>
   );
 }
 
