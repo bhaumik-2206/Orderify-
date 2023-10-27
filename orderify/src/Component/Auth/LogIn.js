@@ -44,7 +44,7 @@ const LogIn = () => {
                         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                             <span className='flex mb-10 justify-center align-baseline'>
                                 <img className="h-10" alt="Your Company"
-                                    src="/LOGO.png"
+                                    src="images/LOGO.png"
                                 />
                                 <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1'>rderify</p>
                             </span>
@@ -71,7 +71,7 @@ const LogIn = () => {
                         </div>
                     </div>
                     <div className='lg:w-4/6 hidden lg:block'>
-                        <img src="register.jpg" alt="" className='w-full h-full object-cover object-left' />
+                        <img src="images/register.jpg" alt="" className='w-full h-full object-cover object-left' />
                     </div>
                 </div>
             )

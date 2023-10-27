@@ -78,7 +78,7 @@ const Registration = () => {
                 </div>
             </div>
             <div className='lg:w-4/6 hidden lg:block'>
-                <img src="register.jpg" alt="" className='w-full h-full object-cover object-left' />
+                <img src="images/register.jpg" alt="" className='w-full h-full object-cover object-left' />
             </div>
         </div>
     );

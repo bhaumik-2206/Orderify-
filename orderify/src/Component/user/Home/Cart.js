@@ -4,13 +4,13 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import fetchApi from "../../../util/helper.js";
 import { API_ENDPOINTS } from "../../../config/api.js";
 import { CartDataContext } from "../../../context/CartContext.js";
+import { toast } from "react-toastify";
 
 export default function Cart({ open, setOpen }) {
+  const [loading, setLoading] = useState({});
   const { cartData, setCartData } = useContext(CartDataContext);
   const [data, setData] = useState({})
   const token = localStorage.getItem("auth");
-
-  console.log(cartData)
 
   const customHeaders = {
     Auth: token,
@@ -40,19 +40,36 @@ export default function Cart({ open, setOpen }) {
     fetchApi({ url: API_ENDPOINTS.CART, method: "DELETE", data: { cart_items: data }, customHeaders })
     fetchData()
   }
+  const changeQuantity = async (productId, operation) => {
+    setLoading(pre => ({ ...pre, [productId]: true }));
+    const currentQuantity = cartData.find((item) => item.cartitm_fk_prd_id._id === productId).cartitm_prd_qty;
+    if (operation === "+" && currentQuantity === 5) {
+      toast.error("Maxinum Quantity")
+    }
+    if (operation === "-" && currentQuantity === 1) {
+      // toast.error(`${} Deleted Successfully`);
+    }
+    try {
+      let response = await fetchApi({
+        url: API_ENDPOINTS.CART, method: "POST",
+        data: operation === "-" ? { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity - 1 } :
+          { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity + 1 }
+        , customHeaders
+      })
+      if (response.status === 200) {
+        fetchData();
+      }
+    } catch (error) {
+      toast.error("Error to add item");
+    } finally {
+      setLoading(pre => ({ ...pre, [productId]: false }));
+    }
+  }
 
   return (
     <>
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setOpen}>
-          {/* <ConfirmationModal
-            isModalOpen={isConfDeleteShow}
-            message="Are you sure you want to remove this item from cart ?"
-            onConfirm={handleConfForDelete}
-            onCancel={() => {
-              setOpen(true);
-            }}
-          /> */}
           <Transition.Child
             as={Fragment}
             enter="ease-in-out duration-500"
@@ -86,7 +103,7 @@ export default function Cart({ open, setOpen }) {
                           </Dialog.Title>
                           <div className="ml-3 flex h-7 items-center">
                             <button className="text-red-700 text-lg px-3"
-                              onClick={() => removeData(cartData.map(item => item.cartitm_fk_prd_id._id))}>
+                              onClick={() => cartData.length > 0 && removeData(cartData.map(item => item.cartitm_fk_prd_id._id))}>
                               Remove all
                             </button>
                             <button
@@ -110,14 +127,13 @@ export default function Cart({ open, setOpen }) {
                               role="list"
                               className="-my-6 divide-y"
                             >
-                              {cartData.map((item) => (
-                                <div
-                                  key={item._id}
+                              {cartData.length > 0 ? cartData.map((item, index) => (
+                                <div key={index}
                                   className="flex py-3  m-1 px-2"
                                 >
                                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border">
                                     <img
-                                      src="cart.jpg"
+                                      src={item.cartitm_fk_prd_id.prd_img}
                                       alt="item image"
                                       className="h-full w-full object-cover object-center"
                                     />
@@ -129,12 +145,32 @@ export default function Cart({ open, setOpen }) {
                                         <p className="text-md text-ellipsis overflow-hidden">
                                           {item.cartitm_fk_prd_id.prd_name}
                                         </p>
+                                        <div className="flex border-2 h-8 border-blue-700 rounded justify-between item-center space-x-2">
+                                          <button
+                                            id="decrementButton"
+                                            className="w-1/3 block bg-slate-50 hover:bg-slate-100 text-blue-700 border-r-2 border-blue-700 font-bold p-0 px-2 rounded-l-md"
+                                            onClick={() => changeQuantity(item.cartitm_fk_prd_id._id, "-")}
+                                            disabled={loading[item.cartitm_fk_prd_id._id]}
+                                          >-
+                                          </button>
+                                          {
+                                            loading[item.cartitm_fk_prd_id._id] ?
+                                              <div className="animate-spin"><i className="fa-solid fa-spinner"></i></div> :
+                                              <p className='w-1/3 block text-center text-md font-semibold mx-2 sm:mx-4'>{item.cartitm_prd_qty}</p>
+                                          }
+
+                                          <button
+                                            id="incrementButton"
+                                            className="w-1/3 block bg-slate-50 hover:bg-slate-100 text-blue-700 border-l-2 border-blue-700 font-bold px-2 rounded-r-md"
+                                            onClick={() => changeQuantity(item.cartitm_fk_prd_id._id, "+")}
+                                            disabled={loading[item.cartitm_fk_prd_id._id]}
+                                          >
+                                            +
+                                          </button>
+                                        </div>
                                       </div>
                                       <p className="mt-1 text-sm text-gray-500">
                                         ₹ {item.cartitm_fk_prd_id.prd_price} / item
-                                      </p>
-                                      <p className="text-sm text-gray-500">
-                                        Qty {item.cartitm_prd_qty}
                                       </p>
                                     </div>
                                     <div className="flex flex-1 items-end justify-between text-sm">
@@ -153,39 +189,31 @@ export default function Cart({ open, setOpen }) {
                                     </div>
                                   </div>
                                 </div>
-                              ))}
+                              )) :
+                                <div className="text-center">
+                                  <img className="block mx-auto w-4/6" src="https://cdn.kekastatic.net/shared/assets/images/components/placeholder/thinking-face.svg" alt="" />
+                                  <p className="text-xl">Empty</p>
+                                </div>
+                              }
                             </ul>
                           </div>
                         </div>
                       </div>
 
                       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                        <div className="flex justify-between text-base font-medium text-gray-900">
+                        <div className="text-2xl flex justify-between font-medium text-gray-900">
                           <p>Total</p>
-                          <p>
+                          <p className="font-bold text-3xl">
                             {data.cart_total_amount}
                           </p>
                         </div>
                         <div className="mt-6">
                           <a
-                            href="#"
+                            href=""
                             className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                           >
                             Order
                           </a>
-                        </div>
-                        <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-                          <p>
-                            or
-                            <button
-                              type="button"
-                              className="font-medium text-indigo-600 hover:text-indigo-500"
-                              onClick={() => setOpen(false)}
-                            >
-                              Continue Shopping
-                              <span aria-hidden="true"> &rarr;</span>
-                            </button>
-                          </p>
                         </div>
                       </div>
                     </div>

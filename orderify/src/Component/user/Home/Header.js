@@ -1,8 +1,9 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import LogOut from '../profile/LogOut';
 import Cart from './Cart';
+import { CartDataContext } from '../../../context/CartContext';
 
 const navigation = [
     { name: 'Product', to: '/products', current: true },
@@ -11,13 +12,14 @@ const navigation = [
 ]
 
 export default function Header() {
+    const { cartData } = useContext(CartDataContext);
     const [isLogoutShow, setIsLogoutShow] = useState(false);
     const [isCartModalShow, setIsCartModalShow] = useState(false);
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const navigate = useNavigate();
 
     return (
-        <Disclosure as="nav" className="bg-gray-800">
+        <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-10">
             <>
                 <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                     <div className="relative flex h-16 items-center justify-between">
@@ -30,7 +32,7 @@ export default function Header() {
                         <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                             <div>
                                 <div onClick={() => navigate("/products")} className='cursor-pointer flex justify-center align-baseline'>
-                                    <img className="h-10" alt="Your Company" src="LOGO.png" />
+                                    <img className="h-10" alt="Your Company" src="images/LOGO.png" />
                                     <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1'>rderify</p>
                                 </div>
                             </div>
@@ -46,12 +48,20 @@ export default function Header() {
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                             <button type="button"
-                                onClick={()=>setIsCartModalShow(pv=>!pv)}
-                                className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                onClick={() => setIsCartModalShow(pv => !pv)}
+                                className="relative rounded-full bg-black py-2 px-3 text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                             >
-                                <i className="fa-solid fa-cart-shopping"></i>
+                                {cartData.length > 0 &&
+                                    <p className='animated-ping absolute z-10 text-sm bg-orange-500 rounded-full px-1.5 -top-2 bg-transparent -right-2'>
+                                        {cartData.length}
+                                        <span className="animate-ping absolute top-0 right-0 inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span>
+                                    </p>
+                                }
+                                <i className={`fa-solid ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping`}>
+
+                                </i>
                             </button>
-                            <Cart open={isCartModalShow} setOpen={setIsCartModalShow}/>
+                            <Cart open={isCartModalShow} setOpen={setIsCartModalShow} />
 
                             {/* Profile dropdown */}
                             <Menu as="div" className="relative ml-3">
@@ -62,12 +72,6 @@ export default function Header() {
                                 </div>
                                 <Transition
                                     as={Fragment}
-                                // enter="transition ease-out duration-100"
-                                // enterFrom="transform opacity-0 scale-95"
-                                // enterTo="transform opacity-100 scale-100"
-                                // leave="transition ease-in duration-75"
-                                // leaveFrom="transform opacity-100 scale-100"
-                                // leaveTo="transform opacity-0 scale-95"
                                 >
                                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <Menu.Item>
