@@ -9,7 +9,7 @@ function Products() {
     const [loadingStates, setLoadingStates] = useState({});
     const [products, setProducts] = useState([]);
     // const [cartData, setCartData] = useState([]);
-    const { cartData, setCartData } = useContext(CartDataContext)
+    const { cartData, fetchCart } = useContext(CartDataContext)
     const token = localStorage.getItem('auth');
     const customHeaders = {
         'Auth': token,
@@ -28,14 +28,14 @@ function Products() {
             console.log(error);
         }
     };
-    const fetchCart = async () => {
-        try {
-            const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'GET', customHeaders });
-            setCartData(response.data.cart_items);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    // const fetchCart = async () => {
+    //     try {
+    //         const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'GET', customHeaders });
+    //         setCartData(response.data.cart_items);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
     const orderProduct = async (itemData) => {
         try {
             const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'POST', data: itemData, customHeaders });
