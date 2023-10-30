@@ -7,6 +7,6 @@ export const API_ENDPOINTS = {
     CART: `${API_BASE_URL}/cart`,
 
     // Order API
-    ADMIN_ORDERS: `${API_BASE_URL}/order`,      // Admin Order Details
+    ADMIN_ORDERS: `${API_BASE_URL}/orders`,      // Admin Order Details
     USER_ORDER: `${API_BASE_URL}/order-history`,         // User Order Details
 };

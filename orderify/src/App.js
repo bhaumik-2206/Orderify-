@@ -15,6 +15,7 @@ import Registration from './Component/auth/Registration';
 import Products from './Component/user/Home/Products';
 import CartContext from './context/CartContext';
 import Order from './Component/user/order/Order';
+import AdminPage from './Component/admin/AdminPage';
 
 
 
@@ -35,6 +36,7 @@ function App() {
           <Route path='/' element={<ProtectedHome Component={Dashboard} />}>
             <Route path="/products" element={<Products />} />
             <Route path="/order" element={<Order />} />
+            <Route path="/orders" element={<AdminPage />} />
             <Route path="/history" element={<Products />} />
             <Route path="/profile" element={<Profile />} />
           </Route>

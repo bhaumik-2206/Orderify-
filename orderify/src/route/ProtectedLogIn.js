@@ -6,6 +6,7 @@ const ProtectedLogIn = ({ Component }) => {
     const [auth, setAuth] = useState("")
     useEffect(() => {
         let auth = localStorage.getItem("auth");
+        let userData = localStorage.getItem("userData");
         setAuth(auth);
         if (auth) {
             navigate("/products");

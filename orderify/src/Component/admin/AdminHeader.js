@@ -4,10 +4,9 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import LogOut from '../user/profile/LogOut';
 
 const navigation = [
-    { name: 'Dashboard', to: '/products', current: false },
-    { name: 'Order', to: '/order', current: false },
+    { name: 'Dashboard', to: '/orders', current: false },
+    { name: 'Orders', to: '/orders', current: false },
     { name: 'Payment', to: '/profile', current: false },
-    { name: 'History', to: '/history', current: false },
 ]
 
 export default function AdminHeader() {
