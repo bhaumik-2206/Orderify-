@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import fetchApi from "../../../util/helper.js";
@@ -6,40 +6,26 @@ import { API_ENDPOINTS } from "../../../config/api.js";
 import { CartDataContext } from "../../../context/CartContext.js";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import ConfirmOrder from "./ConfirmOrder.js";
 
 export default function Cart({ open, setOpen }) {
   const [loading, setLoading] = useState({});
+  const [show, setShow] = useState(false);
   const { cartData, totalAmount, fetchCart } = useContext(CartDataContext);
-  const [data, setData] = useState({})
   const token = localStorage.getItem("auth");
 
   const customHeaders = {
     Auth: token,
   };
 
-  // useEffect(() => {
-  //   fetchCart();
-  // }, [open]);
-
-  // async function fetchCart() {
-  //   try {
-  //     let response = await fetchApi({
-  //       url: API_ENDPOINTS.CART,
-  //       method: "GET",
-  //       customHeaders,
-  //     });
-  //     if (response.status === 200) {
-  //       setCartData(response.data.cart_items);
-  //       setData(response.data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
-  const removeData = (data) => {
-    fetchApi({ url: API_ENDPOINTS.CART, method: "DELETE", data: { cart_items: data }, customHeaders })
-    fetchCart()
+  const removeData = async (data) => {
+    const response = await fetchApi({ url: API_ENDPOINTS.CART, method: "DELETE", data: { cart_items: data }, customHeaders })
+    if (response.status === 200) {
+      fetchCart();
+      toast.success("Item Removed Successfully");
+    } else {
+      toast.error("Error to remove the item");
+    }
   }
   const changeQuantity = async (productId, operation) => {
     setLoading(pre => ({ ...pre, [productId]: true }));
@@ -48,7 +34,7 @@ export default function Cart({ open, setOpen }) {
       toast.error("Maxinum Quantity")
     }
     if (operation === "-" && currentQuantity === 1) {
-      // toast.error(`${} Deleted Successfully`);
+      toast.success(`Item Removed Successfully`);
     }
     try {
       let response = await fetchApi({
@@ -123,7 +109,7 @@ export default function Cart({ open, setOpen }) {
 
                         <div className="mt-8 px-4">
                           <div className="flow-root">
-                            <ul role="list" className="-my-6 divide-y">
+                            <ul className="-my-6 divide-y">
                               {cartData.length > 0 ? cartData.map((item, index) => (
                                 <div key={index}
                                   className="flex flex-col sm:flex-row py-3 m-1 px-2"
@@ -131,7 +117,7 @@ export default function Cart({ open, setOpen }) {
                                   <div className="mb-3 sm:mb-0 w-1/2 block mx-auto sm:h-24 sm:w-24  flex-shrink-0 overflow-hidden rounded-md border">
                                     <img
                                       src={item.cartitm_fk_prd_id.prd_img}
-                                      alt="item image"
+                                      alt="Item"
                                       className="h-full w-full object-cover object-center"
                                     />
                                   </div>
@@ -179,8 +165,7 @@ export default function Cart({ open, setOpen }) {
                                           onClick={() => removeData([item.cartitm_fk_prd_id._id])}
                                           type="button"
                                           className="font-medium text-indigo-600 hover:text-indigo-500"
-                                        >
-                                          Remove
+                                        >Remove
                                         </button>
                                       </div>
                                     </div>
@@ -206,11 +191,12 @@ export default function Cart({ open, setOpen }) {
                         </div>
                         <div className="mt-6">
                           <Link
-                            href=""
-                            className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                          >
-                            Order
-                          </Link>
+                            onClick={() => {
+                              setShow(true);
+                            }}
+                            className={`${cartData.length > 0 ? "bg-indigo-600 hover:bg-indigo-700 cursor-pointer" : "bg-gray-600 cursor-not-allowed"} flex items-center justify-center rounded-md border border-transparent  px-6 py-3 text-base font-medium text-white shadow-sm`}
+                            disabled={cartData.length === 0}
+                          >Order</Link>
                         </div>
                       </div>
                     </div>
@@ -219,6 +205,7 @@ export default function Cart({ open, setOpen }) {
               </div>
             </div>
           </div>
+          <ConfirmOrder show={show} setShow={setShow} setOpen={setOpen} />
         </Dialog>
       </Transition.Root>
     </>

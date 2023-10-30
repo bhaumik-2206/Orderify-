@@ -6,7 +6,7 @@ export const CartDataContext = createContext();
 
 const CartContext = ({ children }) => {
     const [cartData, setCartData] = useState([]);
-    const [totalAmount, setTotalAmount] = useState("")
+    const [totalAmount, setTotalAmount] = useState("");
     const token = localStorage.getItem('auth');
     const customHeaders = {
         'Auth': token,
@@ -17,6 +17,7 @@ const CartContext = ({ children }) => {
             setCartData(response.data.cart_items);
             setTotalAmount(response.data.cart_total_amount);
         } catch (error) {
+            setCartData([]);
             console.log(error);
         }
     };

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import dayjs from 'dayjs';
 
 const userDetails = [
     { title: "First Name", value: "user_fname" },
@@ -14,7 +15,10 @@ const Profile = () => {
     const [userData, setUserData] = useState({})
     useEffect(() => {
         setUserData(JSON.parse(localStorage.getItem("userData")));
-    }, [])
+    }, []);
+
+    const date = dayjs(userData.createdAt)
+    
 
     return (
         <div className="bg-gray-100">
@@ -36,7 +40,7 @@ const Profile = () => {
                                 </li>
                                 <li className="flex items-center py-3">
                                     <span>Member since</span>
-                                    <span className="ml-auto">Nov 07, 2016</span>
+                                    <span className="ml-auto"> {date.format("DD MMM ,YYYY")}</span>
                                 </li>
                             </ul>
                         </div>
@@ -68,26 +72,6 @@ const Profile = () => {
                 </div>
             </div>
         </div>
-        // <div className='w-10/12 mx-auto'>
-        //     <div className="bg-gray-700 text-white my-4 rounded-lg">
-        //         <div className='w-full flex border-b-2 border-black p-3 justify-between align-middle'>
-        //             <div>
-        //                 <h1 className='ps-3 text-2xl font-bold'>Primary Details</h1>
-        //             </div>
-        //             <div>
-        //                 <button className='block text-blue-950'>Edit</button>
-        //             </div>
-        //         </div>
-        //         <div className="flex flex-wrap p-3">
-        //             {userDetails.map((item, index) => (
-        //                 <div key={index} className='ps-3 w-1/2 mb-3' >
-        //                     <p className='text-md'>{item.title}</p>
-        //                     {userData[item.value] ? <p className='text-sm'>{userData[item.value]}</p> : <p>Not Added</p>}
-        //                 </div>
-        //             ))}
-        //         </div>
-        //     </div>
-        // </div>
     )
 }
 

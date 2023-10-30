@@ -57,9 +57,7 @@ export default function Header() {
                                         {/* <span className="animate-ping absolute top-0 right-0 inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span> */}
                                     </p>
                                 }
-                                <i className={`fa-solid text-xl ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping`}>
-
-                                </i>
+                                <i className={`fa-solid text-sm sm:text-xl ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping`}></i>
                             </button>
                             <Cart open={isCartModalShow} setOpen={setIsCartModalShow} />
 
@@ -67,7 +65,7 @@ export default function Header() {
                             <Menu as="div" className="relative ml-3">
                                 <div>
                                     <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                        <i className="fa-solid fa-user bg-black px-3 py-1.5 text-white rounded-full text-lg"></i>
+                                        <i className="fa-solid fa-user bg-black px-3 sm:px-3 py-2 sm:py-1.5 text-white rounded-full text-sm sm:text-lg"></i>
                                     </Menu.Button>
                                 </div>
                                 <Transition
@@ -90,7 +88,7 @@ export default function Header() {
                                             <Link
                                                 className={`block px-4 py-2 text-sm text-gray-700 hover:bg-slate-200 bg-slate-50`}
                                                 onClick={() => setIsLogoutShow(true)}
-                                            > Sign out</Link >
+                                            > Log out</Link >
                                         </Menu.Item>
                                     </Menu.Items>
                                 </Transition>

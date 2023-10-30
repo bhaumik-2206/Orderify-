@@ -6,7 +6,8 @@ const LogOut = ({ isModalOpen, setIsModalOpen }) => {
     const navigate = useNavigate();
 
     const handleDeactivateAccount = () => {
-        localStorage.clear();
+        localStorage.removeItem("userData");
+        localStorage.removeItem("auth");
         setIsModalOpen(false);
         navigate("/logIn");
         toast.error("Logged Out Successfully");
