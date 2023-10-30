@@ -6,9 +6,8 @@ import Cart from './Cart';
 import { CartDataContext } from '../../../context/CartContext';
 
 const navigation = [
-    { name: 'Product', to: '/products', current: true },
-    { name: 'Order', to: '/order', current: false },
-    { name: 'History', to: '/history', current: false },
+    { name: 'Products', to: '/products', current: true },
+    { name: 'Orders', to: '/order', current: false },
 ]
 
 export default function Header() {
@@ -33,7 +32,7 @@ export default function Header() {
                             <div>
                                 <div onClick={() => navigate("/products")} className='cursor-pointer flex justify-center align-baseline'>
                                     <img className="h-10" alt="Your Company" src="images/LOGO.png" />
-                                    <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1 mr-10 sm:mr-0'>rderify</p>
+                                    <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1 mr-10 sm:mr-0 select-none'>rderify</p>
                                 </div>
                             </div>
                             <div className="hidden sm:ml-6 sm:block">

@@ -8,5 +8,5 @@ export const API_ENDPOINTS = {
 
     // Order API
     ADMIN_ORDERS: `${API_BASE_URL}/order`,      // Admin Order Details
-    // USER_ORDER: `${API_BASE_URL}/order`,         // User Order Details
+    USER_ORDER: `${API_BASE_URL}/order-history`,         // User Order Details
 };

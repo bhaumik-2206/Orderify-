@@ -14,6 +14,7 @@ import LogIn from './Component/auth/LogIn';
 import Registration from './Component/auth/Registration';
 import Products from './Component/user/Home/Products';
 import CartContext from './context/CartContext';
+import Order from './Component/user/order/Order';
 
 
 
@@ -33,7 +34,7 @@ function App() {
           {/* Main Dashboard Routes */}
           <Route path='/' element={<ProtectedHome Component={Dashboard} />}>
             <Route path="/products" element={<Products />} />
-            <Route path="/order" element={<Products />} />
+            <Route path="/order" element={<Order />} />
             <Route path="/history" element={<Products />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
