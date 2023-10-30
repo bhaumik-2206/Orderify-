@@ -52,12 +52,12 @@ export default function Header() {
                                 className="relative rounded-full bg-black py-2 px-3 text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                             >
                                 {cartData.length > 0 &&
-                                    <p className='animated-ping absolute z-10 text-sm bg-orange-500 rounded-full px-1.5 -top-2 bg-transparent -right-2'>
+                                    <p className='absolute z-10 text-sm bg-orange-500 rounded-full px-1.5 -top-2 -right-2'>
                                         {cartData.length}
-                                        <span className="animate-ping absolute top-0 right-0 inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span>
+                                        {/* <span className="animate-ping absolute top-0 right-0 inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span> */}
                                     </p>
                                 }
-                                <i className={`fa-solid ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping`}>
+                                <i className={`fa-solid text-xl ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping`}>
 
                                 </i>
                             </button>
@@ -67,7 +67,7 @@ export default function Header() {
                             <Menu as="div" className="relative ml-3">
                                 <div>
                                     <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                        <i className="fa-solid fa-user bg-black p-2 text-white rounded-full "></i>
+                                        <i className="fa-solid fa-user bg-black px-3 py-1.5 text-white rounded-full text-lg"></i>
                                     </Menu.Button>
                                 </div>
                                 <Transition
@@ -99,7 +99,7 @@ export default function Header() {
                     </div>
                 </div>
                 {isOpenMenu &&
-                    <div className='space-y-1 px-2 pb-3 pt-2'>
+                    <div className='block sm:hidden space-y-1 px-2 pb-3 pt-2'>
                         {navigation.map((item, index) => (
                             <NavLink key={index} to={item.to} className={({ isActive }) =>
                                 `block rounded-md px-3 py-2 text-base font-medium ${isActive ? "bg-gray-900 text-white  " : "text-gray-300 hover:bg-gray-700 hover:text-white"} `

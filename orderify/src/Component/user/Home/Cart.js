@@ -5,10 +5,11 @@ import fetchApi from "../../../util/helper.js";
 import { API_ENDPOINTS } from "../../../config/api.js";
 import { CartDataContext } from "../../../context/CartContext.js";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export default function Cart({ open, setOpen }) {
   const [loading, setLoading] = useState({});
-  const { cartData, setCartData } = useContext(CartDataContext);
+  const { cartData, totalAmount, fetchCart } = useContext(CartDataContext);
   const [data, setData] = useState({})
   const token = localStorage.getItem("auth");
 
@@ -16,29 +17,29 @@ export default function Cart({ open, setOpen }) {
     Auth: token,
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [open]);
+  // useEffect(() => {
+  //   fetchCart();
+  // }, [open]);
 
-  async function fetchData() {
-    try {
-      let response = await fetchApi({
-        url: API_ENDPOINTS.CART,
-        method: "GET",
-        customHeaders,
-      });
-      if (response.status === 200) {
-        setCartData(response.data.cart_items);
-        setData(response.data);
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // async function fetchCart() {
+  //   try {
+  //     let response = await fetchApi({
+  //       url: API_ENDPOINTS.CART,
+  //       method: "GET",
+  //       customHeaders,
+  //     });
+  //     if (response.status === 200) {
+  //       setCartData(response.data.cart_items);
+  //       setData(response.data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   const removeData = (data) => {
     fetchApi({ url: API_ENDPOINTS.CART, method: "DELETE", data: { cart_items: data }, customHeaders })
-    fetchData()
+    fetchCart()
   }
   const changeQuantity = async (productId, operation) => {
     setLoading(pre => ({ ...pre, [productId]: true }));
@@ -57,7 +58,7 @@ export default function Cart({ open, setOpen }) {
         , customHeaders
       })
       if (response.status === 200) {
-        fetchData();
+        fetchCart();
       }
     } catch (error) {
       toast.error("Error to add item");
@@ -135,7 +136,7 @@ export default function Cart({ open, setOpen }) {
                                     />
                                   </div>
 
-                                  <div className="w-full ml-4 flex flex-1 flex-col w-60">
+                                  <div className="w-full ml-4 flex flex-1 flex-col">
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <p className="text-md text-ellipsis">
@@ -200,16 +201,16 @@ export default function Cart({ open, setOpen }) {
                         <div className="text-2xl flex justify-between font-medium text-gray-900">
                           <p>Total</p>
                           <p className="font-bold text-3xl">
-                            {data.cart_total_amount}
+                            ₹ {totalAmount}
                           </p>
                         </div>
                         <div className="mt-6">
-                          <a
+                          <Link
                             href=""
                             className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                           >
                             Order
-                          </a>
+                          </Link>
                         </div>
                       </div>
                     </div>
