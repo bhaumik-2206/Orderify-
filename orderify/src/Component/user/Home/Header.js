@@ -53,18 +53,15 @@ export default function Header({ role }) {
                             {
                                 role === "user" ? (
                                     <button type="button"
-                                        onClick={() => setIsCartModalShow(pv => !pv)}
+                                        onClick={() => { setIsCartModalShow(true); }}
                                         className="relative rounded-full bg-black py-2 px-3 text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                                    >
-                                        {cartData.length > 0 &&
-                                            <p className='absolute z-10 text-sm bg-orange-500 rounded-full px-1.5 -top-2 -right-2'>
-                                                {cartData.length}
-                                                {/* <span className="animate-ping absolute top-0 right-0 inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span> */}
-                                            </p>
-                                        }
-                                        <i className={`fa-solid text-sm sm:text-xl ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping`}></i>
+                                    >{cartData.length > 0 &&
+                                        <p className='absolute z-10 text-sm bg-orange-500 rounded-full px-1.5 -top-2 -right-2'>
+                                            {cartData.length}
+                                        </p>
+                                        }<i className={`fa-solid text-sm sm:text-xl ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping`}></i>
                                     </button>
-                                ): null
+                                ) : null
                             }
 
                             <Cart open={isCartModalShow} setOpen={setIsCartModalShow} />
