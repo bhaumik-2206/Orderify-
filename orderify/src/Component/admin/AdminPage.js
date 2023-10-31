@@ -9,26 +9,24 @@ function AdminPage() {
     const customHeaders = {
         'Auth': token,
     };
+
     const fetchOders = async () => {
         try {
             const response = await fetchApi({ url: API_ENDPOINTS.ADMIN_ORDERS, method: 'GET', customHeaders });
-            setOders(response.data)
-            if (!(response.status === 200)) {
-                setOders([])
+            if (response.status === 200) {
+                setOders(response.data)
             }
-            console.log(response);
         } catch (error) {
             console.log(error)
-            setOders([])
         }
 
     }
-    // console.log(showUser)
+
     useEffect(() => {
         fetchOders();
     }, [])
-    return (
 
+    return (
         <div className="inset-0 overflow-hidden">
             <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                 <div className="mt-2">
@@ -36,11 +34,9 @@ function AdminPage() {
                         <ul role="list" className="-my-6 divide-y divide-gray-200 ">
                             {orders.map((item) => (
                                 <div key={item.prd_id} >
-                                    <li className="flex py-6">
-                                        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                            <img
-                                                src={item.prd_img}
-                                                // alt={item.imageAlt}
+                                    <li className="block sm:flex py-6">
+                                        <div className="h-28 w-28 mx-auto sm:h-40 sm:w-40 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                            <img src={item.prd_img} alt="Item"
                                                 className="h-full w-full object-cover object-center"
                                             />
                                         </div>
@@ -48,23 +44,22 @@ function AdminPage() {
                                         <div className="ml-4 flex flex-1 flex-col">
                                             <div>
                                                 <div className="flex justify-between text-base font-medium text-gray-900">
-                                                    <h3>
-                                                        <p >{item.prd_name}</p>
-                                                    </h3>
-                                                    <div>
-                                                        <p className="ml-4">Price: ₹ {item.prd_price}/item</p>
-                                                        <p className="ml-4">Total Amount: ₹ {item.total_amount}</p>
+                                                    <div className='w-1/2'>
+                                                        <p>{item.prd_name}</p>
+                                                        <p className="text-xl ">Qty: <b>{item.total_qty}</b></p>
+                                                    </div>
+                                                    <div className='text-right w-1/2'>
+                                                        <p>₹ {item.prd_price}/item</p>
+                                                        <p className='text-xl'>Total: ₹ <b className='text-2xl'>{item.total_amount}</b></p>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="flex flex-1 items-end justify-between text-sm">
-                                                <p className="text-lg ">Qty:{item.total_qty}</p>
-
+                                            <div className="flex flex-1 items-end justify-end text-sm">
                                                 <div className="flex">
                                                     <button
                                                         type="button"
                                                         className="font-medium text-indigo-600 hover:text-indigo-500 text-lg"
-                                                        onClick={() => setShowUser(pre => !pre[item.prd_id]&&({ [item.prd_id]: true }))}
+                                                        onClick={() => setShowUser(pre => !pre[item.prd_id] && ({ [item.prd_id]: true }))}
                                                     >
                                                         {showUser[item.prd_id] ? "hide users" : "show users"}
                                                     </button>
