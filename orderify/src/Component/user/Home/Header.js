@@ -5,18 +5,22 @@ import LogOut from '../profile/LogOut';
 import Cart from './Cart';
 import { CartDataContext } from '../../../context/CartContext';
 
-const navigation = [
+const navigationUser = [
     { name: 'Products', to: '/products', current: true },
     { name: 'Orders', to: '/order', current: false },
 ]
-
-export default function Header() {
+const navigationAdmin = [
+    { name: 'Dashboard', to: '/orders', current: false },
+    { name: 'Orders', to: '/orders', current: false },
+    { name: 'Payment', to: '/profile', current: false },
+]
+export default function Header({ role }) {
     const { cartData } = useContext(CartDataContext);
     const [isLogoutShow, setIsLogoutShow] = useState(false);
     const [isCartModalShow, setIsCartModalShow] = useState(false);
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const navigate = useNavigate();
-
+    const navigation = role === 'admin' ? navigationAdmin : navigationUser;
     return (
         <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-10">
             <>
@@ -46,18 +50,23 @@ export default function Header() {
                             </div>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                            <button type="button"
-                                onClick={() => setIsCartModalShow(pv => !pv)}
-                                className="relative rounded-full bg-black py-2 px-3 text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                            >
-                                {cartData.length > 0 &&
-                                    <p className='absolute z-10 text-sm bg-orange-500 rounded-full px-1.5 -top-2 -right-2'>
-                                        {cartData.length}
-                                        {/* <span className="animate-ping absolute top-0 right-0 inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span> */}
-                                    </p>
-                                }
-                                <i className={`fa-solid text-sm sm:text-xl ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping`}></i>
-                            </button>
+                            {
+                                role === "user" ? (
+                                    <button type="button"
+                                        onClick={() => setIsCartModalShow(pv => !pv)}
+                                        className="relative rounded-full bg-black py-2 px-3 text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                    >
+                                        {cartData.length > 0 &&
+                                            <p className='absolute z-10 text-sm bg-orange-500 rounded-full px-1.5 -top-2 -right-2'>
+                                                {cartData.length}
+                                                {/* <span className="animate-ping absolute top-0 right-0 inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span> */}
+                                            </p>
+                                        }
+                                        <i className={`fa-solid text-sm sm:text-xl ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping`}></i>
+                                    </button>
+                                ): null
+                            }
+
                             <Cart open={isCartModalShow} setOpen={setIsCartModalShow} />
 
                             {/* Profile dropdown */}

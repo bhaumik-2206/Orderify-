@@ -6,10 +6,15 @@ const ProtectedLogIn = ({ Component }) => {
     const [auth, setAuth] = useState("")
     useEffect(() => {
         let auth = localStorage.getItem("auth");
-        let userData = localStorage.getItem("userData");
+        let userData = JSON.parse(localStorage.getItem("userData"));
         setAuth(auth);
         if (auth) {
-            navigate("/products");
+            if (userData.user_role === "admin") {
+                navigate("/orders");
+            } else {
+                navigate("/products");
+            }
+
         }
     }, []);
 

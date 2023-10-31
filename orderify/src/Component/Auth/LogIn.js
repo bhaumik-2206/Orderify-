@@ -19,7 +19,7 @@ const LogIn = () => {
             if (response.status === 200) {
                 localStorage.setItem("auth", response.token);
                 localStorage.setItem("userData", JSON.stringify(response.data));
-                navigate("/products");
+                navigate(response.data.user_role === "admin" ? "/orders" : "/products");
                 toast.success("Log In Successfully");
             } else {
                 toast.error(response.message);

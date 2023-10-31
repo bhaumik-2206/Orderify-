@@ -30,7 +30,7 @@ export default function AdminHeader() {
                         </div>
                         <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                             <div>
-                                <div onClick={() => navigate("/products")} className='cursor-pointer flex justify-center align-baseline'>
+                                <div onClick={() => navigate("/orders")} className='cursor-pointer flex justify-center align-baseline'>
                                     <img className="h-10" alt="Your Company" src="images/LOGO.png" />
                                     <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1'>rderify</p>
                                 </div>
