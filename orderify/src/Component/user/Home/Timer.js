@@ -1,0 +1,116 @@
+import { useCallback, useEffect, useState } from "react";
+
+const Timer = () => {
+  const [countDownTime, setCountDownTime] = useState({
+    hours: "00",
+    minutes: "00",
+    seconds: "00",
+  });
+  const [isShopOpen, setIsShopOpen] = useState(true);
+
+  const getTimeDifference = () => {
+    const currentDate = new Date();
+    const targetDate = new Date();
+    targetDate.setHours(19, 46, 0); // Set the target time
+    if (currentDate > targetDate) {
+      targetDate.setDate(targetDate.getDate() + 1);
+      setIsShopOpen(false);
+    }
+    const timeDifference = targetDate - currentDate;
+
+    const hours =
+      Math.floor(timeDifference / (1000 * 60 * 60)) >= 10
+        ? Math.floor(timeDifference / (1000 * 60 * 60))
+        : `0${Math.floor(timeDifference / (1000 * 60 * 60))}`;
+    const minutes =
+      Math.floor((timeDifference / 1000 / 60) % 60) >= 10
+        ? Math.floor((timeDifference / 1000 / 60) % 60)
+        : `0${Math.floor((timeDifference / 1000 / 60) % 60)}`;
+    const seconds =
+      Math.floor((timeDifference / 1000) % 60) >= 10
+        ? Math.floor((timeDifference / 1000) % 60)
+        : `0${Math.floor((timeDifference / 1000) % 60)}`;
+
+    setCountDownTime({
+      hours: hours,
+      minutes: minutes,
+      seconds: seconds,
+    });
+  };
+
+  const startCountDown = useCallback(() => {
+    getTimeDifference();
+    const interval = setInterval(() => {
+      getTimeDifference();
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  //   console.log('object')
+  useEffect(() => {
+    startCountDown();
+  }, [startCountDown]);
+
+  return (
+    <div className="flex h-30 flex-col md:flex-row justify-center items-center bg-[#111827] w-fit rounded px-5 py-3 shadow-inner shadow-black m-3">
+      <div className="flex flex-col items-center justify-center w-full h-full gap-8 sm:gap-16">
+        <div className="flex flex-col justify-center gap-1 sm:gap-1">
+          <div className="flex justify-between">
+            <div className="text-white">Status</div>
+            <div className="text-white">---{">"}</div>
+            <div
+              className={`${
+                isShopOpen ? "bg-green-600" : "bg-red-600"
+              } text-white font-semibold px-2 rounded w-fit`}
+            >
+              {isShopOpen ? "Open" : "Close"}
+            </div>
+          </div>
+          <div
+            className={`font-semibold mb-1 ${
+              !isShopOpen ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {isShopOpen ? "Closing In :-" : "Opening In :-"}
+          </div>
+          <div className="flex gap-6">
+            {Object.keys(countDownTime).map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col shadow p-2 bg-[#1F2937] rounded -m-0.5 -mx-2 relative"
+              >
+                <div className="h-10 w-10 sm:w-32 sm:h-32 lg:w-12 lg:h-12 flex justify-between items-center bg-[#111827] rounded-lg">
+                  <div className="relative h-1.5 w-1.5 sm:h-2 sm:w-2 !-left-[6px] rounded-full bg-[#B45309]"></div>
+                  <span className="text-lg sm:text-xl font-semibold text-white">
+                    {countDownTime[item]}
+                  </span>
+                  <div className="relative h-1.5 w-1.5 sm:h-2 sm:w-2 -right-[6px] rounded-full bg-[#B45309]"></div>
+                </div>
+                <span className="text-white text-xs sm:text-sm text-center capitalize">
+                  {item}
+                </span>
+              </div>
+            ))}
+            
+            <div className="flex flex-col shadow p-2 bg-[#1F2937] rounded -m-0.5 -mx-2 relative">
+              <div className="h-10 w-10 sm:w-32 sm:h-32 lg:w-12 lg:h-12 flex justify-between items-center bg-[#111827] rounded-lg">
+                <div className="relative h-1.5 w-1.5 sm:h-2 sm:w-2 !-left-[6px] rounded-full bg-[#B45309]"></div>
+                <span className="relative lg:text-lg sm:text-6xl text-3xl font-semibold text-white">
+                    <div style={{ transform: `rotate(${countDownTime.seconds * 6}deg)`, transformOrigin: 'bottom center'}} className={`bg-yellow-400 translate-x-1/2 w-0.5 bottom-1/2  h-5 rounded absolute`}></div>
+                    <div style={{ transform: `rotate(${countDownTime.minutes * 6}deg)`, transformOrigin: 'bottom center' }} className={`bg-white w-1 h-4 rounded absolute bottom-1/2 `}></div>
+                    <div style={{ transform: `rotate(${countDownTime.hours * 30}deg)`, transformOrigin: 'bottom center' }} className={`bg-[#B45309] w-1 h-3  rounded-sm absolute bottom-1/2 `}></div>
+                  </span>
+                <div className="relative h-1.5 w-1.5 sm:h-2 sm:w-2 -right-[6px] rounded-full bg-[#B45309]"></div>
+              </div>
+              <span className="text-white text-xs sm:text-sm text-center capitalize">
+                Clock
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Timer;
