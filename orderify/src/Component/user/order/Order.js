@@ -20,29 +20,34 @@ const Order = () => {
 
     const fetchUserOrder = async () => {
         setLoading(true);
+
         try {
             let date = dayjs();
             const response = await fetchApi({
                 url: API_ENDPOINTS.USER_ORDER, method: 'POST', data: { start: date.subtract(10, "day").format("DD-MM-YYYY"), end: date.format("DD-MM-YYYY") }, customHeaders
             });
             if (response.status === 200) {
-                let order = response.data.reverse();
-                const groupedOrders = Object.entries(order.reduce((result, order) => {
-                    const date = new Date(order.order_date).toDateString();
-                    if (!result[date]) {
-                        result[date] = [];
+                let order = response.data;
+                // console.log(order)
+                const groupedOrders = {}
+                order.forEach(element => {
+                    const orderdDate = new Date(element.order_date).toDateString();
+                    if(groupedOrders[orderdDate]){
+                        groupedOrders[orderdDate].push(element)
+                    }else{
+                        groupedOrders[orderdDate] = [element]
                     }
-                    result[date].push(order);
-                    return result;
-                }, {}));
-                setOrders(groupedOrders);
+                });
+                // console.log('groupdata ',groupedOrders)
+                setOrders({...groupedOrders});
                 setLoading(false);
             } else {
-                console.log("ERROR")
+                toast.error("ERROR - Invalid status code")
             }
         } catch (error) {
             toast.error("Error to get order History")
-        }
+        } 
+
     }
 
     const handleButAgain = async (productId) => {
@@ -61,19 +66,20 @@ const Order = () => {
             <div className="fixed inset-0 flex items-center justify-center">
                 <div className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl  text-blue-700">
                     <i className="fas fa-spinner fa-spin animate-spin"></i>
-                </div>
+                </div>      
             </div>
         )
     }
+    
     return (
-        orders.length === 0 ? (
+        Object.keys(orders).length === 0 ? (
             <h1 className='text-2xl font-bold'>Data is empty</h1>
         ) :
-            (orders.map(([date, dateArray], index) => (
+            (Object.keys(orders).map((item, index) => (
                 <div key={index} className='w-full sm:w-10/12 mx-auto'>
-                    <h2 className='text-3xl mt-3 font-semibold mx-5 text-shadow'>{date}</h2>
+                    <h2 className='text-3xl mt-3 font-semibold mx-5 text-shadow'>{item}</h2>
                     <div className='grid grid-cols-2 sm:block'>
-                        {dateArray.map((dateArray, index) => (
+                        {orders[item].map((dateArray, index) => (
                             <div key={index} className="m-2 py-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center">
                                 <div className="block text-center sm:text-left sm:flex">
                                     <div className=" mb-3 sm:mb-0 w-40 sm:block mx-auto sm:h-40 flex-shrink-0 overflow-hidden rounded-md border">
