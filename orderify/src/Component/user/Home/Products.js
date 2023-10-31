@@ -27,32 +27,19 @@ function Products() {
             console.log(error);
         }
     };
-    // const fetchCart = async () => {
-    //     try {
-    //         const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'GET', customHeaders });
-    //         setCartData(response.data.cart_items);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
     const orderProduct = async (itemData) => {
         try {
             const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'POST', data: itemData, customHeaders });
             if (response.status === 200) {
-                fetchCart();
+                await fetchCart();
             }
             if (response.status === 400) {
-                toast.warn(response.message, {
-                    position: "bottom-center",
-                    autoClose: 1000,
-                    theme: "dark",
-                });
+                toast.error("Maxinum Quantity");
             }
         } catch (error) {
             console.log("Error To Fetch API");
-        } finally {
-            toggleLoadingState(itemData.cartitm_fk_prd_id, false)
         }
+        toggleLoadingState(itemData.cartitm_fk_prd_id, false)
     };
 
     const addItem = (productId) => {

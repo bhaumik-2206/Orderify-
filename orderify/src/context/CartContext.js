@@ -8,6 +8,7 @@ const CartContext = ({ children }) => {
     const [cartData, setCartData] = useState([]);
     const [totalAmount, setTotalAmount] = useState("");
     const token = localStorage.getItem('auth');
+    const userData = JSON.parse(localStorage.getItem('userData'));
     const customHeaders = {
         'Auth': token,
     };
@@ -17,13 +18,15 @@ const CartContext = ({ children }) => {
             setCartData(response.data.cart_items);
             setTotalAmount(response.data.cart_total_amount);
         } catch (error) {
-            setCartData([]);
             console.log(error);
         }
     };
     useEffect(() => {
         fetchCart();
+        // userData.user_role === "user" && fetchCart();
     }, [])
+
+    
     return (
         <CartDataContext.Provider value={{ cartData, setCartData, fetchCart, totalAmount }}>
             {children}

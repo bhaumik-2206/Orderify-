@@ -5,53 +5,60 @@ import fetchApi from "../../../util/helper.js";
 import { API_ENDPOINTS } from "../../../config/api.js";
 import { CartDataContext } from "../../../context/CartContext.js";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 import ConfirmOrder from "./ConfirmOrder.js";
 
 export default function Cart({ open, setOpen }) {
   const [loading, setLoading] = useState({});
+  const [removeAllOrder, setRemoveAllOrder] = useState(false);
   const [show, setShow] = useState(false);
   const { cartData, totalAmount, fetchCart } = useContext(CartDataContext);
   const token = localStorage.getItem("auth");
-
   const customHeaders = {
     Auth: token,
   };
 
-  const removeData = async (data) => {
-    const response = await fetchApi({ url: API_ENDPOINTS.CART, method: "DELETE", data: { cart_items: data }, customHeaders })
-    if (response.status === 200) {
-      fetchCart();
-      toast.success("Item Removed Successfully");
-    } else {
-      toast.error("Error to remove the item");
+  const removeData = async (data, type) => {
+    if (type === "all")
+      setRemoveAllOrder(true)
+    try {
+      const response = await fetchApi({ url: API_ENDPOINTS.CART, method: "DELETE", data: { cart_items: data }, customHeaders })
+      if (response.status === 200) {
+        await fetchCart();
+        toast.success("Item Removed Successfully");
+      }
+    } catch (error) {
+      toast.error("Error to remove the item")
     }
+    setRemoveAllOrder(false);
   }
   const changeQuantity = async (productId, operation) => {
     setLoading(pre => ({ ...pre, [productId]: true }));
     const currentQuantity = cartData.find((item) => item.cartitm_fk_prd_id._id === productId).cartitm_prd_qty;
-    if (operation === "+" && currentQuantity === 5) {
-      toast.error("Maxinum Quantity")
-    }
-    if (operation === "-" && currentQuantity === 1) {
-      toast.success(`Item Removed Successfully`);
-    }
+    // if (operation === "+" && currentQuantity === 5) {
+    //   toast.error("Maxinum Quantity")
+    // }
+    // if (operation === "-" && currentQuantity === 1) {
+    //   toast.success(`Item Removed Successfully`);
+    // }
     try {
       let response = await fetchApi({
         url: API_ENDPOINTS.CART, method: "POST",
         data: operation === "-" ? { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity - 1 } :
           { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity + 1 }
         , customHeaders
-      })
+      });
       if (response.status === 200) {
-        fetchCart();
+        await fetchCart();
+      }
+      if (response.status === 400) {
+        toast.error("Maxinum Quantity");
       }
     } catch (error) {
       toast.error("Error to add item");
-    } finally {
-      setLoading(pre => ({ ...pre, [productId]: false }));
     }
+    setLoading(pre => ({ ...pre, [productId]: false }));
   }
+
 
   return (
     <>
@@ -89,12 +96,16 @@ export default function Cart({ open, setOpen }) {
                             Shopping cart
                           </Dialog.Title>
                           <div className=" flex justify-between h-7 items-center">
-                            <button
-                              className="text-red-700 text-lg px-0  sm:px-3"
-                              onClick={() => cartData.length > 0 && removeData(cartData.map(item => item.cartitm_fk_prd_id._id))}
-                            >
-                              Remove all
-                            </button>
+                            {removeAllOrder ?
+                              (<div className="animate-spin"><i className="fa-solid text-red-700 mx-10 fa-spinner"></i></div>
+                              ) : (
+                                <button
+                                  className={`${cartData.length === 0 ? "text-gray-500" : "text-red-700"}  text-lg px-0  sm:px-3`}
+                                  onClick={() => cartData.length > 0 && removeData(cartData.map(item => item.cartitm_fk_prd_id._id), "all")}
+                                  disabled={cartData.length === 0}
+                                >Remove all
+                                </button>
+                              )}
                             <button
                               type="button"
                               className="relative -m-2 p-2 text-gray-500 hover:text-gray-600"
@@ -134,8 +145,7 @@ export default function Cart({ open, setOpen }) {
                                             className="w-1/3 block bg-slate-50 hover:bg-slate-100 text-blue-700 border-r-2 border-blue-700 font-bold p-0 px-2 rounded-l-md"
                                             onClick={() => changeQuantity(item.cartitm_fk_prd_id._id, "-")}
                                             disabled={loading[item.cartitm_fk_prd_id._id]}
-                                          >-
-                                          </button>
+                                          >-</button>
                                           {
                                             loading[item.cartitm_fk_prd_id._id] ?
                                               <div className="animate-spin"><i className="fa-solid fa-spinner"></i></div> :
@@ -173,8 +183,9 @@ export default function Cart({ open, setOpen }) {
                                 </div>
                               )) : (
                                 <div className="text-center">
-                                  <img className="block mx-auto w-4/6" src="https://cdn.kekastatic.net/shared/assets/images/components/placeholder/thinking-face.svg" alt="" />
-                                  <p className="text-xl">Empty</p>
+                                  {/* <img className="block mx-auto w-4/6" src="https://cdn.kekastatic.net/shared/assets/images/components/placeholder/thinking-face.svg" alt="" /> */}
+                                  <p className="text-xl">Your cart is empty!!!</p>
+                                  <button onClick={() => setOpen(false)} className="text-blue-700 text-center font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md hover:bg-slate-100 border border-blue-700 my-3">Order now</button>
                                 </div>
                               )}
                             </ul>
@@ -183,20 +194,18 @@ export default function Cart({ open, setOpen }) {
                       </div>
 
                       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                        <div className="text-2xl flex justify-between font-medium text-gray-900">
+                        {totalAmount !== 0 && <div className="text-2xl flex justify-between font-medium text-gray-900">
                           <p>Total</p>
                           <p className="font-bold text-3xl">
                             ₹ {totalAmount}
                           </p>
-                        </div>
+                        </div>}
                         <div className="mt-6">
-                          <Link
-                            onClick={() => {
-                              setShow(true);
-                            }}
-                            className={`${cartData.length > 0 ? "bg-indigo-600 hover:bg-indigo-700 cursor-pointer" : "bg-gray-600 cursor-not-allowed"} flex items-center justify-center rounded-md border border-transparent  px-6 py-3 text-base font-medium text-white shadow-sm`}
+                          <button
+                            onClick={() => setShow(true)}
+                            className={`${cartData.length > 0 ? "bg-indigo-600 hover:bg-indigo-700 cursor-pointer" : "bg-gray-600 cursor-not-allowed"} w-full flex items-center justify-center rounded-md border border-transparent  px-6 py-3 text-base font-medium text-white shadow-sm`}
                             disabled={cartData.length === 0}
-                          >Order</Link>
+                          >Order</button>
                         </div>
                       </div>
                     </div>
