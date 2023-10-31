@@ -3,22 +3,36 @@ import fetchApi from '../../../util/helper';
 import { API_ENDPOINTS } from '../../../config/api';
 import { toast } from 'react-toastify';
 import { CartDataContext } from '../../../context/CartContext';
-
+import ReactPaginate from 'react-paginate';
 
 function Products() {
     const [loadingStates, setLoadingStates] = useState({});
     const [products, setProducts] = useState([]);
+    const { cartData, setCartData } = useContext(CartDataContext)
+    const [itemOffset, setItemOffset] = useState(0);
+    const itemsPerPage = 4;
+    const endOffset = itemOffset + itemsPerPage;
+    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+    const currentItems = products.slice(itemOffset, endOffset);
+    const pageCount = Math.ceil(products.length / itemsPerPage);
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % products.length;
+        console.log(
+            `User requested page number ${event.selected}, which is offset ${newOffset}`
+        );
+        setItemOffset(newOffset);
+    };
+
     // const [cartData, setCartData] = useState([]);
-    const { cartData, fetchCart } = useContext(CartDataContext)
     const token = localStorage.getItem('auth');
     const customHeaders = {
         'Auth': token,
     };
-    // console.log(cartData)
+
     useEffect(() => {
         fetchData();
     }, []);
-    // console.log(products)
+
     const fetchData = async () => {
         try {
             const response = await fetchApi({ url: API_ENDPOINTS.PRODUCT, method: 'GET', customHeaders });
@@ -31,15 +45,21 @@ function Products() {
         try {
             const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'POST', data: itemData, customHeaders });
             if (response.status === 200) {
-                await fetchCart();
+                setCartData(response.data.cart_items);
+                // fetchCart();
             }
             if (response.status === 400) {
-                toast.error("Maxinum Quantity");
+                toast.warn(response.message, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                    theme: "dark",
+                });
             }
         } catch (error) {
             console.log("Error To Fetch API");
+        } finally {
+            toggleLoadingState(itemData.cartitm_fk_prd_id, false)
         }
-        toggleLoadingState(itemData.cartitm_fk_prd_id, false)
     };
 
     const addItem = (productId) => {
@@ -71,7 +91,6 @@ function Products() {
 
     };
 
-
     if (products.length === 0) {
         return (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -85,7 +104,7 @@ function Products() {
         <div className="bg-white">
             <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                    {products.map((product) => (
+                    {currentItems.map((product) => (
                         <div key={product._id} className="flex flex-col justify-between bg-white rounded-lg overflow-hidden shadow-lg transition-transform">
                             <div>
                                 <div className="relative aspect-w-16 aspect-h-9">
@@ -143,6 +162,25 @@ function Products() {
                     ))}
                 </div>
             </div>
+            <div className='flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6' >
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel="next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    pageLinkClassName="pag-num p-2"
+                    previousLinkClassName="page-num p-2"
+                    activeClassName="bg-red-200 p-2"
+                    previousClassName="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    nextClassName='relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
+                    // className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                    pageClassName="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                />
+            </div>
+
         </div>
 
     );

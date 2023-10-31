@@ -33,6 +33,7 @@ function App() {
           </Route>
           <Route path='/' element={<ProtectedHome Component={() => <Dashboard role={"admin"} />} />}>
             <Route path="/orders" element={<AdminPage />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
           {/* Main Dashboard Routes */}
           <Route path='/' element={<ProtectedHome Component={() => <Dashboard role={"user"} />} />}>
