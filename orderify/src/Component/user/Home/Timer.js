@@ -11,7 +11,7 @@ const Timer = () => {
   const getTimeDifference = () => {
     const currentDate = new Date();
     const targetDate = new Date();
-    targetDate.setHours(19, 0, 0); // Set the target time
+    targetDate.setHours(16, 35, 0); // Set the target time
     if (currentDate > targetDate) {
       targetDate.setDate(targetDate.getDate() + 1);
       setIsShopOpen(false);
@@ -51,7 +51,7 @@ const Timer = () => {
   }, [startCountDown]);
 
   return (
-    <div className="flex h-30 flex-col md:flex-row justify-center items-center bg-[#111827] w-fit rounded px-5 py-3 shadow-inner shadow-black m-3">
+    <div className="flex h-30 flex-col md:flex-row justify-center items-center bg-[#111827] w-fit rounded px-5 py-3">
       <div className="flex flex-col items-center justify-center w-full h-full gap-8 sm:gap-16">
         <div className="flex flex-col justify-center gap-1 sm:gap-1">
           <div className="flex justify-between">
@@ -90,14 +90,27 @@ const Timer = () => {
                 </span>
               </div>
             ))}
-            
+
+             {/* clock------------------------  */}
+
             <div className="flex flex-col shadow p-2 bg-[#1F2937] rounded -m-0.5 -mx-2 relative">
               <div className="h-10 w-10 sm:w-12 sm:h-12 lg:w-12 lg:h-12 flex justify-between items-center bg-[#111827] rounded-lg">
                 <div className="relative h-1.5 w-1.5 sm:h-2 sm:w-2 !-left-[6px] rounded-full bg-[#B45309]"></div>
                 <span className="relative lg:text-lg sm:text-6xl text-3xl font-semibold text-white">
-                    <div style={{ transform: `rotate(${new Date().getSeconds() * 6}deg)`, transformOrigin: 'bottom center'}} className={`bg-yellow-400 translate-x-1/2 w-0.5 bottom-1/2  h-4 sm:h-5 rounded absolute`}></div>
-                    <div style={{ transform: `rotate(${new Date().getMinutes() * 6}deg)`, transformOrigin: 'bottom center' }} className={`bg-white w-1 h-3 sm:h-4 rounded absolute bottom-1/2 `}></div>
+
+
+                    {/* clock wise */}
                     <div style={{ transform: `rotate(${new Date().getHours() * 30}deg)`, transformOrigin: 'bottom center' }} className={`bg-[#B45309] w-1 h-2.5 sm:h-3  rounded-sm absolute bottom-1/2 `}></div>
+                    <div style={{ transform: `rotate(${new Date().getMinutes() * 6}deg)`, transformOrigin: 'bottom center' }} className={`bg-white w-1 h-3 sm:h-4 rounded absolute bottom-1/2 `}></div>
+                    <div style={{ transform: `rotate(${new Date().getSeconds() * 6}deg)`, transformOrigin: 'bottom center'}} className={`bg-yellow-400  w-0.5 bottom-1/2  h-4 sm:h-5 rounded absolute`}></div>
+                    <div className={`bg-yellow-400 translate-y-1/2 w-1 bottom-1/2  h-1 sm:h-1 rounded-full absolute`}></div>
+
+                    {/* anti-clock wise */}
+                    {/* <div style={{ transform: `rotate(${countDownTime.hours * 30}deg)`, transformOrigin: 'bottom center' }} className={`bg-[#B45309] w-1 h-2.5 sm:h-3  rounded-sm absolute bottom-1/2 `}></div>
+                    <div style={{ transform: `rotate(${countDownTime.minutes * 6}deg)`, transformOrigin: 'bottom center' }} className={`bg-white w-1 h-3 sm:h-4 rounded absolute bottom-1/2 `}></div>
+                    <div style={{ transform: `rotate(${countDownTime.seconds * 6}deg)`, transformOrigin: 'bottom center'}} className={`bg-yellow-400  w-0.5 bottom-1/2  h-4 sm:h-5 rounded absolute`}></div>
+                    <div className={`bg-yellow-400 translate-y-1/2 w-1 bottom-1/2  h-1 sm:h-1 rounded-full absolute`}></div> */}
+
                   </span>
                 <div className="relative h-1.5 w-1.5 sm:h-2 sm:w-2 -right-[6px] rounded-full bg-[#B45309]"></div>
               </div>

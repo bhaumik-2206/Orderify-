@@ -3,29 +3,55 @@ import fetchApi from '../../../util/helper';
 import { API_ENDPOINTS } from '../../../config/api';
 import { toast } from 'react-toastify';
 import { CartDataContext } from '../../../context/CartContext';
-
+import ReactPaginate from 'react-paginate';
 
 function Products() {
     const [loadingStates, setLoadingStates] = useState({});
     const [products, setProducts] = useState([]);
-
+    const [isPageChangingNow, setIsPageChangingNow] = useState(false);
     const { cartData, setCartData, changeQuantityContext } = useContext(CartDataContext)
+    // const [itemOffset, setItemOffset] = useState(0);
+    // const itemsPerPage = 4;
+    // const endOffset = itemOffset + itemsPerPage;
+    // console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+    // const currentItems = products.slice(itemOffset, endOffset);
+    // const pageCount = Math.ceil(products.length / itemsPerPage);
+    // var isPageChangingNow = false;
+    const [pageCount, setPageCount] = useState(0);
+    const handlePageClick = (event) => {
+        console.log(event)
+        // const newOffset = (event.selected * itemsPerPage) % products.length;
+        // console.log(
+        //     `User requested page number ${event.selected}, which is offset ${newOffset}`
+        // );
+        const currentPage = event.selected + 1
+        fetchData(currentPage)
+        // setItemOffset(newOffset);
+        // isPageChangingNow = true
+        setIsPageChangingNow(true)
+    };
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    const fetchData = async () => {
+    console.log(pageCount + ' page')
+    const fetchData = async (currentPage = 1) => {
         try {
             const response = await fetchApi({
                 url: API_ENDPOINTS.PRODUCT, method: 'POST', isAuthRequired: true, data: {
-                    "limit": 10,
-                    "page": 1
+                    "limit": 1,
+                    "page": currentPage
                 }
             });
+            // console.log(response.data)
+            // console.log(response.data.products);
             setProducts(response.data.products);
+            setPageCount( response.data.total_page)
         } catch (error) {
             console.log(error);
+        }finally{
+            setIsPageChangingNow(false)
         }
     };
     const orderProduct = async (itemData) => {
@@ -79,10 +105,19 @@ function Products() {
     };
 
 
-    if (products.length === 0) {
+    if (products.length === 0 || isPageChangingNow) {
         return (
             <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl  text-blue-700">
+                    <i className="fas fa-spinner fa-spin animate-spin"></i>
+                </div>
+            </div>
+        )
+    }
+    function loading_spin() {
+        return (
+            <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-blue-700">
                     <i className="fas fa-spinner fa-spin animate-spin"></i>
                 </div>
             </div>
@@ -149,6 +184,26 @@ function Products() {
                         </div>
                     ))}
                 </div>
+            </div>
+            {/* pagination */}
+            <div className='border-t border-gray-200 bg-white px-4 py-3 sm:px-6 w-fit m-auto' >
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel="next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    pageLinkClassName="pag-num p-2"
+                    previousLinkClassName="page-num p-2"
+                    activeClassName="bg-red-200 p-2"
+                    previousClassName="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white p-0 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    nextClassName='relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-50'
+                    breakClassName='relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
+                    className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                    pageClassName="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                />
             </div>
         </div>
 
