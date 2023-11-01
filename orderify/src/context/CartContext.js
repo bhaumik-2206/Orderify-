@@ -45,7 +45,7 @@ const CartContext = ({ children }) => {
             }
             if (currentQuantity === 1 && !operation) {
                 toast.success("Item Removed Successfully");
-                setCartData([]);
+                setCartData(pre => pre.filter(pro => pro.cartitm_fk_prd_id._id !== productId));
             }
         } catch (error) {
             toast.error("Error to add item");
