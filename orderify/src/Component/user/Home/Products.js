@@ -8,17 +8,22 @@ import { CartDataContext } from '../../../context/CartContext';
 function Products() {
     const [loadingStates, setLoadingStates] = useState({});
     const [products, setProducts] = useState([]);
-    // const [cartData, setCartData] = useState([]);
-    const { cartData, setCartData } = useContext(CartDataContext)
-    // console.log(cartData)
+
+    const { cartData, setCartData, changeQuantityContext } = useContext(CartDataContext)
+
     useEffect(() => {
         fetchData();
     }, []);
-    // console.log(products)
+
     const fetchData = async () => {
         try {
-            const response = await fetchApi({ url: API_ENDPOINTS.PRODUCT, method: 'GET', isAuthRequired: true });
-            setProducts(response.data);
+            const response = await fetchApi({
+                url: API_ENDPOINTS.PRODUCT, method: 'POST', isAuthRequired: true, data: {
+                    "limit": 10,
+                    "page": 1
+                }
+            });
+            setProducts(response.data.products);
         } catch (error) {
             console.log(error);
         }
@@ -44,20 +49,26 @@ function Products() {
         orderProduct(updatedOrder);
     };
 
-    const incrementQuantity = (productId) => {
 
-        const currentQuantity = cartData.find((item) => item.cartitm_fk_prd_id._id === productId).cartitm_prd_qty;
-        const updatedOrder = { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity + 1 };
-        orderProduct(updatedOrder);
-    };
+    const changeQuantity = async (productId, operation) => {
+        toggleLoadingState(productId, true);
+        await changeQuantityContext(productId, operation)
+        toggleLoadingState(productId, false);
+    }
 
-    const decrementQuantity = (productId) => {
+    // const incrementQuantity = (productId) => {
+    //     const currentQuantity = cartData.find((item) => item.cartitm_fk_prd_id._id === productId).cartitm_prd_qty;
+    //     const updatedOrder = { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity + 1 };
+    //     orderProduct(updatedOrder);
+    // };
 
-        const currentQuantity = cartData.find((item) => item.cartitm_fk_prd_id._id === productId).cartitm_prd_qty;
-        const updatedOrder = { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity - 1 };
+    // const decrementQuantity = (productId) => {
 
-        orderProduct(updatedOrder);
-    };
+    //     const currentQuantity = cartData.find((item) => item.cartitm_fk_prd_id._id === productId).cartitm_prd_qty;
+    //     const updatedOrder = { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity - 1 };
+
+    //     orderProduct(updatedOrder);
+    // };
 
 
     const toggleLoadingState = (productId, isLoading) => {
@@ -65,7 +76,6 @@ function Products() {
             ...prevState,
             [productId]: isLoading,
         }));
-
     };
 
 
@@ -100,7 +110,7 @@ function Products() {
                                             <button
                                                 id="decrementButton"
                                                 className="w-1/3 block bg-slate-50 hover:bg-slate-100 text-blue-700 border-r-2 border-blue-700 font-bold py-1 px-1 sm:py-2 sm:px-4 rounded-l-md"
-                                                onClick={() => { decrementQuantity(product._id); toggleLoadingState(product._id, true); }}
+                                                onClick={() => { changeQuantity(product._id, false) }}
                                                 disabled={loadingStates[product._id]}
                                             >
                                                 -
@@ -115,7 +125,7 @@ function Products() {
                                             <button
                                                 id="incrementButton"
                                                 className="w-1/3 block bg-slate-50 hover:bg-slate-100 text-blue-700 border-l-2 border-blue-700 font-bold py-1 px-1 sm:py-2 sm:px-4 rounded-r-md"
-                                                onClick={() => { incrementQuantity(product._id); toggleLoadingState(product._id, true); }}
+                                                onClick={() => { changeQuantity(product._id, true) }}
                                                 disabled={loadingStates[product._id]}
                                             >
                                                 +

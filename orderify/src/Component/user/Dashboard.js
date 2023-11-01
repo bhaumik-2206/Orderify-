@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Header from './Home/Header';
+import Header from './home/Header';
 import { Outlet } from 'react-router-dom';
 
 const Dashboard = ({ role }) => {
@@ -12,9 +12,9 @@ const Dashboard = ({ role }) => {
         }
     }, []);
 
-    if (!role) {
-        return <p>Please provide a role.</p>;
-    }
+    // if (!role) {
+    //     return <p>Please provide a role.</p>;
+    // }
 
     if (!userData) {
         return <p>Access denied.</p>;

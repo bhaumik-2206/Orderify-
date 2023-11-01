@@ -9,14 +9,14 @@ const Order = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
     const { fetchCart, cartData } = useContext(CartDataContext);
+    console.log(cartData)
 
     useEffect(() => {
         fetchUserOrder();
-    }, [cartData]);
+    }, [cartData.length > 0]);
 
     const fetchUserOrder = async () => {
         setLoading(true);
-
         try {
             let date = dayjs();
             const response = await fetchApi({
@@ -42,7 +42,6 @@ const Order = () => {
         } catch (error) {
             toast.error("Error to get order History")
         }
-
     }
 
     const handleButAgain = async (productId) => {

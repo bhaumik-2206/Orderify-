@@ -7,9 +7,6 @@ const userDetails = [
     { title: "Last Name", value: "user_lname" },
     { title: "Email", value: "user_email" },
     { title: "Mobile Number", value: "user_phone" },
-    { title: "Date Of Birth", value: "user_DOB" },
-    { title: "Gender", value: "user_gender" },
-    { title: "Blood Group", value: "user_blood" },
 ];
 const Profile = () => {
     const [userData, setUserData] = useState({})
@@ -27,10 +24,6 @@ const Profile = () => {
                     <div className="w-full md:w-3/12 md:mx-2">
                         <div className="bg-white p-3 border-t-4 border-green-400">
                             <h1 className="text-gray-900 font-bold text-xl leading-8 my-1">{userData.user_fname} {userData.user_lname}</h1>
-                            <h3 className="text-gray-600 font-lg text-semibold leading-6">Lorem ipsum dolor sit amet.</h3>
-                            <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">Lorem ipsum dolor sit amet
-                                consectetur adipisicing elit.
-                                Reprehenderit, eligendi dolorum sequi illum qui unde aspernatur non deserunt</p>
                             <ul
                                 className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                                 <li className="flex items-center py-3">
@@ -55,7 +48,7 @@ const Profile = () => {
                                 <span className="tracking-wide">About</span>
                             </div>
                             <div className="text-gray-700">
-                                <div className="grid md:grid-cols-2 text-sm">
+                                <div>
                                     {userDetails.map((details, index) => (
                                         <div key={index} className="grid grid-cols-2">
                                             <div className="px-4 py-2 font-semibold">{details.title}</div>
@@ -64,9 +57,6 @@ const Profile = () => {
                                     ))}
                                 </div>
                             </div>
-                            <button
-                                className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Show
-                                Full Information</button>
                         </div>
                     </div>
                 </div>

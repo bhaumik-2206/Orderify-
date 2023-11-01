@@ -10,7 +10,7 @@ const navigationUser = [
     { name: 'Orders', to: '/order', current: false },
 ]
 const navigationAdmin = [
-    { name: 'Dashboard', to: '/orders', current: false },
+    // { name: 'Dashboard', to: '/orders', current: false },
     { name: 'Orders', to: '/orders', current: false },
     { name: 'Payment', to: '/profile', current: false },
 ]

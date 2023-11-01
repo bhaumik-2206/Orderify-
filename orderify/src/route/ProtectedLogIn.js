@@ -14,7 +14,6 @@ const ProtectedLogIn = ({ Component }) => {
             } else {
                 navigate("/products");
             }
-
         }
     }, []);
 

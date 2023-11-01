@@ -5,12 +5,12 @@ import { toast } from 'react-toastify'
 import { CartDataContext } from '../../../context/CartContext'
 
 const ConfirmOrder = ({ show, setShow, setOpen }) => {
-    const { cartData, fetchCart } = useContext(CartDataContext);
+    const { cartData, setCartData } = useContext(CartDataContext);
 
     const handleOrderSubmit = async () => {
         const response = await fetchApi({ url: API_ENDPOINTS.ORDER, method: "POST", isAuthRequired: true })
         if (response.status === 200) {
-            fetchCart();
+            setCartData([]);
         } else {
             toast.error("Error to send order")
         }
