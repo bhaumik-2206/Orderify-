@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 
 const userDetails = [
     { title: "First Name", value: "user_fname" },
-    { title: "Middle Name", value: "user_middle" },
     { title: "Last Name", value: "user_lname" },
     { title: "Email", value: "user_email" },
     { title: "Mobile Number", value: "user_phone" },
@@ -15,7 +14,7 @@ const Profile = () => {
     }, []);
 
     const date = dayjs(userData.createdAt)
-    
+
 
     return (
         <div className="bg-gray-100">
@@ -31,9 +30,9 @@ const Profile = () => {
                                     <span className="ml-auto"><span
                                         className="bg-green-500 py-1 px-2 rounded text-white text-sm">Active</span></span>
                                 </li>
-                                <li className="flex items-center py-3">
-                                    <span>Member since</span>
-                                    <span className="ml-auto"> {date.format("DD MMM ,YYYY")}</span>
+                                <li className="flex md:block lg:flex items-center py-3">
+                                    <p>Member since</p>
+                                    <p className="ml-auto"> {date.format("DD MMM ,YYYY")}</p>
                                 </li>
                             </ul>
                         </div>

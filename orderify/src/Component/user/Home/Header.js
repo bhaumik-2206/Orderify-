@@ -10,9 +10,7 @@ const navigationUser = [
     { name: 'Orders', to: '/order', current: false },
 ]
 const navigationAdmin = [
-    // { name: 'Dashboard', to: '/orders', current: false },
     { name: 'Orders', to: '/orders', current: false },
-    { name: 'Payment', to: '/profile', current: false },
 ]
 export default function Header({ role }) {
     const { cartData } = useContext(CartDataContext);
@@ -82,12 +80,6 @@ export default function Header({ role }) {
                                                 to="/profile"
                                                 className={`block px-4 py-2 text-sm text-gray-700 hover:bg-slate-200 bg-slate-50`}
                                             >Your Profile</Link>
-                                        </Menu.Item>
-                                        <Menu.Item>
-                                            <Link
-                                                to="#"
-                                                className={`block px-4 py-2 text-sm text-gray-700 hover:bg-slate-200 bg-slate-50`}
-                                            >Change Password</Link>
                                         </Menu.Item>
                                         <Menu.Item>
                                             <Link
