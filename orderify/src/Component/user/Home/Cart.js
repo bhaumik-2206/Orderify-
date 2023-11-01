@@ -11,7 +11,7 @@ export default function Cart({ open, setOpen }) {
   const [loading, setLoading] = useState({});
   const [removeAllOrder, setRemoveAllOrder] = useState(false);
   const [show, setShow] = useState(false);
-  const { cartData, setCartData, totalAmount, changeQuantityContext } = useContext(CartDataContext);
+  const { cartData, setCartData, totalAmount, changeQuantityContext, setTotalAmount } = useContext(CartDataContext);
 
   useEffect(() => {
     if (!open) {
@@ -25,8 +25,10 @@ export default function Cart({ open, setOpen }) {
     try {
       const response = await fetchApi({ url: API_ENDPOINTS.CART, method: "DELETE", data: { cart_items: data }, isAuthRequired: true })
       if (response.status === 200) {
-        setCartData(pre => pre.filter(pro => !data.includes(pro.cartitm_fk_prd_id._id)))
+        setCartData(pre => type === "all" ? [] : pre.filter(pro => !data.includes(pro.cartitm_fk_prd_id._id)))
         toast.success("Item Removed Successfully");
+        let removedItem = cartData.find(ele => ele.cartitm_fk_prd_id._id === data[0]);
+        setTotalAmount(pre => type === "all" ? 0 : pre - removedItem.cartitm_fk_prd_id.prd_price * removedItem.cartitm_prd_qty)
       }
     } catch (error) {
       toast.error("Error to remove the item")
@@ -43,8 +45,7 @@ export default function Cart({ open, setOpen }) {
 
   return (
     <>
-
-      <div onClick={() => setOpen(false)} className={` inset-0 ${open ? "bg-gray-500 fixed" : "bg-transparent"} bg-opacity-75`} />
+      <div onClick={() => setOpen(false)} className={`inset-0 ${open ? "bg-gray-500 fixed" : "bg-transparent"} bg-opacity-75`} />
       <div className={`fixed w-screen max-w-md z-20 inset-y-0 right-0 bg-white shadow-lg transform ${open ? 'translate-x-0' : 'translate-x-full'} transition-transform ease-in-out duration-300`}>
         <div className="flex flex-col h-full">
           <div className="sticky top-0 py-4 bg-white px-4 flex justify-between items-center">
@@ -126,8 +127,8 @@ export default function Cart({ open, setOpen }) {
                         <button
                           onClick={() => removeData([item.cartitm_fk_prd_id._id])}
                           type="button"
-                          className="font-medium text-indigo-600 hover:text-indigo-500"
-                        >Remove
+                          className="font-medium text-red-600 hover:text-red-700"
+                        ><i className="fa-solid fa-trash"></i>
                         </button>
                       </div>
                     </div>

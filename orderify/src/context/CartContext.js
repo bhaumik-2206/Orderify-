@@ -26,13 +26,10 @@ const CartContext = ({ children }) => {
             toast.error("Maxinum Quantity");
             return;
         }
-        // if (currentQuantity === 1 && !operation) {
-
-        // }
         try {
             let response = await fetchApi({
                 url: API_ENDPOINTS.CART, method: "POST",
-                data: { cartitm_fk_prd_id: productId, cartitm_prd_qty: (operation ? currentQuantity + 1 : currentQuantity - 1) }
+                data: { cart_items: [{ cartitm_fk_prd_id: productId, cartitm_prd_qty: (operation ? currentQuantity + 1 : currentQuantity - 1) }] }
                 , isAuthRequired: true
             });
             if (response.status === 200) {
@@ -43,6 +40,8 @@ const CartContext = ({ children }) => {
                     } : p
                 }))
             }
+            let index = cartData.findIndex(p => p.cartitm_fk_prd_id._id === productId);
+            setTotalAmount(pre => operation ? cartData[index].cartitm_fk_prd_id.prd_price + pre : pre - cartData[index].cartitm_fk_prd_id.prd_price)
             if (currentQuantity === 1 && !operation) {
                 toast.success("Item Removed Successfully");
                 setCartData(pre => pre.filter(pro => pro.cartitm_fk_prd_id._id !== productId));
@@ -58,7 +57,7 @@ const CartContext = ({ children }) => {
 
 
     return (
-        <CartDataContext.Provider value={{ cartData, setCartData, fetchCart, totalAmount, changeQuantityContext }}>
+        <CartDataContext.Provider value={{ cartData, setCartData, fetchCart, totalAmount, changeQuantityContext, setTotalAmount }}>
             {children}
         </CartDataContext.Provider>
     )

@@ -20,7 +20,7 @@ const Order = () => {
         try {
             let date = dayjs();
             const response = await fetchApi({
-                url: API_ENDPOINTS.USER_ORDER, method: 'POST', data: { start: date.subtract(10, "day").format("DD-MM-YYYY"), end: date.format("DD-MM-YYYY") }, isAuthRequired: true
+                url: API_ENDPOINTS.USER_ORDER, method: 'POST', data: { start_date: date.subtract(10, "day").format("DD-MM-YYYY"), end_date: date.format("DD-MM-YYYY") }, isAuthRequired: true
             });
             if (response.status === 200) {
                 let order = response.data;
@@ -76,6 +76,9 @@ const Order = () => {
                         {orders[item].map((dateArray, index) => (
                             <div key={index} className="m-2 py-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center">
                                 <div className="block text-center sm:text-left sm:flex">
+                                    <div className="">
+                                        <input type="checkbox" />
+                                    </div>
                                     <div className=" mb-3 sm:mb-0 w-40 sm:block mx-auto sm:h-40 flex-shrink-0 overflow-hidden rounded-md border">
                                         <img className="w-full h-full object-contain object-center"
                                             src={dateArray.product_details.prd_img}
