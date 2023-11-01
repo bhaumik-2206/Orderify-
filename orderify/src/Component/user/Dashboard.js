@@ -16,13 +16,13 @@ const Dashboard = ({ role }) => {
         return <p>Please provide a role.</p>;
     }
 
-    if (!userData || userData.user_role !== role) {
+    if (!userData) {
         return <p>Access denied.</p>;
     }
 
     return (
         <>
-            {role === 'admin' ? <Header role={"admin"} /> : <Header role={"user"} />}
+            <Header role={userData.user_role} />
             <Outlet />
         </>
     );

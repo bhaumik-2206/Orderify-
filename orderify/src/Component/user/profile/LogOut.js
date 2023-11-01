@@ -10,7 +10,7 @@ const LogOut = ({ isModalOpen, setIsModalOpen }) => {
         localStorage.removeItem("auth");
         setIsModalOpen(false);
         navigate("/logIn");
-        toast.error("Logged Out Successfully");
+        toast.success("Logged Out Successfully");
     };
 
     return (

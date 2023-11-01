@@ -31,11 +31,11 @@ function App() {
             <Route path="/login" element={<LogIn />} />
             <Route path="/register" element={<Registration />} />
           </Route>
+          {/* Main Dashboard Routes */}
           <Route path='/' element={<ProtectedHome Component={() => <Dashboard role={"admin"} />} />}>
             <Route path="/orders" element={<AdminPage />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
-          {/* Main Dashboard Routes */}
           <Route path='/' element={<ProtectedHome Component={() => <Dashboard role={"user"} />} />}>
             <Route path="/products" element={<Products />} />
             <Route path="/order" element={<Order />} />
