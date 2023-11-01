@@ -10,10 +10,6 @@ function Products() {
     const [products, setProducts] = useState([]);
     // const [cartData, setCartData] = useState([]);
     const { cartData, setCartData } = useContext(CartDataContext)
-    const token = localStorage.getItem('auth');
-    const customHeaders = {
-        'Auth': token,
-    };
     // console.log(cartData)
     useEffect(() => {
         fetchData();
@@ -21,7 +17,7 @@ function Products() {
     // console.log(products)
     const fetchData = async () => {
         try {
-            const response = await fetchApi({ url: API_ENDPOINTS.PRODUCT, method: 'GET', customHeaders });
+            const response = await fetchApi({ url: API_ENDPOINTS.PRODUCT, method: 'GET', isAuthRequired: true });
             setProducts(response.data);
         } catch (error) {
             console.log(error);
@@ -29,7 +25,7 @@ function Products() {
     };
     const orderProduct = async (itemData) => {
         try {
-            const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'POST', data: itemData, customHeaders });
+            const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'POST', data: itemData, isAuthRequired: true });
             if (response.status === 200) {
                 // await fetchCart();
                 setCartData(response.data.cart_items);

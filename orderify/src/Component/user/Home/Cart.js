@@ -12,10 +12,6 @@ export default function Cart({ open, setOpen }) {
   const [removeAllOrder, setRemoveAllOrder] = useState(false);
   const [show, setShow] = useState(false);
   const { cartData, setCartData, totalAmount, fetchCart } = useContext(CartDataContext);
-  const token = localStorage.getItem("auth");
-  const customHeaders = {
-    Auth: token,
-  };
 
   useEffect(() => {
     if (!open) {
@@ -28,9 +24,8 @@ export default function Cart({ open, setOpen }) {
     if (type === "all")
       setRemoveAllOrder(true)
     try {
-      const response = await fetchApi({ url: API_ENDPOINTS.CART, method: "DELETE", data: { cart_items: data }, customHeaders })
+      const response = await fetchApi({ url: API_ENDPOINTS.CART, method: "DELETE", data: { cart_items: data }, isAuthRequired: true })
       if (response.status === 200) {
-        // await fetchCart();
         setCartData(response.data.cart_items);
         toast.success("Item Removed Successfully");
       }
@@ -48,15 +43,11 @@ export default function Cart({ open, setOpen }) {
     try {
       let response = await fetchApi({
         url: API_ENDPOINTS.CART, method: "POST",
-        // data: operation === "-" ? { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity - 1 } :
-        //   { cartitm_fk_prd_id: productId, cartitm_prd_qty: currentQuantity + 1 }
-        data: { cartitm_fk_prd_id: productId, cartitm_prd_qty: (operation === "+" ? currentQuantity + 1 : currentQuantity - 1) }
-        , customHeaders
+        data: { cartitm_fk_prd_id: productId, cartitm_prd_qty: (operation ? currentQuantity + 1 : currentQuantity - 1) }
+        , isAuthRequired: true
       });
       if (response.status === 200) {
-        await fetchCart();
-        // console.log(response.data.cart_items)
-        // setCartData(response.data.cart_items);
+        setCartData(response.data.cart_items);
       }
       if (response.status === 400) {
         toast.error("Maxinum Quantity");
@@ -279,7 +270,7 @@ export default function Cart({ open, setOpen }) {
                           <button
                             id="decrementButton"
                             className="w-1/3 block bg-slate-50 hover:bg-slate-100 text-blue-700 border-r-2 border-blue-700 font-bold p-0 px-2 rounded-l-md"
-                            onClick={() => changeQuantity(item.cartitm_fk_prd_id._id, "-")}
+                            onClick={() => changeQuantity(item.cartitm_fk_prd_id._id, false)}
                             disabled={loading[item.cartitm_fk_prd_id._id]}
                           >-</button>
                           {
@@ -291,7 +282,7 @@ export default function Cart({ open, setOpen }) {
                           <button
                             id="incrementButton"
                             className="w-1/3 block bg-slate-50 hover:bg-slate-100 text-blue-700 border-l-2 border-blue-700 font-bold px-2 rounded-r-md"
-                            onClick={() => changeQuantity(item.cartitm_fk_prd_id._id, "+")}
+                            onClick={() => changeQuantity(item.cartitm_fk_prd_id._id, true)}
                             disabled={loading[item.cartitm_fk_prd_id._id]}
                           >
                             +

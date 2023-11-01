@@ -5,18 +5,14 @@ import { API_ENDPOINTS } from '../../config/api'
 function AdminPage() {
     const [orders, setOders] = useState([]);
     const [showUser, setShowUser] = useState({});
-    const token = localStorage.getItem('auth');
-    const customHeaders = {
-        'Auth': token,
-    };
 
     const fetchOders = async () => {
         try {
-            const response = await fetchApi({ url: API_ENDPOINTS.ADMIN_ORDERS, method: 'GET', customHeaders });
+            const response = await fetchApi({ url: API_ENDPOINTS.ADMIN_ORDERS, method: 'GET', isAuthRequired: true });
             if (response.status === 200) {
                 setOders(response.data)
-            }else{
-                setOders([]) 
+            } else {
+                setOders([])
             }
         } catch (error) {
             console.log(error)

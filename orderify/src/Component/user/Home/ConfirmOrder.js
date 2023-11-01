@@ -6,13 +6,9 @@ import { CartDataContext } from '../../../context/CartContext'
 
 const ConfirmOrder = ({ show, setShow, setOpen }) => {
     const { cartData, fetchCart } = useContext(CartDataContext);
-    const token = localStorage.getItem("auth");
-    const customHeaders = {
-        Auth: token,
-    };
 
     const handleOrderSubmit = async () => {
-        const response = await fetchApi({ url: API_ENDPOINTS.ORDER, method: "POST", customHeaders })
+        const response = await fetchApi({ url: API_ENDPOINTS.ORDER, method: "POST", isAuthRequired: true })
         if (response.status === 200) {
             fetchCart();
         } else {

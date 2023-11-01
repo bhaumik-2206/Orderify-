@@ -1,4 +1,9 @@
-const fetchApi = async ({ url, method, data, customHeaders = null }) => {
+const fetchApi = async ({ url, method, data, isAuthRequired = null }) => {
+    const token = localStorage.getItem("auth");
+    const customHeaders = isAuthRequired && {
+        Auth: token,
+    };
+
     try {
         const headers = {
             'Content-Type': 'application/json',
