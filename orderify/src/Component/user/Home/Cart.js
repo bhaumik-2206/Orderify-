@@ -1,5 +1,4 @@
-import { Fragment, useContext, useEffect, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { useContext, useEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import fetchApi from "../../../util/helper.js";
 import { API_ENDPOINTS } from "../../../config/api.js";
@@ -143,7 +142,7 @@ export default function Cart({ open, setOpen }) {
               )) : (
                 <div className="text-center">
                   <p className="text-xl">Your cart is empty!!!</p>
-                  <button onClick={() => navigate("/products")} className="text-blue-700 text-center font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md hover:bg-slate-100 border border-blue-700 my-3">Buy now</button>
+                  <button onClick={() => { navigate("/products"); setOpen(false); }} className="text-blue-700 text-center font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md hover:bg-slate-100 border border-blue-700 my-3">Buy now</button>
                 </div>
               )}
             </ul>

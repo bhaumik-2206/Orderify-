@@ -1,5 +1,3 @@
-import { Navigate } from "react-router-dom";
-
 const fetchApi = async ({ url, method, data, isAuthRequired = null }) => {
     const token = localStorage.getItem("auth");
     const customHeaders = isAuthRequired && {
@@ -21,7 +19,6 @@ const fetchApi = async ({ url, method, data, isAuthRequired = null }) => {
         if (result.message === "jwt expired") {
             localStorage.removeItem("auth");
             localStorage.removeItem("userData");
-            // navigate("/login");
         }
         return result;
     } catch (error) {
