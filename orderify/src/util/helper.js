@@ -1,7 +1,7 @@
 const fetchApi = async ({ url, method, data, isAuthRequired = null }) => {
     const token = localStorage.getItem("auth");
     const customHeaders = isAuthRequired && {
-        Auth: token,
+        "authorization": `Bearer ${token}`,
     };
 
     try {
