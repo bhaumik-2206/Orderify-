@@ -3,16 +3,23 @@ import fetchApi from '../../../util/helper'
 import { API_ENDPOINTS } from '../../../config/api'
 import { toast } from 'react-toastify'
 import { CartDataContext } from '../../../context/CartContext'
+import { useNavigate } from 'react-router-dom'
 
 const ConfirmOrder = ({ show, setShow, setOpen }) => {
-    const { cartData, setCartData } = useContext(CartDataContext);
+    const { cartData, setCartData, setTotalAmount } = useContext(CartDataContext);
+    const navigate = useNavigate();
 
     const handleOrderSubmit = async () => {
         const response = await fetchApi({ url: API_ENDPOINTS.ORDER, method: "POST", isAuthRequired: true })
         if (response.status === 200) {
+            toast.success("Order sent successfully");
             setCartData([]);
+            setTotalAmount(0);
         } else {
-            toast.error("Error to send order")
+            toast.error("Error to send order");
+        }
+        if (response.message === "jwt expired") {
+            navigate("/login");
         }
         setShow(false);
     }

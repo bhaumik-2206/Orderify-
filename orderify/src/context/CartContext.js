@@ -53,7 +53,7 @@ const CartContext = ({ children }) => {
 
     useEffect(() => {
         userData && userData.user_role === "user" && fetchCart();
-    }, [])
+    }, []);
 
 
     return (

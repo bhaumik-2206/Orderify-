@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from '../../../config/api';
 import { toast } from 'react-toastify';
 import { CartDataContext } from '../../../context/CartContext';
 import PaginationComponent from './PaginationComponent';
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -14,6 +15,7 @@ function Products() {
     const [endOffset, setEndOffset] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
     const itemsPerPage = 4;
     const totalPerPage = itemsPerPage + itemOffset;
     console.log(itemOffset)
@@ -41,9 +43,11 @@ function Products() {
             const response = await fetchApi({
                 url: API_ENDPOINTS.PRODUCT, method: 'POST', isAuthRequired: true, data: pageObj
             });
-
             setProducts(response.data.products);
             setEndOffset(response.data);
+            if (response.message === "jwt expired") {
+                navigate("/login");
+            }
         } catch (error) {
             console.log(error);
         } finally {
@@ -60,6 +64,9 @@ function Products() {
                     cartitm_prd_qty: 1
                 }]);
                 setTotalAmount(pre => pre + products[index].prd_price)
+            } if (response.message === "jwt expired") {
+
+                navigate("/login");
             }
             if (response.status === 400) {
                 toast.error("Maxinum Quantity");
@@ -125,8 +132,9 @@ function Products() {
                             {products.map((product) => (
                                 <div key={product._id} className="flex flex-col justify-between bg-white rounded-lg overflow-hidden shadow-lg transition-transform">
                                     <div>
-                                        <div className="relative aspect-w-16 aspect-h-9">
-                                            <img src={product.prd_img} className="object-cover h-full w-full " alt="Product Image" />
+                                        <div className="relative w-60 h-60 mx-auto">
+                                            <img
+                                                src={product.prd_img ? product.prd_img : "images/download.png"} className="object-contain h-full w-full block mx-auto" alt="Product Image" />
                                         </div>
                                         <div className="px-4 pt-0.5">
                                             <h2 className="text-lg font-semibold text-gray-800 ">{product.prd_name}</h2>
@@ -183,7 +191,7 @@ function Products() {
             }
             <div className={`${loading ? "hidden" : "block"}`}>
                 <div className='flex justify-between items-center px-3'>
-                    <div className='text-lg  '>Showing {itemOffset} to {totalPerPage > endOffset.total_products ? endOffset.total_products : totalPerPage  } of {endOffset.total_products} results</div>
+                    <div className='text-lg  '>Showing {itemOffset} to {totalPerPage > endOffset.total_products ? endOffset.total_products : totalPerPage} of {endOffset.total_products} results</div>
                     <PaginationComponent handlePageClick={handlePageClick} endOffset={endOffset.total_page} />
                 </div>
             </div>

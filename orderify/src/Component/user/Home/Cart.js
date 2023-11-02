@@ -5,9 +5,11 @@ import fetchApi from "../../../util/helper.js";
 import { API_ENDPOINTS } from "../../../config/api.js";
 import { CartDataContext } from "../../../context/CartContext.js";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import ConfirmOrder from "./ConfirmOrder.js";
 
 export default function Cart({ open, setOpen }) {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState({});
   const [removeAllOrder, setRemoveAllOrder] = useState(false);
   const [show, setShow] = useState(false);
@@ -30,9 +32,13 @@ export default function Cart({ open, setOpen }) {
         let removedItem = cartData.find(ele => ele.cartitm_fk_prd_id._id === data[0]);
         setTotalAmount(pre => type === "all" ? 0 : pre - removedItem.cartitm_fk_prd_id.prd_price * removedItem.cartitm_prd_qty)
       }
+      if (response.message === "jwt expired") {
+        navigate("/login");
+      }
     } catch (error) {
       toast.error("Error to remove the item")
     }
+
     setRemoveAllOrder(false);
   }
 
@@ -137,7 +143,7 @@ export default function Cart({ open, setOpen }) {
               )) : (
                 <div className="text-center">
                   <p className="text-xl">Your cart is empty!!!</p>
-                  <button onClick={() => setOpen(false)} className="text-blue-700 text-center font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md hover:bg-slate-100 border border-blue-700 my-3">Buy now</button>
+                  <button onClick={() => navigate("/products")} className="text-blue-700 text-center font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md hover:bg-slate-100 border border-blue-700 my-3">Buy now</button>
                 </div>
               )}
             </ul>
