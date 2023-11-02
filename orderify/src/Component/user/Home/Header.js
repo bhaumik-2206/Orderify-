@@ -10,6 +10,7 @@ const navigationUser = [
     { name: 'Orders', to: '/order', current: false },
 ]
 const navigationAdmin = [
+    { name: 'Products', to: '/product', current: false },
     { name: 'Orders', to: '/orders', current: false },
 ]
 export default function Header({ role }) {
