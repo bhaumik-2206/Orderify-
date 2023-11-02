@@ -6,5 +6,12 @@ export const initialRegistrationValue = {
     user_confirmPassword: '',
     user_phone: '',
 };
+export const initialProductAddValue = {
+    prd_name: "",
+    prd_price: "",
+    prd_img: ""
+};
+
+
 
 export const initialLogInValue = { user_email: "", user_pass: "" }

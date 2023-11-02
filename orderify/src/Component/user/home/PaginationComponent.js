@@ -6,12 +6,12 @@ function PaginationComponent({handlePageClick,endOffset}) {
         <div>
             <div className=' border-gray-200 bg-white px-4 py-3 sm:px-6 w-fit' >
                 <ReactPaginate
-                    breakLabel={<i class="fa-solid fa-ellipsis fa-lg"></i>}
-                    nextLabel= {<i class="fa-solid fa-chevron-right fa-lg "></i>}
+                    breakLabel={<i className="fa-solid fa-ellipsis fa-lg"></i>}
+                    nextLabel= {<i className="fa-solid fa-chevron-right fa-lg "></i>}
                     onPageChange={handlePageClick}
                     pageRangeDisplayed={3}
                     pageCount={endOffset}
-                    previousLabel={<i class="fa-solid fa-chevron-left fa-lg"></i>}
+                    previousLabel={<i className="fa-solid fa-chevron-left fa-lg"></i>}
                     renderOnZeroPageCount={null}
                     className=" inline-flex shadow-sm"
                     activeLinkClassName="bg-blue-400"
