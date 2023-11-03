@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { CartDataContext } from '../../../context/CartContext';
 import { groupBy } from 'lodash';
 import { useNavigate } from 'react-router-dom'
+import SkeletonForOrder from './SkeletonForOrder';
 
 const Order = () => {
     const [orders, setOrders] = useState([]);
@@ -76,13 +77,13 @@ const Order = () => {
 
     // if (loading) {
     //     return (
-    //         // <SkeletonForOrder count={8} />
+    //         <SkeletonForOrder count={8} />
     //     )
     // }
     return (
-        Object.keys(orders).length === 0 ? (
-            <h1 className='text-2xl font-bold'>Data is empty</h1>
-        ) :
+         loading ? 
+            <SkeletonForOrder count={8} /> : Object.keys(orders).length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Data is Empty</h1> 
+        :
             <div className='relative w-full sm:w-10/12 mx-auto'>
                 {buyAgainOrder.length > 0 && <div>
                     <button

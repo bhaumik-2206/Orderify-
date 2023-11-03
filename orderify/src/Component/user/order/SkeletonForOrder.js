@@ -19,8 +19,8 @@ function SkeletonForOrder({ count }) {
                                 <div>
                                     <Skeleton className='m-2' width={250} height={20} />
                                     <Skeleton className='m-2' width={100} height={20} />
-                                    <Skeleton className='mt-5 mx-2' width={100} height={20} />
                                     <Skeleton className='m-2' width={100} height={20} />
+                                    <Skeleton className='mt-5 mx-2' width={100} height={20} />
                                 </div>
                             </div>
                         ))}

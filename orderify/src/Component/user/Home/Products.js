@@ -185,17 +185,17 @@ function Products() {
         });
     };
 
-    if (products.length === 0) {
-        return (
-            <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl  text-blue-700">
-                    {
-                        loading ? <SkeletonForProduct count={itemsPerPage} /> : <h1>Data Empty</h1>
-                    }
-                </div>
-            </div>
-        )
-    }
+    // if (products.length === 0) {
+    //     return (
+    //         <div className="absolute inset-0 flex items-center justify-center">
+    //             <div className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl  text-blue-700">
+    //                 {
+    //                     loading ? <SkeletonForProduct count={itemsPerPage} /> : <h1>Data Empty</h1>
+    //                 }
+    //             </div>
+    //         </div>
+    //     )
+    // }
 
     return (
         <div className="bg-white">
@@ -245,7 +245,7 @@ function Products() {
                         fetchData={fetchData}
                         updateProduct={updateProduct}
                     />
-                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                      {(products.length !== 0) ? <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                         {products.map((product) => (
                             <div
                                 key={product._id}
@@ -364,10 +364,10 @@ function Products() {
                                 )}
                             </div>
                         ))}
-                    </div>
+                    </div> : loading || search.trim() === '' ? <SkeletonForProduct count={itemsPerPage} /> : <h1 className="text-center m-3 text-3xl text-blue-900" >No product found</h1>}
                 </div>
             )}
-            <div className={`${loading ? "hidden" : "block"}`}>
+             {products.length > 0 &&<div className={`${loading ? "hidden" : "block"}`}>
                 <div className="flex justify-between items-center px-3 flex-col md:flex-row max-w-7xl mx-auto ps-8">
                     <div className="text-lg  ">
                         Showing {itemOffset + 1} to{" "}
@@ -382,7 +382,7 @@ function Products() {
                         search={search}
                     />
                 </div>
-            </div>
+            </div>}
         </div>
     );
 }

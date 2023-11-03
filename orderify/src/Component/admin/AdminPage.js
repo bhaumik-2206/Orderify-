@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react'
 import fetchApi from '../../util/helper'
 import { API_ENDPOINTS } from '../../config/api'
 import { useNavigate } from 'react-router-dom';
+import SkeletonAdminOrder from './SkeletonAdminOrder';
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function AdminPage() {
     const [orders, setOders] = useState([]);
     const [showUser, setShowUser] = useState({});
+    const [isPageLoading, setIsPageLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,8 +17,9 @@ function AdminPage() {
     }, []);
 
     const fetchOders = async () => {
+        setIsPageLoading(true)
         try {
-            const response = await fetchApi({ url: API_ENDPOINTS.ADMIN_ORDERS, method: 'GET', isAuthRequired: true });
+            const response = await fetchApi({ url: API_ENDPOINTS.ORDER, method: 'GET', isAuthRequired: true });
             if (response.status === 200) {
                 setOders(response.data)
             }
@@ -24,7 +29,10 @@ function AdminPage() {
         } catch (error) {
             console.log(error);
         }
+        setIsPageLoading(false)
     }
+
+    
 
     return (
         <div className="inset-0 overflow-hidden mx-auto max-w-7xl">
@@ -32,7 +40,7 @@ function AdminPage() {
                 <div className="mt-2">
                     <div className="flow-root">
                         <ul role="list" className="-my-6 divide-y divide-gray-200 ">
-                            {orders && orders.map((item, index) => (
+                            {isPageLoading ? <SkeletonAdminOrder count={5}/> : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> :   orders.map((item, index) => (
                                 <div key={index}>
                                     <li className="block sm:flex py-6">
                                         <div className="h-32 w-32 mx-auto sm:h-36 sm:w-36 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 mb-4 sm:mb-0">
