@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState,Fragment } from "react";
 import fetchApi from "../../../util/helper";
 import { API_ENDPOINTS } from "../../../config/api";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import SkeletonForProduct from "./SkeletonForProduct";
 import ProductModel from './ProductModel'
 import ConfirmationModal from "../../common/ConfirmationModal";
+import { Disclosure, Menu, Transition } from '@headlessui/react'
 
 function Products() {
     const [id, setId] = useState(null)
@@ -230,7 +231,7 @@ function Products() {
                             <button className="bg-blue-700 text-white p-2 rounded-md m-1 text-lg font-bold  text-center"
                                 onClick={() => { openProductModal("add") }}
                             >
-                                <i class="fa-solid fa-plus"></i> Add Proucts</button>
+                                <i className="fa-solid fa-plus"></i> Add Proucts</button>
 
                         </div>
                     </div>
@@ -252,7 +253,7 @@ function Products() {
                         {products.map((product) => (
                             <div
                                 key={product._id}
-                                className={`flex flex-col  justify-between bg-white rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : ""
+                                className={`flex relative flex-col  justify-between bg-white rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : ""
                                     }`} >
                                 <div >
                                     <div className="relative w-34 h-34 sm:w-60 sm:h-60 mx-auto">
@@ -342,27 +343,43 @@ function Products() {
                                         )}
                                     </div>
                                 </div>) : (
-                                    <div className=" flex justify-between w-full px-2">
-                                        <div className="text-center flex items-center">
+                                    <div className=" absolute top-0 right-0 flex justify-between w-full px-2">
+                                        <div className="text-center cursor-pointer  flex items-center">
                                             <input
                                                 type="checkbox"
+                                                className="w-4 h-4 cursor-pointer"
                                                 checked={selectedProducts.includes(product._id)}
                                                 onChange={() => toggleProductSelection(product._id)}
                                             />
                                         </div>
-                                        <div className="pr-2 py-1  w-full  text-end">
-                                            {
-                                                !selectedProducts.length > 0 &&
-                                                <button className="p-1 px-3  border-2 border-gray-400  text-red-600 hover:bg-gray-200 rounded-md"
-                                                    onClick={() => { setDeleteConfirm(true); setId(product._id) }}>
-                                                    <i className="fa-solid fa-trash"></i>
-                                                </button>
-                                            }
-                                            <button className="p-1 px-3 mr-2 border-2 border-gray-400 text-blue-700 hover:bg-gray-200 rounded-md"
-                                                onClick={() => openProductModal("edit", product)}>
-                                                <i className="fa-solid fa-pen "></i>
-                                            </button>
-                                        </div>
+
+                                 <Menu as="div" className=" ml-3">
+                                <div>
+                                    <Menu.Button className="relative flex rounded-fulltext-sm focus:outline-none focus:ring-2 m-1 hover:bg-gray-300 p-2 px-3 rounded-full ">
+                                        <i className="fa-solid fa-ellipsis-vertical"></i>
+                                    </Menu.Button>
+                                </div>
+                                <Transition
+                                    as={Fragment}
+                                >
+                                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        { !selectedProducts.length > 0 && <Menu.Item>
+                                            <h1
+                                            onClick={() => { setDeleteConfirm(true); setId(product._id) }}
+                                                to="/profile"
+                                                className={`rounded cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-red-100 bg-slate-50`}
+                                            >Delete</h1>
+                                        </Menu.Item>}
+                                        <Menu.Item>
+                                            <h1
+                                              onClick={() => openProductModal("edit", product)}
+                                                className={`rounded block px-4 py-2 text-sm text-gray-700 hover:bg-green-200 cursor-pointer bg-slate-50`}
+                                            > Edit</h1 >
+                                        </Menu.Item>
+                                    </Menu.Items>
+                                </Transition>
+                            </Menu>
+
                                     </div>
                                 )}
                             </div>
