@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState,Fragment } from "react";
+import React, { useContext, useEffect, useState, Fragment } from "react";
 import fetchApi from "../../../util/helper";
 import { API_ENDPOINTS } from "../../../config/api";
 import { toast } from "react-toastify";
@@ -52,7 +52,7 @@ function Products() {
         if (search) {
             timer = setTimeout(() => {
                 handleSearch();
-            }, 800);
+            }, 500);
         } else {
             fetchData({
                 limit: itemsPerPage,
@@ -60,7 +60,7 @@ function Products() {
             });
         }
         return () => clearTimeout(timer);
-    }, [search]);
+    }, [search.trim()]);
 
     const fetchData = async (pageObj) => {
         if (search) {
@@ -166,12 +166,11 @@ function Products() {
                 data: { prd_ids: id ? [id] : selectedProducts }
             });
             if (response.status === 200) {
+                await fetchData({
+                    limit: 5,
+                    page: 1,
+                });
                 toast.info("Deleted selected products");
-                // setProducts((prevProducts) =>
-                //     prevProducts.filter((product) =>
-                //         id ? !id.includes(product._id) : !selectedProducts.includes(product._id)
-                //     )
-                // );
                 setSelectedProducts([]);
             }
         } catch (error) {
@@ -204,36 +203,36 @@ function Products() {
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-screen-xl sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-center mb-3 w-full sm:w-1/2 mx-auto relative border border-black rounded-lg my-5 ">
-                        <input type="text"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            className="w-full py-2 px-4 text-black bg-white border border-black rounded-l-lg focus:outline-none focus:ring focus:border-blue-300"
-                            placeholder="Search..." />
-                        <button onClick={() => handleSearch()} className="bg-black text-white py-2 px-4 rounded-r-lg">
-                            <i className="fas fa-search"></i>
+                <div className="flex items-center justify-center mb-3 w-full sm:w-1/2 mx-auto relative border border-black rounded-lg my-5 ">
+                    <button className="bg-black text-white py-2 px-4 rounded-l-lg">
+                        <i className="fas fa-search"></i>
+                    </button>
+                    <input type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full py-2 px-4 text-black bg-white border border-black rounded-r-lg focus:outline-none focus:ring focus:border-blue-300"
+                        placeholder="Search..." />
+                </div>
+
+                {userData.user_role === "admin" && <div className="block sm:flex justify-between items-center">
+                    <div>
+                        <button
+                            onClick={() => setDeleteConfirm(true)}
+                            disabled={selectedProducts.length === 0}
+                            className={` text-red-600 text-center block w-full font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md border-2 border-red-500 hover:bg-red-200 hover:text-white ${selectedProducts.length === 0 ? "hidden" : "block"
+                                }`}
+                        >
+                            Delete Selected Products
                         </button>
                     </div>
-                    
-                    {userData.user_role === "admin" && <div className="block sm:flex justify-between items-center">
-                        <div>
-                            <button
-                                onClick={() => setDeleteConfirm(true)}
-                                disabled={selectedProducts.length === 0}
-                                className={` text-red-600 text-center block w-full font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md border-2 border-red-500 hover:bg-red-200 hover:text-white ${selectedProducts.length === 0 ? "hidden" : "block"
-                                    }`}
-                            >
-                                Delete Selected Products
-                            </button>
-                        </div>
-                        <div>
-                            <button className="bg-blue-700 text-white p-2 rounded-md m-1 text-lg font-bold  text-center"
-                                onClick={() => { openProductModal("add") }}
-                            >
-                                <i className="fa-solid fa-plus"></i> Add Proucts</button>
+                    <div>
+                        <button className="bg-blue-700 text-white p-2 rounded-md m-1 text-lg font-bold  text-center"
+                            onClick={() => { openProductModal("add") }}
+                        >
+                            <i className="fa-solid fa-plus"></i> Add Proucts</button>
 
-                        </div>
-                    </div>}
+                    </div>
+                </div>}
             </div>
             {loading ? (
                 <SkeletonForProduct count={itemsPerPage} />
@@ -250,21 +249,24 @@ function Products() {
                         {products.map((product) => (
                             <div
                                 key={product._id}
-                                className={`flex relative flex-col  justify-between bg-white rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : ""
-                                    }`} >
+                                className={`flex relative flex-col  justify-between rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : ""
+                                    } ${!product.prd_is_visible ? "bg-gray-300" : "bg-white"}`} >
                                 <div >
-                                    <div className="relative w-34 h-34 sm:w-60 sm:h-60 mx-auto">
+                                    <div
+                                        // onClick={ }
+                                        className="relative w-34 h-34 sm:w-60 sm:h-60 mx-auto">
                                         <img
                                             src={
                                                 product.prd_img
                                                     ? product.prd_img
                                                     : "images/download.png"
                                             }
-                                            className="object-contain h-full w-full block mx-auto"
+                                            className={` ${!product.prd_is_visible ? "opacity-75" : ""} object-contain h-full w-full block mx-auto`}
                                             alt="Product Image"
                                         />
+                                        {/* {!product.prd_is_visible && <p className="absolute bottom-0 px-3 bg-gray-200 bg-opacity-40">This product is not visible in user products</p>} */}
                                     </div>
-                                    <div className="px-4 pt-0.5">
+                                    <div className={`p-4`}>
                                         <h2 className="text-lg font-semibold text-gray-800 ">
                                             {product.prd_name}
                                         </h2>
@@ -292,12 +294,10 @@ function Products() {
                                                 <div id="counter" className="text-xl font-semibold">
                                                     {!loadingStates[product._id] ? (
                                                         <p className="w-1/3 block text-center text-xl font-semibold mx-2 sm:mx-4">
-                                                            {
-                                                                cartData.find(
-                                                                    (item) =>
-                                                                        item.cartitm_fk_prd_id._id === product._id
-                                                                ).cartitm_prd_qty
-                                                            }
+                                                            {cartData.find(
+                                                                (item) =>
+                                                                    item.cartitm_fk_prd_id._id === product._id
+                                                            ).cartitm_prd_qty}
                                                         </p>
                                                     ) : (
                                                         <div className="animate-spin">
@@ -349,59 +349,60 @@ function Products() {
                                                 onChange={() => toggleProductSelection(product._id)}
                                             />
                                         </div>
-
-                                 <Menu as="div" className=" ml-3">
-                                <div>
-                                    <Menu.Button className="relative flex rounded-fulltext-sm focus:outline-none focus:ring-2 m-1 hover:bg-gray-300 p-2 px-3 rounded-full ">
-                                        <i className="fa-solid fa-ellipsis-vertical"></i>
-                                    </Menu.Button>
-                                </div>
-                                <Transition
-                                    as={Fragment}
-                                >
-                                    <Menu.Items className="absolute right-0 z-10 mt-2  w-fit origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                        { !selectedProducts.length > 0 && <Menu.Item>
-                                            <h1
-                                            onClick={() => { setDeleteConfirm(true); setId(product._id) }}
-                                                to="/profile"
-                                                className={`rounded cursor-pointer block px-7 py-2 text-sm text-gray-700 hover:bg-red-100 bg-slate-50`}
-                                            >Delete</h1>
-                                        </Menu.Item>}
-                                        <Menu.Item>
-                                            <h1
-                                              onClick={() => openProductModal("edit", product)}
-                                                className={`rounded block px-7 py-2 text-sm text-gray-700 hover:bg-green-200 cursor-pointer bg-slate-50`}
-                                            > Edit</h1 >
-                                        </Menu.Item>
-                                    </Menu.Items>
-                                </Transition>
-                            </Menu>
-
+                                        <Menu as="div" className=" ml-3">
+                                            <div>
+                                                <Menu.Button className="relative flex rounded-fulltext-sm focus:outline-none focus:ring-2 m-1 hover:bg-gray-300 p-2 px-3 rounded-full ">
+                                                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                                                </Menu.Button>
+                                            </div>
+                                            <Transition
+                                                as={Fragment}
+                                            >
+                                                <Menu.Items className="absolute right-0 z-10 mt-2  w-fit origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                    {!selectedProducts.length > 0 && <Menu.Item>
+                                                        <h1
+                                                            onClick={() => { setDeleteConfirm(true); setId(product._id) }}
+                                                            to="/profile"
+                                                            className={`rounded cursor-pointer block px-7 py-2 text-sm text-gray-700 hover:bg-red-100 bg-slate-50`}
+                                                        >Delete</h1>
+                                                    </Menu.Item>}
+                                                    <Menu.Item>
+                                                        <h1
+                                                            onClick={() => openProductModal("edit", product)}
+                                                            className={`rounded block px-7 py-2 text-sm text-gray-700 hover:bg-green-200 cursor-pointer bg-slate-50`}
+                                                        > Edit</h1 >
+                                                    </Menu.Item>
+                                                </Menu.Items>
+                                            </Transition>
+                                        </Menu>
                                     </div>
                                 )}
                             </div>
                         ))}
                     </div> : loading || search.trim() === '' ? <SkeletonForProduct count={itemsPerPage} /> : <h1 className="text-center m-3 text-3xl text-blue-900" >No product found</h1>}
                 </div>
-            )}
-            {products.length > 0 && <div className={`${loading ? "hidden" : "block"}`}>
-                <div className="flex justify-between items-center px-3 flex-col md:flex-row max-w-7xl mx-auto ps-8">
-                    <div className="text-lg  ">
-                        Showing {itemOffset + 1} to{" "}
-                        {totalPerPage > endOffset.total_products
-                            ? endOffset.total_products
-                            : totalPerPage}{" "}
-                        of {endOffset.total_products} results
+            )
+            }
+            {
+                products.length > 0 && <div className={`${loading ? "hidden" : "block"}`}>
+                    <div className="flex justify-between items-center px-3 flex-col md:flex-row max-w-7xl mx-auto ps-8">
+                        <div className="text-lg  ">
+                            Showing {itemOffset + 1} to{" "}
+                            {totalPerPage > endOffset.total_products
+                                ? endOffset.total_products
+                                : totalPerPage}{" "}
+                            of {endOffset.total_products} results
+                        </div>
+                        <PaginationComponent
+                            handlePageClick={handlePageClick}
+                            endOffset={endOffset.total_page}
+                            search={search}
+                        />
                     </div>
-                    <PaginationComponent
-                        handlePageClick={handlePageClick}
-                        endOffset={endOffset.total_page}
-                        search={search}
-                    />
                 </div>
-            </div>}
+            }this
             <ConfirmationModal show={deleteConfirm} data={id} setShow={setDeleteConfirm} handleSubmit={deleteSelectedProducts} type={"delete"} />
-        </div>
+        </div >
     );
 }
 

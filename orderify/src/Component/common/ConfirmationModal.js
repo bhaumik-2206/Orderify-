@@ -23,6 +23,12 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type = "d
             button: "Log out",
             color: "bg-red-600"
         },
+        remove: {
+            title: "Remove Item",
+            message: "Are you sure you want to remove the item from cart?",
+            button: "Remove",
+            color: "bg-red-600"
+        },
     }
 
     const handleOperation = () => {
