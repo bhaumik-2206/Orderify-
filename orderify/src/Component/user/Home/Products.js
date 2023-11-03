@@ -204,8 +204,7 @@ function Products() {
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-screen-xl sm:px-6 lg:px-8">
-                {userData.user_role === "user" ? (
-                    <div className="flex items-center justify-center mb-3 w-1/2 mx-auto relative border border-black rounded-lg">
+                    <div className="flex items-center justify-center mb-3 w-full sm:w-1/2 mx-auto relative border border-black rounded-lg my-5 ">
                         <input type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
@@ -215,8 +214,8 @@ function Products() {
                             <i className="fas fa-search"></i>
                         </button>
                     </div>
-                ) : (
-                    <div className="flex justify-between items-center">
+                    
+                    {userData.user_role === "admin" && <div className="block sm:flex justify-between items-center">
                         <div>
                             <button
                                 onClick={() => setDeleteConfirm(true)}
@@ -234,9 +233,7 @@ function Products() {
                                 <i className="fa-solid fa-plus"></i> Add Proucts</button>
 
                         </div>
-                    </div>
-                )
-                }
+                    </div>}
             </div>
             {loading ? (
                 <SkeletonForProduct count={itemsPerPage} />
@@ -362,18 +359,18 @@ function Products() {
                                 <Transition
                                     as={Fragment}
                                 >
-                                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <Menu.Items className="absolute right-0 z-10 mt-2  w-fit origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         { !selectedProducts.length > 0 && <Menu.Item>
                                             <h1
                                             onClick={() => { setDeleteConfirm(true); setId(product._id) }}
                                                 to="/profile"
-                                                className={`rounded cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-red-100 bg-slate-50`}
+                                                className={`rounded cursor-pointer block px-7 py-2 text-sm text-gray-700 hover:bg-red-100 bg-slate-50`}
                                             >Delete</h1>
                                         </Menu.Item>}
                                         <Menu.Item>
                                             <h1
                                               onClick={() => openProductModal("edit", product)}
-                                                className={`rounded block px-4 py-2 text-sm text-gray-700 hover:bg-green-200 cursor-pointer bg-slate-50`}
+                                                className={`rounded block px-7 py-2 text-sm text-gray-700 hover:bg-green-200 cursor-pointer bg-slate-50`}
                                             > Edit</h1 >
                                         </Menu.Item>
                                     </Menu.Items>
