@@ -16,10 +16,14 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
         prd_id: updateProduct._id,
         prd_name: updateProduct.prd_name,
         prd_price: updateProduct.prd_price,
+        prd_img: updateProduct.prd_img,
         prd_is_visible: false
     } : null;
     const handleSubmit = async (values) => {
-        setAPiSend(true)
+        setAPiSend(true);
+        let image_url = values.prd_img;
+        if (values.prd_img.trim() === "")
+            delete values.prd_img;
         try {
             const response = await fetchApi({
                 url: API_ENDPOINTS.PRODUCT_ADD,
@@ -28,7 +32,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
             });
             if (response.status === 200) {
                 setOpen(false);
-                fetchData({
+                await fetchData({
                     limit: 5,
                     page: 1,
                 });
@@ -39,7 +43,8 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
         } catch (error) {
             console.log(error)
         } finally {
-            setAPiSend(false)
+            setAPiSend(false);
+            values.prd_img = image_url;
         }
         console.log(values)
     }
@@ -59,7 +64,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                 </Transition.Child>
 
                 <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-                    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                    <div className="flex min-h-full items-start justify-center p-4 text-center lg:items-center sm:p-0">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -87,6 +92,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                                                         : {
                                                             prd_name: '',
                                                             prd_price: '',
+                                                            prd_img: '',
                                                         }
                                                 }
                                                 validationSchema={ProductValidation}
@@ -99,6 +105,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                                                                 <form onSubmit={formik.handleSubmit}>
                                                                     <CommonInput name="prd_name" label="Product Name" type="text" formik={formik} />
                                                                     <CommonInput name="prd_price" label="Product Price" type="Number" formik={formik} />
+                                                                    <CommonInput name="prd_img" label="Product Image" type="text" formik={formik} />
                                                                     {mode === "edit" && <CommonInput name="prd_is_visible" label="Visible in user products" type="checkbox" formik={formik} />}
                                                                     <div>
                                                                         <div className=" px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">

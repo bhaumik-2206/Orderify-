@@ -27,6 +27,6 @@ export const LogInValidation = Yup.object({
 });
 export const ProductValidation = Yup.object({
     prd_name: Yup.string().required('Product Name is required'),
-    prd_price: Yup.string().required("Required Product Amount"),
+    prd_price: Yup.number().min(1, "Price can not be nagitive").required("Required Product Amount"),
 });
 
