@@ -42,23 +42,23 @@ function AdminPage() {
                         <ul role="list" className="-my-6 divide-y divide-gray-200 ">
                             {isPageLoading ? <SkeletonAdminOrder count={5}/> : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> :   orders.map((item, index) => (
                                 <div key={index}>
-                                    <li className="block sm:flex py-6">
-                                        <div className="h-32 w-32 mx-auto sm:h-36 sm:w-36 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 mb-4 sm:mb-0">
+                                    <li className="flex sm:flex py-6">
+                                        <div className="h-28 w-20 mx-auto sm:h-36 sm:w-36 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 mb-4 sm:mb-0">
                                             <img src={item.product_details.prd_img} alt="Item"
-                                                className="h-full w-full object-cover object-center"
+                                                className="h-full w-full object-contain sm:object-cover object-center"
                                             />
                                         </div>
 
                                         <div className="ml-7 flex flex-1 flex-col">
                                             <div>
-                                                <div className="block sm:flex justify-between text-base font-medium text-gray-900">
-                                                    <div className='w-full sm:w-1/2'>
-                                                        <p className='text-xl'>{item.product_details.prd_name}</p>
+                                                <div className="block sm:flex justify-between text-base font-medium text-gray-900 ">
+                                                    <div className=' sm:w-1/2 '>
+                                                        <p className='text-lg text-ellipsis overflow-hidden sm:text-xl'>{item.product_details.prd_name}</p>
                                                         <p>₹ {item.product_details.prd_price}/item</p>
-                                                        <p className="text-lg ">Qty: <b>{item.prd_total_qty}</b></p>
+                                                        <p className="sm:text-lg text-sm">Qty: <b>{item.prd_total_qty}</b></p>
                                                     </div>
                                                     <div className='w-full text-left sm:text-right sm:w-1/2'>
-                                                        <p className='text-xl'>Total: ₹ <b className='text-2xl'>{item.prd_total_amount}</b></p>
+                                                        <p className='text-lg sm:text-xl'>Total: ₹ <b className='text-lg sm:text-2xl'>{item.prd_total_amount}</b></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -68,7 +68,13 @@ function AdminPage() {
                                                         type="button"
                                                         className="font-medium text-indigo-600 hover:text-indigo-500 text-lg"
                                                         onClick={() => setShowUser(pre => !pre[item.product_details._id] && ({ [item.product_details._id]: true }))}
-                                                    >{showUser[item.product_details._id] ? "hide users" : "show users"}</button>
+                                                    >
+                                                        {/* {showUser[item.product_details._id] ? "hide users" : "show users"} */}
+                                                        <div className='flex items-center gap-2'>
+                                                        <p>User</p>
+                                                        <i className={`fa-solid fa-chevron-up ${!showUser[item.product_details._id] ? "fa-rotate-180" : ""}`}></i>
+                                                        </div>
+                                                        </button>
                                                 </div>
                                             </div>
                                         </div>

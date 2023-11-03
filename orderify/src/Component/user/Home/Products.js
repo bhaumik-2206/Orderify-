@@ -203,30 +203,30 @@ function Products() {
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-screen-xl sm:px-6 lg:px-8">
-                <div className="flex items-center justify-center mb-3 w-full sm:w-1/2 mx-auto relative border border-black rounded-lg my-5 ">
-                    <button className="bg-black text-white py-2 px-4 rounded-l-lg">
+                <div className="flex items-center justify-center mb-2 sm:mb-3 w-72 sm:w-1/2 mx-3 sm:mx-auto relative border border-black rounded-lg my-2 sm:my-5 ">
+                    <button className="bg-black border-black border text-white py-2 px-4 rounded-l-lg">
                         <i className="fas fa-search"></i>
                     </button>
                     <input type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full py-2 px-4 text-black bg-white border border-black rounded-r-lg focus:outline-none focus:ring focus:border-blue-300"
+                        className="w-full py-2 px-4 text-black bg-white border border-black rounded-l-lg focus:outline-none focus:ring focus:border-blue-300"
                         placeholder="Search..." />
                 </div>
 
-                {userData.user_role === "admin" && <div className="block sm:flex justify-between items-center">
+                {userData.user_role === "admin" && <div className="flex px-2 justify-between items-center ">
                     <div>
                         <button
                             onClick={() => setDeleteConfirm(true)}
                             disabled={selectedProducts.length === 0}
-                            className={` text-red-600 text-center block w-full font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md border-2 border-red-500 hover:bg-red-200 hover:text-white ${selectedProducts.length === 0 ? "hidden" : "block"
+                            className={` text-red-600 text-center sm:text-lg block w-full text-xs font-bold py-2 px-2 sm:py-2 sm:px-4 rounded-md border-2 border-red-500 cursor-pointer hover:bg-red-50 hover:text-white${selectedProducts.length === 0 ? "hidden" : "block"
                                 }`}
                         >
                             Delete Selected Products
                         </button>
                     </div>
                     <div>
-                        <button className="bg-blue-700 text-white p-2 rounded-md m-1 text-lg font-bold  text-center"
+                        <button className="border-2 text-blue-700 sm:text-lg border-blue-700 hover:bg-gray-100 p-2 rounded-md m-1 text-xs font-bold  text-center"
                             onClick={() => { openProductModal("add") }}
                         >
                             <i className="fa-solid fa-plus"></i> Add Proucts</button>
@@ -237,7 +237,7 @@ function Products() {
             {loading ? (
                 <SkeletonForProduct count={itemsPerPage} />
             ) : (
-                <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-screen-xl p-3  sm:py-8 sm:px-4 lg:px-8">
                     <ProductModel
                         open={isAddProductModal}
                         setOpen={setIsAddProductModal}
@@ -245,11 +245,11 @@ function Products() {
                         fetchData={fetchData}
                         updateProduct={updateProduct}
                     />
-                    {(products.length !== 0) ? <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    {(products.length !== 0) ? <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-6">
                         {products.map((product) => (
                             <div
                                 key={product._id}
-                                className={`flex relative flex-col  justify-between rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : ""
+                                className={`flex relative flex-col pb-2  justify-between bg-white rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : ""
                                     } ${!product.prd_is_visible ? "bg-gray-300" : "bg-white"}`} >
                                 <div >
                                     <div
@@ -266,11 +266,11 @@ function Products() {
                                         />
                                         {/* {!product.prd_is_visible && <p className="absolute bottom-0 px-3 bg-gray-200 bg-opacity-40">This product is not visible in user products</p>} */}
                                     </div>
-                                    <div className={`p-4`}>
-                                        <h2 className="text-lg font-semibold text-gray-800 ">
+                                    <div className={`px-4 pt-0.5`}>
+                                        <h2 className="text-sm pb-1 sm:text-lg font-semibold text-gray-800  ">
                                             {product.prd_name}
                                         </h2>
-                                        <p className="mt-0.5 text-lg font-bold text-gray-900">
+                                        <p className="mt-0.5 text-xs sm:text-lg font-bold text-gray-900">
                                             Price: ₹ {product.prd_price}
                                         </p>
                                     </div>
@@ -342,24 +342,24 @@ function Products() {
                                 </div>) : (
                                     <div className=" absolute top-0 right-0 flex justify-between w-full px-2">
                                         <div className="text-center cursor-pointer  flex items-center">
-                                            <input
+                                            {product.prd_is_visible && <input
                                                 type="checkbox"
-                                                className="w-4 h-4 cursor-pointer"
+                                                className="w-3 sm:w-4 h-3 sm:h-4 cursor-pointer"
                                                 checked={selectedProducts.includes(product._id)}
                                                 onChange={() => toggleProductSelection(product._id)}
-                                            />
+                                            />}
                                         </div>
                                         <Menu as="div" className=" ml-3">
                                             <div>
-                                                <Menu.Button className="relative flex rounded-fulltext-sm focus:outline-none focus:ring-2 m-1 hover:bg-gray-300 p-2 px-3 rounded-full ">
-                                                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                                                <Menu.Button className="relative  flex rounded-fulltext-sm focus:outline-none focus:ring-2 m-1 bg-blue-100 hover:bg-gray-300 bg-opacity-60 px-1 sm:px-3 rounded-lg py-1 sm:py-2">
+                                                    <i className="fa-solid fa-ellipsis-vertical w-3"></i>
                                                 </Menu.Button>
                                             </div>
                                             <Transition
                                                 as={Fragment}
                                             >
                                                 <Menu.Items className="absolute right-0 z-10 mt-2  w-fit origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                                    {!selectedProducts.length > 0 && <Menu.Item>
+                                                    {!selectedProducts.length > 0 && product.prd_is_visible && <Menu.Item>
                                                         <h1
                                                             onClick={() => { setDeleteConfirm(true); setId(product._id) }}
                                                             to="/profile"
@@ -386,7 +386,7 @@ function Products() {
             {
                 products.length > 0 && <div className={`${loading ? "hidden" : "block"}`}>
                     <div className="flex justify-between items-center px-3 flex-col md:flex-row max-w-7xl mx-auto ps-8">
-                        <div className="text-lg  ">
+                        <div className="sm:text-lg text-sm ">
                             Showing {itemOffset + 1} to{" "}
                             {totalPerPage > endOffset.total_products
                                 ? endOffset.total_products
@@ -400,7 +400,7 @@ function Products() {
                         />
                     </div>
                 </div>
-            }this
+            }
             <ConfirmationModal show={deleteConfirm} data={id} setShow={setDeleteConfirm} handleSubmit={deleteSelectedProducts} type={"delete"} />
         </div >
     );
