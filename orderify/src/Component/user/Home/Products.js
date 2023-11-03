@@ -210,20 +210,22 @@ function Products() {
                     <input type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full py-2 px-4 text-black bg-white border border-black rounded-l-lg focus:outline-none focus:ring focus:border-blue-300"
+                        className="w-full py-2 px-4 text-black bg-white border border-black rounded-r-lg focus:outline-none focus:ring focus:border-blue-300"
                         placeholder="Search..." />
                 </div>
 
                 {userData.user_role === "admin" && <div className="flex px-2 justify-between items-center ">
                     <div>
-                        <button
-                            onClick={() => setDeleteConfirm(true)}
-                            disabled={selectedProducts.length === 0}
-                            className={` text-red-600 text-center sm:text-lg block w-full text-xs font-bold py-2 px-2 sm:py-2 sm:px-4 rounded-md border-2 border-red-500 cursor-pointer hover:bg-red-50 hover:text-white${selectedProducts.length === 0 ? "hidden" : "block"
-                                }`}
-                        >
-                            Delete Selected Products
-                        </button>
+                        {selectedProducts.length > 0 &&
+                            <button
+                                onClick={() => setDeleteConfirm(true)}
+                                disabled={selectedProducts.length === 0}
+                                className={` text-red-600 text-center sm:text-lg block w-full text-xs font-bold py-2 px-2 sm:py-2 sm:px-4 rounded-md border-2 border-red-500 cursor-pointer hover:bg-red-50 hover:text-white${selectedProducts.length === 0 ? "hidden" : "block"
+                                    }`}
+                            >
+                                Delete Selected Products
+                            </button>
+                        }
                     </div>
                     <div>
                         <button className="border-2 text-blue-700 sm:text-lg border-blue-700 hover:bg-gray-100 p-2 rounded-md m-1 text-xs font-bold  text-center"
