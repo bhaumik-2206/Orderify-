@@ -31,8 +31,9 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type = "d
             localStorage.removeItem("auth");
             navigate("/logIn");
             toast.success("Log Out Successfully");
+        } else {
+            handleSubmit(data);
         }
-        handleSubmit(data);
         setShow(false);
     }
 

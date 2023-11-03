@@ -1,6 +1,8 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { Formik } from 'formik'
+import { initialProductAddValue } from '../../../config/InitialValue'
 import { ProductValidation } from '../../../config/Validation'
 import CommonInput from '../../auth/CommonInput'
 import fetchApi from '../../../util/helper'
@@ -14,6 +16,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
         prd_id: updateProduct._id,
         prd_name: updateProduct.prd_name,
         prd_price: updateProduct.prd_price,
+        prd_is_visible: false
     } : null;
     const handleSubmit = async (values) => {
         setAPiSend(true)
@@ -91,12 +94,12 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                                             >
                                                 {formik => (
                                                     <div className='flex flex-col lg:flex-row '>
-                                                        <div className="flex flex-1 flex-col justify-center px-2 py-4 lg:px-8">
+                                                        <div className="flex flex-1 flex-col justify-center py-4 lg:px-8">
                                                             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                                                                 <form onSubmit={formik.handleSubmit}>
                                                                     <CommonInput name="prd_name" label="Product Name" type="text" formik={formik} />
                                                                     <CommonInput name="prd_price" label="Product Price" type="Number" formik={formik} />
-                                                                    <CommonInput name="prd_is_visible" label="Product Image Url" type="checkbox" formik={formik} />
+                                                                    <CommonInput name="prd_is_visible" label="Visible in user products" type="checkbox" formik={formik} />
                                                                     <div>
                                                                         <div className=" px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                                                             <button
