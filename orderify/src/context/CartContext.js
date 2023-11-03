@@ -7,7 +7,7 @@ export const CartDataContext = createContext();
 
 const CartContext = ({ children }) => {
     const [cartData, setCartData] = useState([]);
-    const [totalAmount, setTotalAmount] = useState("");
+    const [totalAmount, setTotalAmount] = useState(0);
     const userData = JSON.parse(localStorage.getItem('userData'));
 
     const fetchCart = async () => {

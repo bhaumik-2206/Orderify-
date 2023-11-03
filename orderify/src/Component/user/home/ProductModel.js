@@ -1,8 +1,6 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { Formik } from 'formik'
-import { initialProductAddValue } from '../../../config/InitialValue'
 import { ProductValidation } from '../../../config/Validation'
 import CommonInput from '../../auth/CommonInput'
 import fetchApi from '../../../util/helper'
@@ -11,12 +9,11 @@ import { toast } from 'react-toastify'
 
 export default function ProductModel({ open, setOpen, fetchData, mode, updateProduct }) {
     const cancelButtonRef = useRef(null)
-    const [apiSend,setAPiSend] = useState(false)
+    const [apiSend, setAPiSend] = useState(false)
     const value = updateProduct ? {
         prd_id: updateProduct._id,
         prd_name: updateProduct.prd_name,
         prd_price: updateProduct.prd_price,
-        prd_img: updateProduct.prd_img
     } : null;
     const handleSubmit = async (values) => {
         setAPiSend(true)
@@ -38,7 +35,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
             }
         } catch (error) {
             console.log(error)
-        }finally{
+        } finally {
             setAPiSend(false)
         }
         console.log(values)
@@ -83,13 +80,12 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                                             <Formik
                                                 initialValues={
                                                     mode === "edit"
-                                                      ? value
-                                                      : { 
-                                                          prd_name: '',
-                                                          prd_price: '',
-                                                          prd_img: '',
+                                                        ? value
+                                                        : {
+                                                            prd_name: '',
+                                                            prd_price: '',
                                                         }
-                                                  }
+                                                }
                                                 validationSchema={ProductValidation}
                                                 onSubmit={(values) => handleSubmit(values)}
                                             >
@@ -98,10 +94,9 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                                                         <div className="flex flex-1 flex-col justify-center px-2 py-4 lg:px-8">
                                                             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                                                                 <form onSubmit={formik.handleSubmit}>
-                                                                    {mode === "edit" && <CommonInput name="prd_id" label="Product Id" type="text" formik={formik}  disabled={true} />}
                                                                     <CommonInput name="prd_name" label="Product Name" type="text" formik={formik} />
                                                                     <CommonInput name="prd_price" label="Product Price" type="Number" formik={formik} />
-                                                                    <CommonInput name="prd_img" label="Product Image Url" type="text" formik={formik} />
+                                                                    <CommonInput name="prd_is_visible" label="Product Image Url" type="checkbox" formik={formik} />
                                                                     <div>
                                                                         <div className=" px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                                                             <button

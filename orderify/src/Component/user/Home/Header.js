@@ -4,14 +4,15 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import LogOut from '../profile/LogOut';
 import Cart from './Cart';
 import { CartDataContext } from '../../../context/CartContext';
+import ConfirmationModal from '../../common/ConfirmationModal';
 
 const navigationUser = [
     { name: 'Products', to: '/products', current: true },
     { name: 'Orders', to: '/order', current: false },
 ]
 const navigationAdmin = [
-    { name: 'Products', to: '/product', current: false },
     { name: 'Orders', to: '/orders', current: false },
+    { name: 'Products', to: '/product', current: false },
 ]
 export default function Header({ role }) {
     const { cartData } = useContext(CartDataContext);
@@ -105,6 +106,7 @@ export default function Header({ role }) {
                 }
             </>
             <LogOut isModalOpen={isLogoutShow} setIsModalOpen={setIsLogoutShow} />
+            <ConfirmationModal show={isLogoutShow} setShow={setIsLogoutShow} type="logOut" />
         </Disclosure >
     )
 }

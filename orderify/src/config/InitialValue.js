@@ -10,7 +10,6 @@ export const initialProductAddValue = {
     prd_id:'',
     prd_name: "",
     prd_price: "",
-    prd_img: ""
 };
 
 

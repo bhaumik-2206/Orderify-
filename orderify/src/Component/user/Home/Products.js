@@ -8,8 +8,11 @@ import { useNavigate } from "react-router-dom";
 import "react-loading-skeleton/dist/skeleton.css";
 import SkeletonForProduct from "./SkeletonForProduct";
 import ProductModel from './ProductModel'
+import ConfirmationModal from "../../common/ConfirmationModal";
 
 function Products() {
+    const [id, setId] = useState(null)
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
     const [isAddProductModal, setIsAddProductModal] = useState(false)
     const [loadingStates, setLoadingStates] = useState({});
     const [products, setProducts] = useState([]);
@@ -159,15 +162,15 @@ function Products() {
                 url: API_ENDPOINTS.PRODUCT_ADD,
                 method: "DELETE",
                 isAuthRequired: true,
-                data: id ? { prd_ids: id } : { prd_ids: selectedProducts },
+                data: { prd_ids: id ? [id] : selectedProducts }
             });
             if (response.status === 200) {
                 toast.info("Deleted selected products");
-                setProducts((prevProducts) =>
-                    prevProducts.filter((product) =>
-                        id ? !id.includes(product._id) : !selectedProducts.includes(product._id)
-                    )
-                );
+                // setProducts((prevProducts) =>
+                //     prevProducts.filter((product) =>
+                //         id ? !id.includes(product._id) : !selectedProducts.includes(product._id)
+                //     )
+                // );
                 setSelectedProducts([]);
             }
         } catch (error) {
@@ -215,7 +218,7 @@ function Products() {
                     <div className="flex justify-between items-center">
                         <div>
                             <button
-                                onClick={() => deleteSelectedProducts()}
+                                onClick={() => setDeleteConfirm(true)}
                                 disabled={selectedProducts.length === 0}
                                 className={` text-red-600 text-center block w-full font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md border-2 border-red-500 hover:bg-red-200 hover:text-white ${selectedProducts.length === 0 ? "hidden" : "block"
                                     }`}
@@ -245,7 +248,7 @@ function Products() {
                         fetchData={fetchData}
                         updateProduct={updateProduct}
                     />
-                      {(products.length !== 0) ? <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    {(products.length !== 0) ? <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                         {products.map((product) => (
                             <div
                                 key={product._id}
@@ -348,17 +351,17 @@ function Products() {
                                             />
                                         </div>
                                         <div className="pr-2 py-1  w-full  text-end">
+                                            {
+                                                !selectedProducts.length > 0 &&
+                                                <button className="p-1 px-3  border-2 border-gray-400  text-red-600 hover:bg-gray-200 rounded-md"
+                                                    onClick={() => { setDeleteConfirm(true); setId(product._id) }}>
+                                                    <i className="fa-solid fa-trash"></i>
+                                                </button>
+                                            }
                                             <button className="p-1 px-3 mr-2 border-2 border-gray-400 text-blue-700 hover:bg-gray-200 rounded-md"
                                                 onClick={() => openProductModal("edit", product)}>
                                                 <i className="fa-solid fa-pen "></i>
                                             </button>
-                                            {
-                                                !selectedProducts.length > 0 &&
-                                                <button className="p-1 px-3  border-2 border-gray-400  text-red-600 hover:bg-gray-200 rounded-md"
-                                                    onClick={() => deleteSelectedProducts(product._id)}>
-                                                    <i className="fa-solid fa-trash"></i>
-                                                </button>
-                                            }
                                         </div>
                                     </div>
                                 )}
@@ -367,7 +370,7 @@ function Products() {
                     </div> : loading || search.trim() === '' ? <SkeletonForProduct count={itemsPerPage} /> : <h1 className="text-center m-3 text-3xl text-blue-900" >No product found</h1>}
                 </div>
             )}
-             {products.length > 0 &&<div className={`${loading ? "hidden" : "block"}`}>
+            {products.length > 0 && <div className={`${loading ? "hidden" : "block"}`}>
                 <div className="flex justify-between items-center px-3 flex-col md:flex-row max-w-7xl mx-auto ps-8">
                     <div className="text-lg  ">
                         Showing {itemOffset + 1} to{" "}
@@ -383,6 +386,7 @@ function Products() {
                     />
                 </div>
             </div>}
+            <ConfirmationModal show={deleteConfirm} data={id} setShow={setDeleteConfirm} handleSubmit={deleteSelectedProducts} type={"delete"} />
         </div>
     );
 }

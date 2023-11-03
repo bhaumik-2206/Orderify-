@@ -15,6 +15,8 @@ const ConfirmOrder = ({ show, setShow, setOpen }) => {
             toast.success("Order sent successfully");
             setCartData([]);
             setTotalAmount(0);
+            navigate("/order");
+            setOpen(false);
         } else {
             toast.error("Error to send order");
         }

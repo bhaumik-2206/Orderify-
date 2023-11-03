@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from "../../../config/api.js";
 import { CartDataContext } from "../../../context/CartContext.js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import ConfirmOrder from "./ConfirmOrder.js";
+import ConfirmationModal from "../../common/ConfirmationModal.js";
 
 export default function Cart({ open, setOpen }) {
   const navigate = useNavigate();
@@ -45,6 +45,23 @@ export default function Cart({ open, setOpen }) {
     setLoading(pre => ({ ...pre, [productId]: true }));
     await changeQuantityContext(productId, operation)
     setLoading(pre => ({ ...pre, [productId]: false }));
+  }
+
+  const handleOrderSubmit = async () => {
+    const response = await fetchApi({ url: API_ENDPOINTS.ORDER, method: "POST", isAuthRequired: true })
+    if (response.status === 200) {
+      toast.success("Order sent successfully");
+      setCartData([]);
+      setTotalAmount(0);
+      navigate("/order");
+      setOpen(false);
+    } else {
+      toast.error("Error to send order");
+    }
+    if (response.message === "jwt expired") {
+      navigate("/login");
+    }
+    setShow(false);
   }
 
 
@@ -166,7 +183,8 @@ export default function Cart({ open, setOpen }) {
         </div>
       </div>
 
-      <ConfirmOrder show={show} setShow={setShow} setOpen={setOpen} />
+      <ConfirmationModal show={show} setShow={setShow} handleSubmit={handleOrderSubmit} type="order" />
+      {/* <ConfirmOrder show={show} setShow={setShow} setOpen={setOpen} /> */}
       {/* <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setOpen}>
           <Transition.Child
