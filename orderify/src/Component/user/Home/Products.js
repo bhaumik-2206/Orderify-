@@ -7,22 +7,24 @@ import PaginationComponent from "./PaginationComponent";
 import { useNavigate } from "react-router-dom";
 import "react-loading-skeleton/dist/skeleton.css";
 import SkeletonForProduct from "./SkeletonForProduct";
-import AddProductModel from './AddProductModel'
+import ProductModel from './ProductModel'
 
 function Products() {
     const [isAddProductModal, setIsAddProductModal] = useState(false)
     const [loadingStates, setLoadingStates] = useState({});
     const [products, setProducts] = useState([]);
+    const [selectedProducts, setSelectedProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const { cartData, setCartData, changeQuantityContext, setTotalAmount } = useContext(CartDataContext);
     const userData = JSON.parse(localStorage.getItem("userData"));
     const [endOffset, setEndOffset] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
-    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
     const itemsPerPage = 5;
     const totalPerPage = itemsPerPage + itemOffset;
-    console.log(itemOffset);
+    const [updateProduct, setUpdateProduct] = useState(null)
+    const [mode, setMode] = useState("add");
     const handlePageClick = (event) => {
         const newOffset =
             (event.selected * itemsPerPage) % endOffset.total_products;
@@ -35,7 +37,12 @@ function Products() {
         fetchData(pageObj);
         setLoading(true);
     };
-
+    const openProductModal = (mode, product) => {
+        console.log(product)
+        setUpdateProduct(product)
+        setIsAddProductModal(true);
+        setMode(mode);
+    };
     useEffect(() => {
         let timer
         if (search) {
@@ -146,6 +153,37 @@ function Products() {
             console.log("ERROR: " + error)
         }
     }
+    const deleteSelectedProducts = async (id) => {
+        try {
+            const response = await fetchApi({
+                url: API_ENDPOINTS.PRODUCT_ADD,
+                method: "DELETE",
+                isAuthRequired: true,
+                data: id ? { prd_ids: id } : { prd_ids: selectedProducts },
+            });
+            if (response.status === 200) {
+                toast.info("Deleted selected products");
+                setProducts((prevProducts) =>
+                    prevProducts.filter((product) =>
+                        id ? !id.includes(product._id) : !selectedProducts.includes(product._id)
+                    )
+                );
+                setSelectedProducts([]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const toggleProductSelection = (productId) => {
+        setSelectedProducts((prevSelected) => {
+            if (prevSelected.includes(productId)) {
+                return prevSelected.filter((id) => id !== productId);
+            } else {
+                return [...prevSelected, productId];
+            }
+        });
+    };
 
     if (products.length === 0) {
         return (
@@ -158,40 +196,62 @@ function Products() {
             </div>
         )
     }
+
     return (
         <div className="bg-white">
+            <div className="mx-auto max-w-screen-xl sm:px-6 lg:px-8">
+                {userData.user_role === "user" ? (
+                    <div className="flex items-center justify-center mb-3 w-1/2 mx-auto relative border border-black rounded-lg">
+                        <input type="text"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="w-full py-2 px-4 text-black bg-white border border-black rounded-l-lg focus:outline-none focus:ring focus:border-blue-300"
+                            placeholder="Search..." />
+                        <button onClick={() => handleSearch()} className="bg-black text-white py-2 px-4 rounded-r-lg">
+                            <i className="fas fa-search"></i>
+                        </button>
+                    </div>
+                ) : (
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <button
+                                onClick={() => deleteSelectedProducts()}
+                                disabled={selectedProducts.length === 0}
+                                className={` text-red-600 text-center block w-full font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md border-2 border-red-500 hover:bg-red-200 hover:text-white ${selectedProducts.length === 0 ? "hidden" : "block"
+                                    }`}
+                            >
+                                Delete Selected Products
+                            </button>
+                        </div>
+                        <div>
+                            <button className="bg-blue-700 text-white p-2 rounded-md m-1 text-lg font-bold  text-center"
+                                onClick={() => { openProductModal("add") }}
+                            >
+                                <i class="fa-solid fa-plus"></i> Add Proucts</button>
+
+                        </div>
+                    </div>
+                )
+                }
+            </div>
             {loading ? (
                 <SkeletonForProduct count={itemsPerPage} />
             ) : (
                 <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
-                    {userData.user_role === "user" ? (
-                        <div className="flex items-center justify-center mb-3 w-1/2 mx-auto relative border border-black rounded-lg">
-                            <input type="text"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                className="w-full py-2 px-4 text-black bg-white border border-black rounded-l-lg focus:outline-none focus:ring focus:border-blue-300"
-                                placeholder="Search..." />
-                            <button onClick={() => handleSearch()} className="bg-black text-white py-2 px-4 rounded-r-lg">
-                                <i className="fas fa-search"></i>
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="flex justify-end items-center">
-                            <button className="bg-blue-700 text-white p-2 rounded-md m-1 text-lg font-bold  text-center"
-                                onClick={() => { setIsAddProductModal(true) }}
-                            >
-                                <i class="fa-solid fa-plus"></i> Add Proucts</button>
-                            <AddProductModel open={isAddProductModal} setOpen={setIsAddProductModal} />
-                        </div>)
-                    }
-
+                    <ProductModel
+                        open={isAddProductModal}
+                        setOpen={setIsAddProductModal}
+                        mode={mode}
+                        fetchData={fetchData}
+                        updateProduct={updateProduct}
+                    />
                     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                         {products.map((product) => (
                             <div
                                 key={product._id}
-                                className="flex flex-col relative justify-between bg-white rounded-lg overflow-hidden shadow-lg transition-transform"
-                            >
-                                <div className="pt-6">
+                                className={`flex flex-col  justify-between bg-white rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : ""
+                                    }`} >
+                                <div >
                                     <div className="relative w-34 h-34 sm:w-60 sm:h-60 mx-auto">
                                         <img
                                             src={
@@ -279,13 +339,27 @@ function Products() {
                                         )}
                                     </div>
                                 </div>) : (
-                                    <div className="absolute top-0 right-0 ">
-                                        <button className="p-1 px-3 text-blue-700 hover:bg-gray-200 rounded-md">
-                                            <i className="fa-solid fa-pen "></i>
-                                        </button>
-                                        <button className="p-1 px-3 text-red-600 hover:bg-gray-200 rounded-md">
-                                            <i className="fa-solid fa-trash"></i>
-                                        </button>
+                                    <div className=" flex justify-between w-full px-2">
+                                        <div className="text-center flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedProducts.includes(product._id)}
+                                                onChange={() => toggleProductSelection(product._id)}
+                                            />
+                                        </div>
+                                        <div className="pr-2 py-1  w-full  text-end">
+                                            <button className="p-1 px-3 mr-2 border-2 border-gray-400 text-blue-700 hover:bg-gray-200 rounded-md"
+                                                onClick={() => openProductModal("edit", product)}>
+                                                <i className="fa-solid fa-pen "></i>
+                                            </button>
+                                            {
+                                                !selectedProducts.length > 0 &&
+                                                <button className="p-1 px-3  border-2 border-gray-400  text-red-600 hover:bg-gray-200 rounded-md"
+                                                    onClick={() => deleteSelectedProducts(product._id)}>
+                                                    <i className="fa-solid fa-trash"></i>
+                                                </button>
+                                            }
+                                        </div>
                                     </div>
                                 )}
                             </div>

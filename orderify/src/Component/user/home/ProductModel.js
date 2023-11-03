@@ -3,25 +3,43 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { Formik } from 'formik'
 import { initialProductAddValue } from '../../../config/InitialValue'
-import {  ProductValidation } from '../../../config/Validation'
+import { ProductValidation } from '../../../config/Validation'
 import CommonInput from '../../auth/CommonInput'
 import fetchApi from '../../../util/helper'
 import { API_ENDPOINTS } from '../../../config/api'
 import { toast } from 'react-toastify'
 
-export default function AddProductModel({ open, setOpen }) {
+export default function ProductModel({ open, setOpen, fetchData, mode, updateProduct }) {
     const cancelButtonRef = useRef(null)
+    const [apiSend,setAPiSend] = useState(false)
+    const value = updateProduct ? {
+        prd_id: updateProduct._id,
+        prd_name: updateProduct.prd_name,
+        prd_price: updateProduct.prd_price,
+        prd_img: updateProduct.prd_img
+    } : null;
     const handleSubmit = async (values) => {
-        try{
-            const response = await fetchApi({ url: API_ENDPOINTS.PRODUCT_ADD, method: 'POST', data: values,isAuthRequired: true});
-            if(response.status === 200){
+        setAPiSend(true)
+        try {
+            const response = await fetchApi({
+                url: API_ENDPOINTS.PRODUCT_ADD,
+                method: mode === "add" ? 'POST' : 'PUT',
+                data: values, isAuthRequired: true
+            });
+            if (response.status === 200) {
                 setOpen(false);
+                fetchData({
+                    limit: 5,
+                    page: 1,
+                });
             }
-            if(response.status===409){
+            if (response.status === 409) {
                 toast.error(response.message);
             }
-        }catch (error){
+        } catch (error) {
             console.log(error)
+        }finally{
+            setAPiSend(false)
         }
         console.log(values)
     }
@@ -52,24 +70,35 @@ export default function AddProductModel({ open, setOpen }) {
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
                             <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                                    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+                                <div className="bg-white  sm:p-6 sm:pb-4">
+                                    <div className="flex min-h-full flex-1 flex-col justify-center ">
                                         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                                             <h2 className="mt-1 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                                                Add New Product
+                                                {
+                                                    mode === "edit" ? "Edit Product" : "Add New Product"
+                                                }
                                             </h2>
                                         </div>
                                         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                                             <Formik
-                                                initialValues={initialProductAddValue}
+                                                initialValues={
+                                                    mode === "edit"
+                                                      ? value
+                                                      : { 
+                                                          prd_name: '',
+                                                          prd_price: '',
+                                                          prd_img: '',
+                                                        }
+                                                  }
                                                 validationSchema={ProductValidation}
                                                 onSubmit={(values) => handleSubmit(values)}
                                             >
                                                 {formik => (
                                                     <div className='flex flex-col lg:flex-row '>
-                                                        <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+                                                        <div className="flex flex-1 flex-col justify-center px-2 py-4 lg:px-8">
                                                             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                                                                 <form onSubmit={formik.handleSubmit}>
+                                                                    {mode === "edit" && <CommonInput name="prd_id" label="Product Id" type="text" formik={formik}  disabled={true} />}
                                                                     <CommonInput name="prd_name" label="Product Name" type="text" formik={formik} />
                                                                     <CommonInput name="prd_price" label="Product Price" type="Number" formik={formik} />
                                                                     <CommonInput name="prd_img" label="Product Image Url" type="text" formik={formik} />
@@ -78,9 +107,10 @@ export default function AddProductModel({ open, setOpen }) {
                                                                             <button
                                                                                 type="submit"
                                                                                 className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 sm:ml-3 sm:w-auto"
-                                                                                // onClick={() => setOpen(false)}
+                                                                                disabled={apiSend}
+                                                                            // onClick={() => setOpen(false)}
                                                                             >
-                                                                                Add Product
+                                                                                {mode === "add" ? "Add Product" : "Update Product"}
                                                                             </button>
                                                                             <button
                                                                                 type="button"
