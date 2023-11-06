@@ -6,7 +6,6 @@ import { CartDataContext } from "../../../context/CartContext";
 import PaginationComponent from "./PaginationComponent";
 import { useNavigate } from "react-router-dom";
 import "react-loading-skeleton/dist/skeleton.css";
-import SkeletonForProduct from "./SkeletonForProduct";
 import ProductModel from './ProductModel'
 import ConfirmationModal from "../../common/ConfirmationModal";
 import { Disclosure, Menu, Transition } from '@headlessui/react'
@@ -62,7 +61,7 @@ function Products() {
                 limit: itemsPerPage,
                 page: currentPageRef.current,
             });
-            
+
         }
         return () => clearTimeout(timer);
     }, [search.trim()]);
@@ -81,7 +80,7 @@ function Products() {
             if (response.status === 200) {
                 setProducts(response.data.products);
                 setEndOffset(response.data);
-                setItemOffset(itemsPerPage*currentPageRef.current-5)
+                setItemOffset(itemsPerPage * currentPageRef.current - 5)
             } else {
                 setProducts([])
             }
@@ -195,18 +194,6 @@ function Products() {
         });
     };
 
-    // if (products.length === 0) {
-    //     return (
-    //         <div className="absolute inset-0 flex items-center justify-center">
-    //             <div className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl  text-blue-700">
-    //                 {
-    //                     loading ? <SkeletonForProduct count={itemsPerPage} /> : <h1>Data Empty</h1>
-    //                 }
-    //             </div>
-    //         </div>
-    //     )
-    // }
-
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-screen-xl sm:px-6 lg:px-8">
@@ -244,13 +231,12 @@ function Products() {
                 </div>}
             </div>
             {loading ? (
-                // <SkeletonForProduct count={itemsPerPage} />
                 <div className=" mx-auto max-w-screen-xl p-3 gap-2 sm:gap-6 sm:py-8 sm:px-4 lg:px-8">
                     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-6">
-                    {Array(itemsPerPage).fill(0).map((_,index)=>(
-                        <Skeleton key={index} className="w-36 h-64 sm:h-96"/>
-                    ))
-                    }
+                        {Array(itemsPerPage).fill(0).map((_, index) => (
+                            <Skeleton key={index} className="w-36 h-64 sm:h-96" />
+                        ))
+                        }
                     </div>
                 </div>
             ) : (
@@ -397,7 +383,15 @@ function Products() {
                                 )}
                             </div>
                         ))}
-                    </div> : loading || search.trim() === '' ? <SkeletonForProduct count={itemsPerPage} /> : <h1 className="text-center m-3 text-3xl text-blue-900" >No product found</h1>}
+                    </div> : loading || search.trim() === '' ?
+                        <div className=" mx-auto max-w-screen-xl p-3 gap-2 sm:gap-6 sm:py-8 sm:px-4 lg:px-8">
+                            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-6">
+                                {Array(itemsPerPage).fill(0).map((_, index) => (
+                                    <Skeleton key={index} className="w-36 h-64 sm:h-96" />
+                                ))
+                                }
+                            </div>
+                        </div> : <h1 className="text-center m-3 text-3xl text-blue-900" >No product found</h1>}
                 </div>
             )
             }

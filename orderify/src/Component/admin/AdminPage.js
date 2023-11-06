@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import fetchApi from '../../util/helper'
 import { API_ENDPOINTS } from '../../config/api'
 import { useNavigate } from 'react-router-dom';
-import SkeletonAdminOrder from './SkeletonAdminOrder';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -40,7 +39,6 @@ function AdminPage() {
                 <div className="mt-2">
                     <div className="flow-root">
                         <ul role="list" className="-my-6 divide-y divide-gray-200 ">
-                            {/* {isPageLoading ? <SkeletonAdminOrder count={5}/> : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> :   orders.map((item, index) => ( */}
 
                             {isPageLoading ? <div className=" mx-auto max-w-screen-xl p-3 gap-2 sm:gap-6 sm:py-8 sm:px-4 lg:px-8">
                                     <Skeleton count={4} className="w-max h-44 sm:h-36 mb-3" />

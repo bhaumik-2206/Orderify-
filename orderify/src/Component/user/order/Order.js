@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import { CartDataContext } from '../../../context/CartContext';
 import { groupBy } from 'lodash';
 import { useNavigate } from 'react-router-dom'
-import SkeletonForOrder from './SkeletonForOrder';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -80,17 +79,16 @@ const Order = () => {
 
     return (
         loading ?
-            // <SkeletonForOrder count={8} /> : Object.keys(orders).length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Data is Empty</h1>
             <div className=" mx-auto max-w-screen-xl p-3 gap-2 sm:gap-6 sm:py-8 sm:px-4 lg:px-8">
-            <Skeleton width={250} className=' h-12 mb-3'/>
-        <div className="grid grid-cols-2 gap-2">
-        {Array(6).fill(0).map((_,index)=>(
-            <Skeleton key={index} className="w-96 h-72 sm:h-44"/>
-        ))
-        }
-        </div>
-    </div>
-    : Object.keys(orders).length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Data is Empty</h1>
+                <Skeleton width={250} className=' h-12 mb-3' />
+                <div className="grid grid-cols-2 gap-2">
+                    {Array(6).fill(0).map((_, index) => (
+                        <Skeleton key={index} className="w-96 h-72 sm:h-44" />
+                    ))
+                    }
+                </div>
+            </div>
+            : Object.keys(orders).length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Data is Empty</h1>
                 :
                 <div className='relative w-full sm:w-10/12 mx-auto'>
                     {buyAgainOrder.length > 0 && <div>
