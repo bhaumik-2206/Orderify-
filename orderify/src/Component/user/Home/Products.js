@@ -10,6 +10,8 @@ import SkeletonForProduct from "./SkeletonForProduct";
 import ProductModel from './ProductModel'
 import ConfirmationModal from "../../common/ConfirmationModal";
 import { Disclosure, Menu, Transition } from '@headlessui/react'
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function Products() {
     const [id, setId] = useState(null)
@@ -242,7 +244,15 @@ function Products() {
                 </div>}
             </div>
             {loading ? (
-                <SkeletonForProduct count={itemsPerPage} />
+                // <SkeletonForProduct count={itemsPerPage} />
+                <div className=" mx-auto max-w-screen-xl p-3 gap-2 sm:gap-6 sm:py-8 sm:px-4 lg:px-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-6">
+                    {Array(itemsPerPage).fill(0).map((_,index)=>(
+                        <Skeleton key={index} className="w-36 h-64 sm:h-96"/>
+                    ))
+                    }
+                    </div>
+                </div>
             ) : (
                 <div className="mx-auto max-w-screen-xl p-3  sm:py-8 sm:px-4 lg:px-8">
                     <ProductModel

@@ -32,7 +32,7 @@ function AdminPage() {
         setIsPageLoading(false)
     }
 
-    
+
 
     return (
         <div className="inset-0 overflow-hidden mx-auto max-w-7xl">
@@ -40,7 +40,12 @@ function AdminPage() {
                 <div className="mt-2">
                     <div className="flow-root">
                         <ul role="list" className="-my-6 divide-y divide-gray-200 ">
-                            {isPageLoading ? <SkeletonAdminOrder count={5}/> : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> :   orders.map((item, index) => (
+                            {/* {isPageLoading ? <SkeletonAdminOrder count={5}/> : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> :   orders.map((item, index) => ( */}
+
+                            {isPageLoading ? <div className=" mx-auto max-w-screen-xl p-3 gap-2 sm:gap-6 sm:py-8 sm:px-4 lg:px-8">
+                                    <Skeleton count={4} className="w-max h-44 sm:h-36 mb-3" />
+                            </div>
+                             : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> : orders.map((item, index) => (
                                 <div key={index}>
                                     <li className="flex sm:flex py-6">
                                         <div className="h-28 w-20 mx-auto sm:h-36 sm:w-36 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 mb-4 sm:mb-0">
@@ -71,10 +76,10 @@ function AdminPage() {
                                                     >
                                                         {/* {showUser[item.product_details._id] ? "hide users" : "show users"} */}
                                                         <div className='flex items-center gap-2'>
-                                                        <p>User</p>
-                                                        <i className={`fa-solid fa-chevron-up ${!showUser[item.product_details._id] ? "fa-rotate-180" : ""}`}></i>
+                                                            <p>User</p>
+                                                            <i className={`fa-solid fa-chevron-up ${!showUser[item.product_details._id] ? "fa-rotate-180" : ""}`}></i>
                                                         </div>
-                                                        </button>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
