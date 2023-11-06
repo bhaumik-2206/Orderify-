@@ -13,28 +13,43 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function Products() {
-    const [id, setId] = useState(null)
+    // UI-related state
     const [deleteConfirm, setDeleteConfirm] = useState(false);
-    const [isAddProductModal, setIsAddProductModal] = useState(false)
-    const [loadingStates, setLoadingStates] = useState({});
+    const [isAddProductModal, setIsAddProductModal] = useState(false);
+    const [updateProduct, setUpdateProduct] = useState(null);
+    const [mode, setMode] = useState("add");
+    const [id, setId] = useState(null)
+
+    // Loading state
+    const [loading, setLoading] = useState(true);
+
+    // Search state
+    const [search, setSearch] = useState("");
+
+    // Product data state
+    const { cartData, setCartData, changeQuantityContext, setTotalAmount } = useContext(CartDataContext);
     const [products, setProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const { cartData, setCartData, changeQuantityContext, setTotalAmount } = useContext(CartDataContext);
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    const [endOffset, setEndOffset] = useState(0);
+    const [loadingStates, setLoadingStates] = useState({});
+
+    // Pagination state
+    const [data, setData] = useState(0);
     const [itemOffset, setItemOffset] = useState(0);
-    const navigate = useNavigate();
-    const [search, setSearch] = useState("");
+    const currentPageRef = useRef(1);
     const itemsPerPage = 5;
     const totalPerPage = itemsPerPage + itemOffset;
-    const [updateProduct, setUpdateProduct] = useState(null);
-    const currentPageRef = useRef(1);
-    const [mode, setMode] = useState("add");
+
+    // User data
+    const userData = JSON.parse(localStorage.getItem("userData"));
+
+    // Navigation
+    const navigate = useNavigate();
+
+
     const handlePageClick = (event) => {
         const newOffset =
-            (event.selected * itemsPerPage) % endOffset.total_products;
-        console.log(newOffset);
+            (event.selected * itemsPerPage) % data.total_products;
+        // console.log(newOffset);
         setItemOffset(newOffset);
         const pageObj = {
             limit: itemsPerPage,
@@ -67,9 +82,6 @@ function Products() {
     }, [search.trim()]);
 
     const fetchData = async (pageObj) => {
-        if (search) {
-            pageObj.search = search;
-        }
         try {
             const response = await fetchApi({
                 url: API_ENDPOINTS.PRODUCT,
@@ -79,7 +91,7 @@ function Products() {
             });
             if (response.status === 200) {
                 setProducts(response.data.products);
-                setEndOffset(response.data);
+                setData(response.data);
                 setItemOffset(itemsPerPage * currentPageRef.current - 5)
             } else {
                 setProducts([])
@@ -144,24 +156,30 @@ function Products() {
     };
 
     const handleSearch = async () => {
-        try {
-            let response = await fetchApi({
-                url: API_ENDPOINTS.PRODUCT, method: "POST", isAuthRequired: true,
-                data: {
-                    limit: itemsPerPage,
-                    page: 1,
-                    search
-                }
-            })
-            if (response.status === 200) {
-                setProducts(response.data.products);
-                setEndOffset(response.data);
-                setItemOffset(0)
+        let Objdata= {
+                         limit: itemsPerPage,
+                         page: 1,
+                         search
             }
-            console.log(response)
-        } catch (error) {
-            console.log("ERROR: " + error)
-        }
+        fetchData(Objdata)
+        // try {
+        //     let response = await fetchApi({
+        //         url: API_ENDPOINTS.PRODUCT, method: "POST", isAuthRequired: true,
+        //         data: {
+        //             limit: itemsPerPage,
+        //             page: 1,
+        //             search
+        //         }
+        //     })
+        //     if (response.status === 200) {
+        //         setProducts(response.data.products);
+        //         setData(response.data);
+        //         setItemOffset(0)
+        //     }
+        //     console.log(response)
+        // } catch (error) {
+        //     console.log("ERROR: " + error)
+        // }
     }
     const deleteSelectedProducts = async (id) => {
         try {
@@ -178,9 +196,12 @@ function Products() {
                 });
                 toast.info("Deleted selected products");
                 setSelectedProducts([]);
+               
             }
         } catch (error) {
             console.log(error);
+        }finally{
+            setSearch("");
         }
     };
 
@@ -198,10 +219,10 @@ function Products() {
         <div className="bg-white">
             <div className="mx-auto max-w-screen-xl sm:px-6 lg:px-8">
                 <div className="flex items-center justify-center mb-2 sm:mb-3 w-72 sm:w-1/2 mx-3 sm:mx-auto relative border border-black rounded-lg my-2 sm:my-5 ">
-                    <button className="bg-black border-black border text-white py-2 px-4 rounded-l-lg">
+                    <label htmlFor="search" className="bg-black cursor-pointer border-black border text-white py-2 px-4 rounded-l-lg">
                         <i className="fas fa-search"></i>
-                    </button>
-                    <input type="text"
+                    </label>
+                    <input type="text" id="search"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="w-full py-2 px-4 text-black bg-white border border-black rounded-r-lg focus:outline-none focus:ring focus:border-blue-300"
@@ -248,12 +269,13 @@ function Products() {
                         fetchData={fetchData}
                         updateProduct={updateProduct}
                         currentPageRef={currentPageRef}
+                        setSearch={setSearch}
                     />
                     {(products.length !== 0) ? <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-6">
                         {products.map((product) => (
                             <div
                                 key={product._id}
-                                className={`flex relative flex-col pb-2  justify-between rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : ""
+                                className={`flex relative flex-col pb-2  justify-between rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : "border-2"
                                     } ${!product.prd_is_visible ? "bg-gray-300" : "bg-white"}`} >
                                 <div >
                                     <div
@@ -401,14 +423,14 @@ function Products() {
 
                         <div className="sm:text-lg text-sm ">
                             Showing {itemOffset + 1} to{" "}
-                            {totalPerPage > endOffset.total_products
-                                ? endOffset.total_products
+                            {totalPerPage > data.total_products
+                                ? data.total_products
                                 : totalPerPage}{" "}
-                            of {endOffset.total_products} results
+                            of {data.total_products} results
                         </div>
                         <PaginationComponent
                             handlePageClick={handlePageClick}
-                            endOffset={endOffset.total_page}
+                            endOffset={data.total_page}
                             search={search}
                         />
                     </div>
