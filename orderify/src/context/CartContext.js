@@ -40,12 +40,12 @@ const CartContext = ({ children }) => {
                         cartitm_prd_qty: (operation ? p.cartitm_prd_qty + 1 : p.cartitm_prd_qty - 1)
                     } : p
                 }))
-            }
-            let index = cartData.findIndex(p => p.cartitm_fk_prd_id._id === productId);
-            setTotalAmount(pre => operation ? cartData[index].cartitm_fk_prd_id.prd_price + pre : pre - cartData[index].cartitm_fk_prd_id.prd_price)
-            if (currentQuantity === 1 && !operation) {
-                toast.success("Item Removed Successfully");
-                setCartData(pre => pre.filter(pro => pro.cartitm_fk_prd_id._id !== productId));
+                let index = cartData.findIndex(p => p.cartitm_fk_prd_id._id === productId);
+                setTotalAmount(pre => operation ? cartData[index].cartitm_fk_prd_id.prd_price + pre : pre - cartData[index].cartitm_fk_prd_id.prd_price)
+                if (currentQuantity === 1 && !operation) {
+                    toast.success("Item Removed Successfully");
+                    setCartData(pre => pre.filter(pro => pro.cartitm_fk_prd_id._id !== productId));
+                }
             }
         } catch (error) {
             toast.error("Error to add item");

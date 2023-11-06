@@ -15,6 +15,7 @@ const navigationAdmin = [
     { name: 'Products', to: '/product', current: false },
 ]
 export default function Header({ role }) {
+    const userData = JSON.parse(localStorage.getItem("userData"));
     const { cartData, setIsCartOpen, isCartOpen } = useContext(CartDataContext);
     const [isLogoutShow, setIsLogoutShow] = useState(false);
     const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -69,7 +70,8 @@ export default function Header({ role }) {
                             <Menu as="div" className="relative ml-3">
                                 <div>
                                     <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                        <i className="fa-solid fa-user bg-black px-3 sm:px-3 py-2 sm:py-1.5 text-white rounded-full text-sm sm:text-lg"></i>
+                                        {/* <i className="fa-solid fa-user bg-black px-3 sm:px-3 py-2 sm:py-1.5 text-white rounded-full text-sm sm:text-lg"></i> */}
+                                        <p className=' bg-black px-3 sm:px-3 py-2 sm:py-2 text-white rounded-full text-lg sm:text-xl'>{userData.user_fname.charAt(0) + userData.user_lname.charAt(0)}</p>
                                     </Menu.Button>
                                 </div>
                                 <Transition
@@ -94,6 +96,26 @@ export default function Header({ role }) {
                         </div>
                     </div>
                 </div>
+                {/* {role === "user" ?
+                    <div className=' bg-gray-700  shadow-xl py-1'>
+                        <Menu as="div" className="relative px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl flex  justify-end">
+                            <div>
+                                <Menu.Button className="relative flex text-white bg-black rounded px-2  text-sm">
+                                    Timer
+                                </Menu.Button>
+                            </div>
+                            <Transition
+                                as={Fragment}
+                            >
+                                <Menu.Items className="absolute top-4 right-90 z-10 mt-2 w-fit  origin-top-right rounded-md bg-gray-700  shadow-lg ring-1 ring-black     ring-opacity-5 focus:outline-none">
+                                    <Menu.Item>
+                                        <Timer />
+                                    </Menu.Item>
+                                </Menu.Items>
+                            </Transition>
+                        </Menu>
+                    </div> : null
+                } */}
                 {isOpenMenu &&
                     <div className='block sm:hidden space-y-1 px-2 pb-3 pt-2'>
                         {navigation.map((item, index) => (

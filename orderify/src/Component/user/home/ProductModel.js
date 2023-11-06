@@ -9,7 +9,7 @@ import fetchApi from '../../../util/helper'
 import { API_ENDPOINTS } from '../../../config/api'
 import { toast } from 'react-toastify'
 
-export default function ProductModel({ open, setOpen, fetchData, mode, updateProduct, currentPageRef }) {
+export default function ProductModel({ open, setOpen, fetchData, mode, updateProduct, currentPageRef, setSearch }) {
     const cancelButtonRef = useRef(null);
     const [apiSend, setAPiSend] = useState(false);
     const value = updateProduct ? {
@@ -21,16 +21,23 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
     } : null;
     const handleSubmit = async (values) => {
         setAPiSend(true);
-        let image_url = values.prd_img || "";
-        if (mode === "add" && values.prd_img.trim() === "")
-            delete values.prd_img;
-        if (mode === "update" && values.prd_img && values.prd_img.trim() === "")
-            delete values.prd_img;
+        let value = {
+            prd_id: values.prd_id,
+            prd_name: values.prd_name,
+            prd_price: values.prd_price,
+            prd_is_visible: values ? values.prd_is_visible : false
+        }
+        let postData = values.prd_img.trim() ? {
+            ...value,
+            prd_img: values.prd_img,
+        } : value
+        // if (values.prd_img.trim() === "")
+        //     delete values.prd_img;
         try {
             const response = await fetchApi({
                 url: API_ENDPOINTS.PRODUCT_ADD,
                 method: mode === "add" ? 'POST' : 'PUT',
-                data: values, isAuthRequired: true
+                data: postData, isAuthRequired: true
             });
             if (response.status === 200) {
                 setOpen(false);
@@ -46,7 +53,8 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
             console.log(error)
         } finally {
             setAPiSend(false);
-            values.prd_img = image_url;
+            setSearch("");
+            // values.prd_img = image_url;
         }
     }
     return (
