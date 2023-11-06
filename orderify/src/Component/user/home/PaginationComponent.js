@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactPaginate from 'react-paginate';
 
-function PaginationComponent({handlePageClick,endOffset}) {
+function PaginationComponent({handlePageClick,endOffset,currentPage=1}) {
     return (
         <div>
             <div className=' border-gray-200 bg-white px-4 py-3 sm:px-6 w-fit' >
@@ -12,6 +12,7 @@ function PaginationComponent({handlePageClick,endOffset}) {
                     pageRangeDisplayed={3}
                     pageCount={endOffset}
                     previousLabel={<i className="fa-solid fa-chevron-left fa-lg"></i>}
+                    initialPage={currentPage - 1} 
                     renderOnZeroPageCount={null}
                     className=" inline-flex shadow-sm"
                     activeLinkClassName="bg-blue-400"

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, Fragment } from "react";
+import React, { useContext, useEffect, useState, Fragment, useRef } from "react";
 import fetchApi from "../../../util/helper";
 import { API_ENDPOINTS } from "../../../config/api";
 import { toast } from "react-toastify";
@@ -27,7 +27,8 @@ function Products() {
     const [search, setSearch] = useState("");
     const itemsPerPage = 5;
     const totalPerPage = itemsPerPage + itemOffset;
-    const [updateProduct, setUpdateProduct] = useState(null)
+    const [updateProduct, setUpdateProduct] = useState(null);
+    const currentPageRef = useRef(1);
     const [mode, setMode] = useState("add");
     const handlePageClick = (event) => {
         const newOffset =
@@ -39,6 +40,7 @@ function Products() {
             page: Number(event.selected + 1),
         };
         fetchData(pageObj);
+        currentPageRef.current = event.selected + 1;
         setLoading(true);
     };
     const openProductModal = (mode, product) => {
@@ -56,8 +58,9 @@ function Products() {
         } else {
             fetchData({
                 limit: itemsPerPage,
-                page: 1,
+                page: currentPageRef.current,
             });
+            
         }
         return () => clearTimeout(timer);
     }, [search.trim()]);
@@ -76,6 +79,7 @@ function Products() {
             if (response.status === 200) {
                 setProducts(response.data.products);
                 setEndOffset(response.data);
+                setItemOffset(itemsPerPage*currentPageRef.current-5)
             } else {
                 setProducts([])
             }
@@ -151,6 +155,7 @@ function Products() {
             if (response.status === 200) {
                 setProducts(response.data.products);
                 setEndOffset(response.data);
+                setItemOffset(0)
             }
             console.log(response)
         } catch (error) {
@@ -168,7 +173,7 @@ function Products() {
             if (response.status === 200) {
                 await fetchData({
                     limit: 5,
-                    page: 1,
+                    page: currentPageRef.current,
                 });
                 toast.info("Deleted selected products");
                 setSelectedProducts([]);
@@ -246,12 +251,13 @@ function Products() {
                         mode={mode}
                         fetchData={fetchData}
                         updateProduct={updateProduct}
+                        currentPageRef={currentPageRef}
                     />
                     {(products.length !== 0) ? <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-6">
                         {products.map((product) => (
                             <div
                                 key={product._id}
-                                className={`flex relative flex-col pb-2  justify-between bg-white rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : ""
+                                className={`flex relative flex-col pb-2  justify-between rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : ""
                                     } ${!product.prd_is_visible ? "bg-gray-300" : "bg-white"}`} >
                                 <div >
                                     <div
@@ -388,6 +394,7 @@ function Products() {
             {
                 products.length > 0 && <div className={`${loading ? "hidden" : "block"}`}>
                     <div className="flex justify-between items-center px-3 flex-col md:flex-row max-w-7xl mx-auto ps-8">
+
                         <div className="sm:text-lg text-sm ">
                             Showing {itemOffset + 1} to{" "}
                             {totalPerPage > endOffset.total_products
