@@ -40,7 +40,6 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                 data: postData, isAuthRequired: true
             });
             if (response.status === 200) {
-                setOpen(false);
                 await fetchData({
                     limit: 5,
                     page: currentPageRef.current,
@@ -54,7 +53,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
         } finally {
             setAPiSend(false);
             setSearch("");
-            // values.prd_img = image_url;
+            setOpen(false);
         }
     }
     return (
