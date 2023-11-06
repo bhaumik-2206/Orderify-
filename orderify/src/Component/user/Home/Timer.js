@@ -11,7 +11,7 @@ const Timer = () => {
   const getTimeDifference = () => {
     const currentDate = new Date();
     const targetDate = new Date();
-    targetDate.setHours(16, 35, 0); // Set the target time
+    targetDate.setHours(12, 30, 0); // Set the target time
     if (currentDate > targetDate) {
       targetDate.setDate(targetDate.getDate() + 1);
       setIsShopOpen(false);
@@ -51,7 +51,7 @@ const Timer = () => {
   }, [startCountDown]);
 
   return (
-    <div className="flex h-30 flex-col md:flex-row justify-center items-center bg-[#111827] w-fit rounded px-5 py-3">
+    <div className="flex h-30 flex-col md:flex-row justify-center items-center bg-gray-800 w-fit rounded px-5 py-3">
       <div className="flex flex-col items-center justify-center w-full h-full gap-8 sm:gap-16">
         <div className="flex flex-col justify-center gap-1 sm:gap-1">
           <div className="flex justify-between">
@@ -76,7 +76,7 @@ const Timer = () => {
             {Object.keys(countDownTime).map((item, index) => (
               <div
                 key={index}
-                className="flex flex-col shadow p-2 bg-[#1F2937] rounded -m-0.5 -mx-2 relative"
+                className="flex flex-col shadow p-2 bg-gray-700 rounded -m-0.5 -mx-2 relative"
               >
                 <div className="h-10 w-10 sm:w-12 sm:h-12 lg:w-12 lg:h-12 flex justify-between items-center bg-[#111827] rounded-lg">
                   <div className="relative h-1.5 w-1.5 sm:h-2 sm:w-2 !-left-[6px] rounded-full bg-[#B45309]"></div>
@@ -93,7 +93,7 @@ const Timer = () => {
 
              {/* clock------------------------  */}
 
-            <div className="flex flex-col shadow p-2 bg-[#1F2937] rounded -m-0.5 -mx-2 relative">
+            <div className="flex flex-col shadow p-2 bg-gray-700 rounded -m-0.5 -mx-2 relative">
               <div className="h-10 w-10 sm:w-12 sm:h-12 lg:w-12 lg:h-12 flex justify-between items-center bg-[#111827] rounded-lg">
                 <div className="relative h-1.5 w-1.5 sm:h-2 sm:w-2 !-left-[6px] rounded-full bg-[#B45309]"></div>
                 <span className="relative lg:text-lg sm:text-6xl text-3xl font-semibold text-white">

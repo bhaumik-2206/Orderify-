@@ -75,7 +75,7 @@ function AdminPage() {
                                                         {/* {showUser[item.product_details._id] ? "hide users" : "show users"} */}
                                                         <div className='flex items-center gap-2'>
                                                             <p>User</p>
-                                                            <i className={`fa-solid fa-chevron-up ${!showUser[item.product_details._id] ? "fa-rotate-180" : ""}`}></i>
+                                                            <i style={{transition:'0.2s',transform:`rotate(${!showUser[item.product_details._id]?180:0}deg)`}} className="fa-solid fa-chevron-up "></i>
                                                         </div>
                                                     </button>
                                                 </div>
@@ -98,7 +98,7 @@ function AdminPage() {
                                                         </div>
                                                     </div>
                                                     <div className='flex gap-x-2'>
-                                                        <div className="h-8 w-12 flex-none rounded-full bg-gray-50" ></div>
+                                                        <div className="h-8 w-12 flex-none" ></div>
                                                         <p>Total Amount: {person.prd_qty * item.product_details.prd_price}</p>
                                                     </div>
                                                 </li>
