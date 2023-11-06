@@ -7,9 +7,9 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
     const navigate = useNavigate();
     const values = {
         delete: {
-            title: "Delete Item",
-            message: "Are you sure you want to delete the product",
-            button: "Delete",
+            title: "Invisible Item",
+            message: "Are you sure you want to invisible this product?",
+            button: "invisible",
             color: "bg-red-600",
             colorHover: "hover:bg-red-500",
             rounded:"bg-red-100",

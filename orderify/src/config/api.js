@@ -10,4 +10,7 @@ export const API_ENDPOINTS = {
     // Order API
     ORDER: `${API_BASE_URL}/order`,
     USER_ORDER: `${API_BASE_URL}/order-history`,         // User Order Details
+
+    // User Edit Profile
+    USER: `${API_BASE_URL}/user`,         // User Order Details
 };

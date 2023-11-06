@@ -156,11 +156,11 @@ function Products() {
     };
 
     const handleSearch = async () => {
-        let Objdata= {
-                         limit: itemsPerPage,
-                         page: 1,
-                         search
-            }
+        let Objdata = {
+            limit: itemsPerPage,
+            page: 1,
+            search
+        }
         fetchData(Objdata)
         // try {
         //     let response = await fetchApi({
@@ -196,11 +196,11 @@ function Products() {
                 });
                 toast.info("Deleted selected products");
                 setSelectedProducts([]);
-               
+
             }
         } catch (error) {
             console.log(error);
-        }finally{
+        } finally {
             setSearch("");
         }
     };
@@ -218,8 +218,8 @@ function Products() {
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-screen-xl sm:px-6 lg:px-8">
-                <div className="flex items-center justify-center mb-2 sm:mb-3 w-72 sm:w-1/2 mx-3 sm:mx-auto relative border border-black rounded-lg my-2 sm:my-5 ">
-                    <label htmlFor="search" className="bg-black cursor-pointer border-black border text-white py-2 px-4 rounded-l-lg">
+                <div className="flex items-center justify-center mb-2 sm:mb-3 w-72 sm:w-1/2 mx-3 sm:mx-auto relative border border-black rounded-lg my-2 sm:my-5 overflow-hidden">
+                    <label htmlFor="search" className="bg-black cursor-pointer border-black border text-white py-2 px-4 ">
                         <i className="fas fa-search"></i>
                     </label>
                     <input type="text" id="search"
@@ -228,7 +228,6 @@ function Products() {
                         className="w-full py-2 px-4 text-black bg-white border border-black rounded-r-lg focus:outline-none focus:ring focus:border-blue-300"
                         placeholder="Search..." />
                 </div>
-
                 {userData.user_role === "admin" && <div className="flex px-2 justify-between items-center ">
                     <div>
                         {selectedProducts.length > 0 &&
@@ -238,7 +237,7 @@ function Products() {
                                 className={` text-red-600 text-center sm:text-lg block w-full text-xs font-bold py-2 px-2 sm:py-2 sm:px-4 rounded-md border-2 border-red-500 cursor-pointer hover:bg-red-50 hover:text-white${selectedProducts.length === 0 ? "hidden" : "block"
                                     }`}
                             >
-                                Delete Selected Products
+                                invisible
                             </button>
                         }
                     </div>
@@ -385,19 +384,19 @@ function Products() {
                                                 as={Fragment}
                                             >
                                                 <Menu.Items className="absolute right-0 z-10 mt-2  w-fit origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                                    {!selectedProducts.length > 0 && product.prd_is_visible && <Menu.Item>
-                                                        <h1
-                                                            onClick={() => { setDeleteConfirm(true); setId(product._id) }}
-                                                            to="/profile"
-                                                            className={`rounded cursor-pointer block px-7 py-2 text-sm text-gray-700 hover:bg-red-100 bg-slate-50`}
-                                                        >Delete</h1>
-                                                    </Menu.Item>}
                                                     <Menu.Item>
                                                         <h1
                                                             onClick={() => openProductModal("edit", product)}
                                                             className={`rounded block px-7 py-2 text-sm text-gray-700 hover:bg-green-200 cursor-pointer bg-slate-50`}
                                                         > Edit</h1 >
                                                     </Menu.Item>
+                                                    {!selectedProducts.length > 0 && product.prd_is_visible && <Menu.Item>
+                                                        <h1
+                                                            onClick={() => { setDeleteConfirm(true); setId(product._id) }}
+                                                            to="/profile"
+                                                            className={`rounded cursor-pointer block px-7 py-2 text-sm text-gray-700 hover:bg-red-100 bg-slate-50`}
+                                                        >Invisible</h1>
+                                                    </Menu.Item>}
                                                 </Menu.Items>
                                             </Transition>
                                         </Menu>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs';
+import ProfileUpdateModal from './ProfileUpdateModal';
 
 const userDetails = [
     { title: "First Name", value: "user_fname" },
@@ -9,6 +10,7 @@ const userDetails = [
 ];
 const Profile = () => {
     const [userData, setUserData] = useState({})
+    const [isProfileEdit, setIsProfileEdit] = useState(false);
     useEffect(() => {
         setUserData(JSON.parse(localStorage.getItem("userData")));
     }, []);
@@ -18,7 +20,7 @@ const Profile = () => {
 
     return (
         <div className="bg-gray-100">
-            <div className="container mx-auto p-5">
+            <div className="container p-5 max-w-7xl mx-auto">
                 <div className="md:flex no-wrap md:-mx-2 ">
                     <div className="w-full md:w-3/12 md:mx-2">
                         <div className="bg-white p-3 border-t-4 border-green-400">
@@ -40,11 +42,16 @@ const Profile = () => {
                     </div>
                     <div className="w-full md:w-9/12 mx-2 h-64">
                         <div className="bg-white p-3 shadow-sm rounded-sm">
-                            <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-                                <span clas="text-green-500">
-                                    <i className="fa-solid fa-user text-lg px-3"></i>
-                                </span>
-                                <span className="tracking-wide">About</span>
+                            <div className="flex justify-between items-center space-x-2 font-semibold text-gray-900 leading-8 mr-8 ms-1">
+                                <div className='flex'>
+                                    <span clas="text-green-500">
+                                        <i className="fa-solid fa-user text-lg px-3"></i>
+                                    </span>
+                                    <span className="tracking-wide">About</span>
+                                </div>
+                                <button>
+                                    <i onClick={() => setIsProfileEdit(true)} className="fa-regular fa-pen-to-square text-2xl"></i>
+                                </button>
                             </div>
                             <div className="text-gray-700">
                                 <div>
@@ -60,6 +67,7 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
+            <ProfileUpdateModal show={isProfileEdit} setShow={setIsProfileEdit} userData={userData} setUserData={setUserData} />
         </div>
     )
 }

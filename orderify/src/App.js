@@ -33,7 +33,7 @@ function App() {
           </Route>
           {/* Main Dashboard Routes */}
           <Route path='/' element={<ProtectedHome Component={() => <Dashboard role={"admin"} />} />}>
-            <Route path="/product" element={<Products />} />
+            <Route path="/products" element={<Products />} />
             <Route path="/orders" element={<AdminPage />} />
             <Route path="/profile" element={<Profile />} />
           </Route>

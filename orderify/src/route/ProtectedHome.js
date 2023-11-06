@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-// import jwtDecode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 const ProtectedHome = ({ Component }) => {
     const navigate = useNavigate();
@@ -8,11 +8,12 @@ const ProtectedHome = ({ Component }) => {
     useEffect(() => {
         let auth = localStorage.getItem("auth");
         setAuth(auth);
+        let token = jwtDecode(auth);
+        console.log(token)
         // console.log(auth)
-        if (!auth) {
+        if (!auth) {    
             navigate("/login");
         }
-        
     }, [])
 
     return (

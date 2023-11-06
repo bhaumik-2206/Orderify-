@@ -5,6 +5,7 @@ import LogOut from '../profile/LogOut';
 import Cart from './Cart';
 import { CartDataContext } from '../../../context/CartContext';
 import ConfirmationModal from '../../common/ConfirmationModal';
+import Timer from './Timer';
 
 const navigationUser = [
     { name: 'Products', to: '/products', current: true },
@@ -12,7 +13,7 @@ const navigationUser = [
 ]
 const navigationAdmin = [
     { name: 'Orders', to: '/orders', current: false },
-    { name: 'Products', to: '/product', current: false },
+    { name: 'Products', to: '/products', current: false },
 ]
 export default function Header({ role }) {
     const userData = JSON.parse(localStorage.getItem("userData"));
@@ -71,7 +72,7 @@ export default function Header({ role }) {
                                 <div>
                                     <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                         {/* <i className="fa-solid fa-user bg-black px-3 sm:px-3 py-2 sm:py-1.5 text-white rounded-full text-sm sm:text-lg"></i> */}
-                                        <p className=' bg-black px-3 sm:px-3 py-2 sm:py-2 text-white rounded-full text-lg sm:text-xl'>{userData.user_fname.charAt(0) + userData.user_lname.charAt(0)}</p>
+                                        <p className=' bg-black px-3 sm:px-3 py-2 sm:py-2 text-white rounded-full text-lg sm:text-xl'>{userData.user_fname.charAt(0).toUpperCase() + userData.user_lname.charAt(0).toUpperCase()}</p>
                                     </Menu.Button>
                                 </div>
                                 <Transition
