@@ -15,9 +15,8 @@ const navigationAdmin = [
     { name: 'Products', to: '/product', current: false },
 ]
 export default function Header({ role }) {
-    const { cartData } = useContext(CartDataContext);
+    const { cartData, setIsCartOpen, isCartOpen } = useContext(CartDataContext);
     const [isLogoutShow, setIsLogoutShow] = useState(false);
-    const [isCartModalShow, setIsCartModalShow] = useState(false);
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const navigate = useNavigate();
     const navigation = role === 'admin' ? navigationAdmin : navigationUser;
@@ -53,7 +52,7 @@ export default function Header({ role }) {
                             {
                                 role === "user" ? (
                                     <button type="button"
-                                        onClick={() => { setIsCartModalShow(true); }}
+                                        onClick={() => { setIsCartOpen(true); }}
                                         className="relative rounded-full bg-black py-2 px-3 text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                                     >{cartData.length > 0 &&
                                         <p className='absolute z-10 text-sm bg-orange-500 rounded-full px-1.5 -top-2 -right-2'>
@@ -64,7 +63,7 @@ export default function Header({ role }) {
                                 ) : null
                             }
 
-                            <Cart open={isCartModalShow} setOpen={setIsCartModalShow} />
+                            <Cart open={isCartOpen} setOpen={setIsCartOpen} />
 
                             {/* Profile dropdown */}
                             <Menu as="div" className="relative ml-3">

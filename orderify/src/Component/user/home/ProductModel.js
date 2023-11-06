@@ -1,7 +1,7 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { Formik } from 'formik'
+import { Field, Formik } from 'formik'
 import { initialProductAddValue } from '../../../config/InitialValue'
 import { ProductValidation } from '../../../config/Validation'
 import CommonInput from '../../auth/CommonInput'
@@ -9,20 +9,22 @@ import fetchApi from '../../../util/helper'
 import { API_ENDPOINTS } from '../../../config/api'
 import { toast } from 'react-toastify'
 
-export default function ProductModel({ open, setOpen, fetchData, mode, updateProduct }) {
-    const cancelButtonRef = useRef(null)
-    const [apiSend, setAPiSend] = useState(false)
+export default function ProductModel({ open, setOpen, fetchData, mode, updateProduct, currentPageRef }) {
+    const cancelButtonRef = useRef(null);
+    const [apiSend, setAPiSend] = useState(false);
     const value = updateProduct ? {
         prd_id: updateProduct._id,
         prd_name: updateProduct.prd_name,
         prd_price: updateProduct.prd_price,
         prd_img: updateProduct.prd_img,
-        prd_is_visible: false
+        prd_is_visible: updateProduct ? updateProduct.prd_is_visible : false
     } : null;
     const handleSubmit = async (values) => {
         setAPiSend(true);
-        let image_url = values.prd_img;
-        if (values.prd_img.trim() === "")
+        let image_url = values.prd_img || "";
+        if (mode === "add" && values.prd_img.trim() === "")
+            delete values.prd_img;
+        if (mode === "update" && values.prd_img && values.prd_img.trim() === "")
             delete values.prd_img;
         try {
             const response = await fetchApi({
@@ -34,7 +36,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                 setOpen(false);
                 await fetchData({
                     limit: 5,
-                    page: 1,
+                    page: currentPageRef.current,
                 });
             }
             if (response.status === 409) {
@@ -46,7 +48,6 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
             setAPiSend(false);
             values.prd_img = image_url;
         }
-        console.log(values)
     }
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -106,16 +107,29 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                                                                     <CommonInput name="prd_name" label="Product Name" type="text" formik={formik} />
                                                                     <CommonInput name="prd_price" label="Product Price" type="Number" formik={formik} />
                                                                     <CommonInput name="prd_img" label="Product Image" type="text" formik={formik} />
-                                                                    {mode === "edit" && <CommonInput name="prd_is_visible" label="Visible in user products" type="checkbox" formik={formik} />}
+                                                                    {/* {mode === "edit" && <CommonInput name="prd_is_visible" label="Visible in user products" type="checkbox" formik={formik} />} */}
+                                                                    {mode === "edit" &&
+                                                                        <div className="p-0.5 relative" style={{ marginTop: "10px" }}>
+                                                                            <label htmlFor={"prd_is_visible"} className=" text-lg font-medium leading-5 text-gray-700 p-0.5">
+                                                                                Visible in user products
+                                                                            </label>
+                                                                            <Field type="checkbox" name="prd_is_visible" className="inline ms-2" />
+                                                                        </div>
+                                                                    }
                                                                     <div>
                                                                         <div className=" px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                                                             <button
                                                                                 type="submit"
                                                                                 className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 sm:ml-3 sm:w-auto"
                                                                                 disabled={apiSend}
-                                                                            // onClick={() => setOpen(false)}
                                                                             >
-                                                                                {mode === "add" ? "Add Product" : "Update Product"}
+                                                                                {apiSend ?
+                                                                                    (<div className="animate-spin">
+                                                                                        <i className="fa-solid fa-spinner px-11"></i>
+                                                                                    </div>
+                                                                                    ) : (
+                                                                                        mode === "add" ? "Add Product" : "Update Product"
+                                                                                    )}
                                                                             </button>
                                                                             <button
                                                                                 type="button"

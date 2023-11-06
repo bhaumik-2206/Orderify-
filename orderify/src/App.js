@@ -23,7 +23,7 @@ function App() {
   return (
     <CartContext>
       <BrowserRouter>
-        <ToastContainer pauseOnHover={false} autoClose={2000} />
+        <ToastContainer pauseOnHover={false} autoClose={2000} position="top-left" />
         <Routes>
           {/* Log In Routes */}
           <Route path="/" element={<ProtectedLogIn Component={Auth} />}>

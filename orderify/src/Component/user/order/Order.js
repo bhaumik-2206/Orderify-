@@ -12,7 +12,7 @@ const Order = () => {
     const [orders, setOrders] = useState([]);
     const [buyAgainOrder, setBuyAgainOrder] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { fetchCart, cartData } = useContext(CartDataContext);
+    const { fetchCart, setIsCartOpen } = useContext(CartDataContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,7 +36,6 @@ const Order = () => {
                 const order = response.data;
                 const groupedOrders = groupBy(order, (element) => new Date(element.createdAt).toDateString());
                 setOrders(groupedOrders);
-                setLoading(false);
             } else {
                 toast.error('ERROR - Invalid status code');
             }
@@ -46,15 +45,17 @@ const Order = () => {
         } catch (error) {
             toast.error('Error getting order history');
         }
+        setLoading(false);
     }
 
     const handleButAgain = async () => {
         try {
             const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'POST', data: { cart_items: buyAgainOrder.map(ele => ({ cartitm_fk_prd_id: ele.cartitm_fk_prd_id, cartitm_prd_qty: ele.cartitm_prd_qty })) }, isAuthRequired: true });
             if (response.status === 200) {
-                fetchCart();
+                await fetchCart();
                 setBuyAgainOrder([]);
                 toast.success("Order successfully added in cart");
+                setIsCartOpen(true);
             }
         } catch (error) {
             console.log("Error To Fetch API");
@@ -83,23 +84,15 @@ const Order = () => {
                     {buyAgainOrder.length > 0 && <div>
                         <button
                             onClick={() => handleButAgain()}
-                            className="absolute -top-2 right-0 sm:w-auto mx-auto mt-3 bg-indigo-600 sm:ms-auto hover:bg-indigo-700 cursor-pointer flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-lg font-medium text-white shadow-sm"
+                            className="fixed top-16 right-5 sm:w-auto mx-auto mt-3 bg-indigo-600 sm:ms-auto hover:bg-indigo-700 cursor-pointer flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-lg font-medium text-white shadow-sm"
                         >Order</button>
                     </div>}
                     {Object.keys(orders).map((item, index) => (
                         <div key={index}>
                             <div className='block text-center sm:h-12 sm:flex justify-between items-center mt-3'>
                                 <div className="flex items-center">
-                                    {/* {buyAgainOrder.length > 0 && <input className="h-4 w-4" type="checkbox" />} */}
-                                    {/* <h2 className={`${buyAgainOrder.length > 0 ? "ms-4 " : "ms-8"} text-3xl font-semibold text-shadow`}>{item}</h2> */}
                                     <h2 className={`ms-8 text-3xl font-semibold text-shadow`}>{item}</h2>
                                 </div>
-                                {/* {buyAgainOrder.length > 0 && buyAgainOrder.findIndex(ele => ele.date === item) !== -1 && <div>
-                            <button
-                                onClick={() => handleButAgain()}
-                                className="sm:w-auto mx-auto mt-3 bg-indigo-600 sm:ms-auto hover:bg-indigo-700 cursor-pointer flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-lg font-medium text-white shadow-sm"
-                            >Order</button>
-                        </div>} */}
                             </div>
                             <div className='grid grid-cols-2'>
                                 {orders[item].map((dateArray, index) => (

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 export const CartDataContext = createContext();
 
 const CartContext = ({ children }) => {
+    const [isCartOpen, setIsCartOpen] = useState(false);
     const [cartData, setCartData] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
     const userData = JSON.parse(localStorage.getItem('userData'));
@@ -57,7 +58,7 @@ const CartContext = ({ children }) => {
 
 
     return (
-        <CartDataContext.Provider value={{ cartData, setCartData, fetchCart, totalAmount, changeQuantityContext, setTotalAmount }}>
+        <CartDataContext.Provider value={{ cartData, setCartData, fetchCart, totalAmount, changeQuantityContext, setTotalAmount, isCartOpen, setIsCartOpen }}>
             {children}
         </CartDataContext.Provider>
     )
