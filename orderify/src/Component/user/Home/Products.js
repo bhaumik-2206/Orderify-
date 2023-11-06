@@ -51,10 +51,14 @@ function Products() {
             (event.selected * itemsPerPage) % data.total_products;
         // console.log(newOffset);
         setItemOffset(newOffset);
-        const pageObj = {
+        const pageObj = search ?   {
             limit: itemsPerPage,
             page: Number(event.selected + 1),
-        };
+            search
+        } : {
+            limit: itemsPerPage,
+            page: Number(event.selected + 1),
+        }
         fetchData(pageObj);
         currentPageRef.current = event.selected + 1;
         setLoading(true);
