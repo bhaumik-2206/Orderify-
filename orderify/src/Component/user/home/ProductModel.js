@@ -82,11 +82,11 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white w-full p-3 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                                <div className="bg-white  sm:p-6 sm:pb-4">
+                            <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white w-full text-left shadow-xl transition-all sm:w-full sm:max-w-lg">
+                                <div className="bg-white sm:pb-4">
                                     <div className="flex min-h-full flex-1 flex-col justify-center ">
-                                        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                                            <h2 className="mt-1 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                                        <div className="sm:mx-auto sm:w-full ">
+                                            <h2 className="mt-1 p-2 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                                                 {
                                                     mode === "edit" ? "Edit Product" : "Add New Product"
                                                 }
@@ -108,7 +108,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                                             >
                                                 {formik => (
                                                     <div className='flex flex-col lg:flex-row '>
-                                                        <div className="flex flex-1 flex-col justify-center py-4 lg:px-8">
+                                                        <div className="flex flex-1 flex-col justify-center py-2 p-2 lg:px-8">
                                                             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                                                                 <form onSubmit={formik.handleSubmit}>
                                                                     <CommonInput name="prd_name" label="Product Name" type="text" formik={formik} />
@@ -124,7 +124,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
                                                                         </div>
                                                                     }
                                                                     <div>
-                                                                        <div className=" px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                                                        <div className=" py-3 sm:flex sm:flex-row-reverse ">
                                                                             <button
                                                                                 type="submit"
                                                                                 className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 sm:ml-3 sm:w-auto"

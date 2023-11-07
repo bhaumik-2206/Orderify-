@@ -45,30 +45,7 @@ function Products() {
     // Navigation
     const navigate = useNavigate();
 
-
-    const handlePageClick = (event) => {
-        const newOffset =
-            (event.selected * itemsPerPage) % data.total_products;
-        // console.log(newOffset);
-        setItemOffset(newOffset);
-        const pageObj = search ?   {
-            limit: itemsPerPage,
-            page: Number(event.selected + 1),
-            search
-        } : {
-            limit: itemsPerPage,
-            page: Number(event.selected + 1),
-        }
-        fetchData(pageObj);
-        currentPageRef.current = event.selected + 1;
-        setLoading(true);
-    };
-    const openProductModal = (mode, product) => {
-        console.log(product)
-        setUpdateProduct(product)
-        setIsAddProductModal(true);
-        setMode(mode);
-    };
+    // handle serch and product fetch 
     useEffect(() => {
         let timer
         if (search) {
@@ -85,6 +62,34 @@ function Products() {
         return () => clearTimeout(timer);
     }, [search.trim()]);
 
+    //PAGINATION FUNCTION
+    const handlePageClick = (event) => {
+        const newOffset =
+            (event.selected * itemsPerPage) % data.total_products;
+        // console.log(newOffset);
+        setItemOffset(newOffset);
+        const pageObj = search ? {
+            limit: itemsPerPage,
+            page: Number(event.selected + 1),
+            search
+        } : {
+            limit: itemsPerPage,
+            page: Number(event.selected + 1),
+        }
+        fetchData(pageObj);
+        currentPageRef.current = event.selected + 1;
+        setLoading(true);
+    };
+
+    //open  product  add and edit model 
+    const openProductModal = (mode, product) => {
+        console.log(product)
+        setUpdateProduct(product)
+        setIsAddProductModal(true);
+        setMode(mode);
+    };
+
+    // product data fetch function
     const fetchData = async (pageObj) => {
         try {
             const response = await fetchApi({
@@ -109,6 +114,8 @@ function Products() {
             setLoading(false);
         }
     };
+
+    //  add prodect cart  user function 
     const orderProduct = async (itemData, id) => {
         try {
             const response = await fetchApi({
@@ -145,7 +152,6 @@ function Products() {
         };
         orderProduct(updatedOrder, productId);
     };
-
     const changeQuantity = async (productId, operation) => {
         toggleLoadingState(productId, true);
         await changeQuantityContext(productId, operation);
@@ -159,32 +165,16 @@ function Products() {
         }));
     };
 
+    // search product functionality
     const handleSearch = async () => {
         let Objdata = {
             limit: itemsPerPage,
             page: 1,
             search
         }
-        fetchData(Objdata)
-        // try {
-        //     let response = await fetchApi({
-        //         url: API_ENDPOINTS.PRODUCT, method: "POST", isAuthRequired: true,
-        //         data: {
-        //             limit: itemsPerPage,
-        //             page: 1,
-        //             search
-        //         }
-        //     })
-        //     if (response.status === 200) {
-        //         setProducts(response.data.products);
-        //         setData(response.data);
-        //         setItemOffset(0)
-        //     }
-        //     console.log(response)
-        // } catch (error) {
-        //     console.log("ERROR: " + error)
-        // }
+        fetchData(Objdata);
     }
+    // delete product functionality
     const deleteSelectedProducts = async (id) => {
         try {
             const response = await fetchApi({
@@ -209,6 +199,7 @@ function Products() {
         }
     };
 
+    // multiple product select to delete functionality
     const toggleProductSelection = (productId) => {
         setSelectedProducts((prevSelected) => {
             if (prevSelected.includes(productId)) {
