@@ -51,7 +51,7 @@ function Products() {
         if (search) {
             timer = setTimeout(() => {
                 handleSearch();
-            }, 500);
+            }, 300);
         } else {
             fetchData({
                 limit: itemsPerPage,
@@ -66,7 +66,6 @@ function Products() {
     const handlePageClick = (event) => {
         const newOffset =
             (event.selected * itemsPerPage) % data.total_products;
-        // console.log(newOffset);
         setItemOffset(newOffset);
         const pageObj = search ? {
             limit: itemsPerPage,
@@ -274,14 +273,14 @@ function Products() {
                                 <div >
                                     <div
                                         // onClick={ }
-                                        className="relative w-34 h-34 sm:w-60 sm:h-60 mx-auto">
+                                        className="relative w-34 h-34 sm:w-60 sm:h-60 mx-auto pt-1">
                                         <img
                                             src={
                                                 product.prd_img
                                                     ? product.prd_img
                                                     : "images/download.png"
                                             }
-                                            className={` ${!product.prd_is_visible ? "opacity-75" : ""} object-contain h-full w-full block mx-auto`}
+                                            className={` ${!product.prd_is_visible ? "opacity-75" : ""} object-contain h-full w-full block mx-auto ${userData.user_role==="admin" ? "pt-8" : "p-2"}`}
                                             alt="Product Image"
                                         />
                                         {/* {!product.prd_is_visible && <p className="absolute bottom-0 px-3 bg-gray-200 bg-opacity-40">This product is not visible in user products</p>} */}
@@ -416,11 +415,14 @@ function Products() {
                     <div className="flex justify-between items-center px-3 flex-col md:flex-row max-w-7xl mx-auto ps-8">
 
                         <div className="sm:text-lg text-sm ">
-                            Showing {itemOffset + 1} to{" "}
-                            {totalPerPage > data.total_products
-                                ? data.total_products
-                                : totalPerPage}{" "}
-                            of {data.total_products} results
+                            {search ?
+                                <p>Showing  {data.total_products} results</p> :
+                                <p>Showing {itemOffset + 1} to{" "}
+                                    {totalPerPage > data.total_products
+                                        ? data.total_products
+                                        : totalPerPage}{" "}
+                                    of {data.total_products} results</p>
+                            }
                         </div>
                         <PaginationComponent
                             handlePageClick={handlePageClick}

@@ -4,7 +4,7 @@ import ReactPaginate from 'react-paginate';
 function PaginationComponent({handlePageClick,endOffset,currentPage=1}) {
     return (
         <div>
-            <div className=' border-gray-200 bg-white px-4 py-3 sm:px-6 w-fit' >
+            <div className=' border-gray-200 bg-white mb-4 py-3 sm:px-2 w-fit' >
                 <ReactPaginate
                     breakLabel={<i className="fa-solid fa-ellipsis fa-lg"></i>}
                     nextLabel= {<i className="fa-solid fa-chevron-right fa-lg "></i>}
