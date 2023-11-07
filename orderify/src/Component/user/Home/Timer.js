@@ -11,7 +11,7 @@ const Timer = () => {
   const getTimeDifference = () => {
     const currentDate = new Date();
     const targetDate = new Date();
-    targetDate.setHours(12, 30, 0); // Set the target time
+    targetDate.setHours(16, 6, 0); // Set the target time
     if (currentDate > targetDate) {
       targetDate.setDate(targetDate.getDate() + 1);
       setIsShopOpen(false);
