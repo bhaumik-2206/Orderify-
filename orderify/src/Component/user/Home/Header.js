@@ -25,12 +25,12 @@ export default function Header({ role }) {
     return (
         <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-10">
             <>
-                <div className="mx-auto max-w-7xl px-2 py-2 sm:py-0 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl py-0 px-2 sm:px-6 lg:px-8">
                     <div className="relative flex h-16 items-center justify-between">
                         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                             {/* Mobile menu button*/}
                             <button className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'>
-                                <i onClick={() => setIsOpenMenu(!isOpenMenu)} className={`block px-2 text-lg text-white fa-solid ${isOpenMenu ? "fa-xmark" : "fa-bars"}`}></i>
+                                <i onClick={() => setIsOpenMenu(!isOpenMenu)} className={`block text-lg text-white fa-solid ${isOpenMenu ? "fa-xmark" : "fa-bars"}`}></i>
                             </button>
                         </div>
                         <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -50,7 +50,7 @@ export default function Header({ role }) {
                                 </div>
                             </div>
                         </div>
-                        <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                        <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                             {
                                 role === "user" ? (
                                     <button type="button"
@@ -101,7 +101,7 @@ export default function Header({ role }) {
                 </div>
                 {role === "user" ?
                     <div className=' bg-gray-700  shadow-xl py-1'>
-                        <Menu as="div" className="relative px-3 sm:px-6 lg:px-8 mx-auto max-w-7xl flex  justify-end">
+                        <Menu as="div" className="relative px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl flex  justify-end">
                             <div>
                                 <Menu.Button className="relative flex text-white bg-black rounded px-2 py-1 text-sm">
                                     Timer

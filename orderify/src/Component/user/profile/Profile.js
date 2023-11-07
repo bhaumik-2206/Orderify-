@@ -8,7 +8,7 @@ const userDetails = [
     { title: "First Name", value: "user_fname" },
     { title: "Last Name", value: "user_lname" },
     { title: "Email", value: "user_email" },
-    { title: "Mobile Number", value: "user_phone" },
+    { title: "Mobile", value: "user_phone" },
 ];
 const Profile = () => {
     const [userData, setUserData] = useState({})
@@ -43,7 +43,7 @@ const Profile = () => {
             </div>
         ) : (
             <div className="bg-gray-100">
-                <div className="container p-5 max-w-7xl mx-auto">
+                <div className="container p-3 sm:p-5 max-w-7xl mx-auto">
                     <div className="md:flex no-wrap md:-mx-2 ">
                         <div className="w-full md:w-3/12 md:mx-2">
                             <div className="bg-white p-3 border-t-4 border-green-400">
@@ -64,9 +64,9 @@ const Profile = () => {
                             </div >
                             <div className="my-4"></div>
                         </div >
-                        <div className="w-full md:w-9/12 mx-2 h-64">
+                        <div className="w-full md:w-9/12 sm:mx-2 h-64">
                             <div className="bg-white p-3 shadow-sm rounded-sm">
-                                <div className="flex justify-between items-center space-x-2 font-semibold text-gray-900 leading-8 mr-8 ms-1">
+                                <div className="flex justify-between items-center space-x-2 font-semibold text-gray-900 leading-8 sm:mr-8">
                                     <div className='flex'>
                                         <span clas="text-green-500">
                                             <i className="fa-solid fa-user text-lg px-3"></i>
@@ -80,9 +80,9 @@ const Profile = () => {
                                 <div className="text-gray-700">
                                     <div>
                                         {userDetails.map((details, index) => (
-                                            <div key={index} className="grid grid-cols-2">
-                                                <div className="px-4 py-2 font-semibold">{details.title}</div>
-                                                {userData[details.value] ? <div className="px-4 py-2">{userData[details.value]}</div> : <p className='px-4 py-2'>Not Added</p>}
+                                            <div key={index} className="sm:grid sm:grid-cols-2 flex justify-between">
+                                                <div className="sm:px-4 py-2 font-semibold">{details.title} :</div>
+                                                {userData[details.value] ? <div className="sm:px-4 py-2">{userData[details.value]}</div> : <p className='px-4 py-2'>Not Added</p>}
                                             </div>
                                         ))}
                                     </div>

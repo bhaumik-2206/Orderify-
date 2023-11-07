@@ -87,7 +87,7 @@ function AdminPage() {
 
     return (
         <div className="inset-0 overflow-hidden mx-auto max-w-7xl">
-            <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+            <div className="flex-1 overflow-y-auto px-4 py-1 sm:py-6 sm:px-6">
                 {/* {(!isPageLoading && orders.length !== 0) ?  : null} */}
                 <div className="mt-2">
                     <div className="flow-root">
@@ -96,21 +96,22 @@ function AdminPage() {
                                 <Skeleton count={4} className="w-max h-44 sm:h-36 mb-3" />
                             </div> : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> :
                                 <>
-                                    <div className='flex items-center justify-between'>
-                                        <div className='px-3'>
+                                    <div className='flex items-center justify-between mb-2'>
+                                        <div className='sm:px-3'>
                                             <p onClick={() => handleChange({ type: "all" })}
-                                                className='text-blue-700 hover:text-blue-500 cursor-pointer text-sm sm:text-xl ms-6'
-                                            >select all</p>
+                                                className='border-2 p-1 font-semibold text-blue-600 border-blue-700 rounded hover:text-blue-500 cursor-pointer text-sm sm:text-lg sm:px-3 sm:ms-6'
+                                            >Select All</p>
                                         </div>
                                         <div className='flex'>
-                                            {changeStatus.length > 0 && <div className="flex justify-between pb-4">
+                                            {changeStatus.length > 0 && <div className="flex justify-between sm:pb-4">
                                                 {/* <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("pending") }} className={`sm:w-28 rounded-md px-3 py-2 text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-blue-600 border-2 text-blue-600 hover:bg-blue-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Pending</button> */}
-                                                <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("completed") }} className={`w-20 sm:w-28 rounded-md sm:px-3 sm:py-2 text-sm md:text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-green-600 border-2 text-green-600 hover:bg-green-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Accept</button>
-                                                <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("rejected") }} className={`w-20 sm:w-28 rounded-md sm:px-3 sm:py-2 text-sm md:text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-red-600 border-2 text-red-600 hover:bg-red-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Reject</button>
+                                                <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("completed") }} className={`p-1 sm:w-28 rounded-md sm:px-3 sm:py-2 mr-2 text-sm md:text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-green-600 border-2 text-green-600 hover:bg-green-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Accept</button>
+
+                                                <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("rejected") }} className={`p-1 sm:w-28 rounded-md sm:px-3 sm:py-2 text-sm md:text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-red-600 border-2 text-red-600 hover:bg-red-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Reject</button>
                                             </div>}
-                                            <Menu as="div" className="relative px-3  mx-auto max-w-screen-xl flex justify-end pb-4">
+                                            <Menu as="div" className="relative px-3  mx-auto max-w-screen-xl flex justify-end sm:pb-4">
                                                 <div>
-                                                    <Menu.Button className="sm:w-28 rounded-md px-3 py-2 text-md font-semibold shadow-sm sm:ml-3 border-blue-600 border-2 text-blue-600 hover:bg-blue-600 hover:text-white transition-all">
+                                                    <Menu.Button className="sm:w-28 rounded-md p-1 sm:px-3 sm:py-2 text-sm font-semibold shadow-sm sm:ml-3 border-blue-600 border-2 text-blue-600 hover:bg-blue-600 hover:text-white transition-all">
                                                         Summary
                                                     </Menu.Button>
                                                 </div>
@@ -140,8 +141,8 @@ function AdminPage() {
                                     <ul role="list" className="-my-6 divide-y divide-gray-200 py-4">
                                         {orders.map((item, index) => (
                                             <div key={index}>
-                                                <li className="flex sm:flex py-6 items-center">
-                                                    <div className='px-3'>
+                                                <li className="flex py-4  sm:py-6 sm:items-center">
+                                                    <div className='sm:px-3 pr-1'>
                                                         <input
                                                             type="checkbox"
                                                             checked={changeStatus.includes(item.id)}
@@ -159,28 +160,34 @@ function AdminPage() {
                                                         />
                                                     </div>
 
-                                                    <div className="ml-7 flex flex-1 flex-col">
+                                                    <div className="sm:ml-7 ml-3 flex flex-1 flex-col">
                                                         <div>
                                                             <div className="block sm:flex justify-between text-base font-medium text-gray-900 ">
+
                                                                 <div className=' sm:w-1/2 '>
                                                                     <p className='text-lg text-ellipsis overflow-hidden sm:text-xl'>{item.product_details.prd_name}</p>
                                                                     <p>₹ {item.product_details.prd_price}/item</p>
                                                                     <p className="sm:text-lg text-sm">Quantity: <b>{item.prd_total_qty}</b></p>
-                                                                    <p className={`${item.order_status === "completed" && "bg-green-500"} ${item.order_status === "rejected" && "bg-red-500"} bg-gray-500 inline-block mt-3 py-1 px-2 rounded text-white text-sm`}>{item.order_status}</p>
+
+
                                                                 </div>
+
                                                                 <div className='w-full text-left sm:text-right sm:w-1/2'>
-                                                                    <p className='text-lg sm:text-xl'>Total: ₹ <b className='text-lg sm:text-2xl'>{item.prd_total_amount}</b></p>
+                                                                    <p className='text-md sm:text-lg'>Total: ₹ <b className='text-md sm:text-lg'>{item.prd_total_amount}</b></p>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="flex flex-1 items-end justify-end text-sm">
+                                                        <div className="flex  items-center justify-between text-sm">
+                                                            
+                                                        <p className={`${item.order_status === "completed" && "bg-green-500"} ${item.order_status === "rejected" && "bg-red-500"} bg-gray-500 inline-block sm:mt-3 py-1 px-2 rounded text-white sm:text-sm text-xs`}>{item.order_status}</p>
+
                                                             <div className="flex">
                                                                 <button
                                                                     type="button"
                                                                     className="font-medium text-indigo-600 hover:text-indigo-500 text-lg"
 
                                                                 >
-                                                                    <div className='flex items-center gap-2' onClick={() => setShowUser(pre => !pre[item.product_details._id] && ({ [item.product_details._id]: true }))}>
+                                                                    <div className='flex text-sm sm:text-lg items-center gap-2' onClick={() => setShowUser(pre => !pre[item.product_details._id] && ({ [item.product_details._id]: true }))}>
                                                                         <p>User</p>
                                                                         <i style={{ transition: '0.2s', transform: `rotate(${!showUser[item.product_details._id] ? 180 : 0}deg)` }} className="fa-solid fa-chevron-up "></i>
                                                                     </div>
