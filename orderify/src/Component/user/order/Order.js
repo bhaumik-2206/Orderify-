@@ -1,4 +1,4 @@
-import React, {Fragment ,useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import fetchApi from '../../../util/helper';
 import { API_ENDPOINTS } from '../../../config/api';
@@ -37,7 +37,7 @@ const Order = () => {
 
             if (response.status === 200) {
                 const order = response.data;
-                
+
                 const sortedOrders = sortBy(order, (element) => new Date(element.createdAt)).reverse();
                 const groupedOrders = groupBy(sortedOrders, (element) => new Date(element.createdAt).toDateString());
                 setOrders(groupedOrders);
@@ -53,7 +53,7 @@ const Order = () => {
         setLoading(false);
     }
 
-    const handleButAgain = async () => {
+    const handleBuyAgain = async () => {
         setBuyAgainLoading(true)
         try {
             const response = await fetchApi({ url: API_ENDPOINTS.CART, method: 'POST', data: { cart_items: buyAgainOrder.map(ele => ({ cartitm_fk_prd_id: ele.cartitm_fk_prd_id, cartitm_prd_qty: ele.cartitm_prd_qty })) }, isAuthRequired: true });
@@ -85,9 +85,9 @@ const Order = () => {
 
     function summaryDetailsFiller(arrayOfItem) {
         let items = arrayOfItem.length
-        let amount = arrayOfItem.reduce((total,item)=>total+item.prd_total_amount,0)
-        let quantity = arrayOfItem.reduce((total,item)=>total+item.prd_total_qty,0)               
-        return {items,quantity,amount}
+        let amount = arrayOfItem.reduce((total, item) => total + item.prd_total_amount, 0)
+        let quantity = arrayOfItem.reduce((total, item) => total + item.prd_total_qty, 0)
+        return { items, quantity, amount }
     }
 
     return (
@@ -106,7 +106,7 @@ const Order = () => {
                 <div className='mx-auto max-w-screen-xl relative w-full px-2 sm:px-6 lg:px-8'>
                     {/* {buyAgainOrder.length > 0 && <div>
                         <button
-                            onClick={() => handleButAgain()}
+                            onClick={() => handleBuyAgain()}
                             className="absolute -top-3 right-10 sm:w-auto mx-auto mt-3 bg-indigo-600 sm:ms-auto hover:bg-indigo-700 cursor-pointer flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-lg font-medium text-white shadow-sm"
                         >Order</button>
                     </div>} */}
@@ -114,10 +114,10 @@ const Order = () => {
                         <div key={index}>
                             <div className='max-w-7xl mx-auto m-2 block text-center sm:h-12 sm:flex justify-between items-center mt-3'>
                                 <div className="flex items-center">
-                                    <h2 className={`mx-1 text-3xl font-semibold text-shadow`}>{item}</h2>
+                                    <h2 className={`mx-1 sm:text-3xl font-semibold text-shadow text-xl `}>{item}</h2>
                                     <Menu as="div" className="relative px-3 flex justify-end">
                                         <div>
-                                            <Menu.Button className="relative shadow flex text-white bg-black rounded px-2 py-1 text-sm">
+                                            <Menu.Button className="relative shadow flex text-white bg-black rounded px-2 py-1 text-xs sm:text-sm">
                                                 Summary
                                             </Menu.Button>
                                         </div>
@@ -143,30 +143,36 @@ const Order = () => {
                                         </Transition>
                                     </Menu>
                                     {buyAgainOrder.length > 0 && <div>
-                                    <button
-                                        onClick={() => handleButAgain()}
-                                        className="absolute right-10 -top-1 sm:w-auto mx-auto mt-2 bg-indigo-600 sm:ms-auto hover:bg-indigo-700 cursor-pointer flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-lg font-medium text-white shadow-sm"
-                                    >
-                                        {buyAgainLoading ? <div className="animate-spin me-2"><i className="fa-solid px-[9px] fa-spinner"></i></div> : "order"}
-                                    </button>
-                                </div>}
+                                        <button
+                                            onClick={() => handleBuyAgain()}
+                                            className="absolute right-2 sm:right-8 -top-2 sm:w-auto mx-auto mt-2 bg-indigo-600 sm:ms-auto hover:bg-indigo-700 cursor-pointer flex items-center justify-center rounded-md border border-transparent sm:px-4 px-3 py-1 sm:py-2 text-md sm:text-lg font-medium text-white shadow-sm"
+                                        >
+                                            {buyAgainLoading ? <div className="animate-spin me-2"><i className="fa-solid px-[9px] fa-spinner"></i></div> : "order"}
+                                        </button>
+                                    </div>}
                                 </div>
                             </div>
-                            <div className='grid grid-cols-2'>
+                            <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2'>
                                 {orders[item].map((dateArray, index) => (
                                     <div onClick={() => dateArray.product_details.prd_is_visible && handleCheckBoxChange(dateArray.product_details._id, dateArray.prd_total_qty, item)} key={index}
-                                        className={`${buyAgainOrder.find(ele => ele.cartitm_fk_prd_id === dateArray.product_details._id && ele.date === item) ? "bg-green-100 border border-green-700" : "border"} ${!dateArray.product_details.prd_is_visible && "bg-gray-200 text-gray-600 border"} m-2 py-2 rounded cursor-pointer border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center px-2`}>
-                                        <div className="px-4 block text-center sm:text-left sm:flex">
-                                            <div className=" mb-3 sm:mb-0 w-40 sm:block mx-auto sm:h-40 flex-shrink-0 overflow-hidden rounded-md border">
-                                                <img className={`${!dateArray.product_details.prd_is_visible && "opacity-80"} w-full h-full  object-contain object-center`}
+                                        className={`${buyAgainOrder.find(ele => ele.cartitm_fk_prd_id === dateArray.product_details._id && ele.date === item) ? "bg-green-100 border border-green-700" : "border"} ${!dateArray.product_details.prd_is_visible && "bg-gray-200 text-gray-600 border"} m-2 py-1 rounded cursor-pointer border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center px-2`}>
+                                        <div className="sm:p-1 block text-center sm:text-left sm:flex">
+                                            <div className=" h-28 w-32  sm:mb-0 sm:w-40 sm:block mx-auto sm:h-40 flex-shrink-0 overflow-hidden rounded-md border">
+                                                <img
                                                     src={dateArray.product_details.prd_img}
+                                                    className={`${!dateArray.product_details.prd_is_visible && "opacity-80"} sm:w-full w-full h-full sm:h-full  sm:object-cover object-cover`}
+                                                    onError={(e) => {
+                                                        e.target.src = 'images/download.png';
+                                                    }}
                                                     alt="Product" />
                                             </div>
-                                            <div className=" px-0 sm:px-4">
+                                            <div className=" text-start px-1 sm:px-4">
                                                 <p className="text-md sm:text-xl font-semibold">{dateArray.product_details.prd_name}</p>
                                                 <p>₹ {dateArray.product_details.prd_price} / item</p>
                                                 <p className="my-0 sm:mt-3 text-lg">Qty: {dateArray.prd_total_qty}</p>
                                                 <p className="text-lg sm:text-2xl font-semibold">₹ {dateArray.prd_total_amount}</p>
+                                                <p className={`${dateArray.order_status === "completed" && "bg-green-500"} ${dateArray.order_status === "rejected" && "bg-red-500"} bg-gray-500 inline-block mt-3 py-1 px-2 rounded text-white text-sm`}>{dateArray.order_status}</p>
+
                                                 {!dateArray.product_details.prd_is_visible && <p className='text-red-500'>Item Not Available</p>}
                                             </div>
                                         </div>

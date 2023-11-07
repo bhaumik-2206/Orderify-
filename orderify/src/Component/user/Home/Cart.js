@@ -105,6 +105,9 @@ export default function Cart({ open, setOpen }) {
                 >
                   <div className="mb-3 sm:mb-0 w-1/2 block mx-auto sm:h-24 sm:w-24  flex-shrink-0 overflow-hidden rounded-md border">
                     <img
+                      onError={(e) => {
+                        e.target.src = 'images/download.png';
+                      }}
                       src={item.cartitm_fk_prd_id.prd_img}
                       alt="Item"
                       className="h-full w-full object-cover object-center"

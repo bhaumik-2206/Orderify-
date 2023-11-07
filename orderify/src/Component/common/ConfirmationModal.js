@@ -38,6 +38,30 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
             colorHover: "hover:bg-red-500",
             rounded:"bg-red-100",
         },
+        completed: {
+            title: "Accept Item",
+            message: "Are you sure you want to Accept the item?",
+            button: "Accept",
+            color: "bg-green-600",
+            colorHover: "hover:bg-green-500",
+            rounded:"bg-green-100",
+        },
+        rejected: {
+            title: "Reject Item",
+            message: "Are you sure you want to reject the item?",
+            button: "Reject",
+            color: "bg-red-600",
+            colorHover: "hover:bg-red-500",
+            rounded:"bg-red-100",
+        },
+        pending: {
+            title: "Pending Item",
+            message: "Are you sure you want to pending the item",
+            button: "Pending",
+            color: "bg-blue-600",
+            colorHover: "hover:bg-blue-500",
+            rounded:"bg-blue-100",
+        },
     }
 
     const handleOperation = async () => {

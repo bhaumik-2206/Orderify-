@@ -82,7 +82,6 @@ function Products() {
 
     //open  product  add and edit model 
     const openProductModal = (mode, product) => {
-        console.log(product)
         setUpdateProduct(product)
         setIsAddProductModal(true);
         setMode(mode);
@@ -275,12 +274,11 @@ function Products() {
                                         // onClick={ }
                                         className="relative w-34 h-34 sm:w-60 sm:h-60 mx-auto pt-1">
                                         <img
-                                            src={
-                                                product.prd_img
-                                                    ? product.prd_img
-                                                    : "images/download.png"
-                                            }
-                                            className={` ${!product.prd_is_visible ? "opacity-75" : ""} object-contain h-full w-full block mx-auto ${userData.user_role==="admin" ? "pt-8" : "p-2"}`}
+                                            src={product.prd_img}
+                                            onError={(e) => {
+                                                e.target.src = 'images/download.png';
+                                            }}
+                                            className={` ${!product.prd_is_visible ? "opacity-75" : ""} object-contain h-full w-full block mx-auto ${userData.user_role === "admin" ? "pt-8" : "p-2"}`}
                                             alt="Product Image"
                                         />
                                         {/* {!product.prd_is_visible && <p className="absolute bottom-0 px-3 bg-gray-200 bg-opacity-40">This product is not visible in user products</p>} */}

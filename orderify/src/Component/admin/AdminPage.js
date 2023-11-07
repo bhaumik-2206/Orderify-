@@ -4,8 +4,9 @@ import { API_ENDPOINTS } from '../../config/api'
 import { useNavigate } from 'react-router-dom';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Menu, Transition } from '@headlessui/react'
 import ConfirmationModal from '../common/ConfirmationModal';
+import { toast } from 'react-toastify';
 
 function AdminPage() {
     const [orders, setOders] = useState([]);
@@ -13,6 +14,9 @@ function AdminPage() {
     const [changeStatus, setChangeStatus] = useState([]);
     const [isPageLoading, setIsPageLoading] = useState(false);
     const [summaryDetails, setSummaryDetails] = useState({ total_users: '', total_items: '', total_amount: '', total_quantity: '' });
+    const [loadingInStatus, setLoadingInStatus] = useState(false);
+    const [changedStatus, setChangedStatus] = useState("")
+    const [show, setShow] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -66,20 +70,19 @@ function AdminPage() {
         }
     }
 
-    const handleUpdateStatus = (status) => {
-        // if (status === "accept") {
-        //     const complete = { prd_id: changeStatus, order_status: "completed", };
-        //     console.log("accept ", complete);
-        //     setChangeStatus([]);
-        // } else if (status === "reject") {
-        //     const reject = { prd_id: changeStatus, order_status: "rejected" };
-        //     console.log("reject", reject);
-        //     setChangeStatus([]);
-        // }
-        let a = orders.map(ele => changeStatus.includes(ele.id) ? ({ ...ele, order_status: status }) : ele)
-        console.log(a)
-        setOders(a);
-        setChangeStatus([]);
+    const handleUpdateStatus = async (status) => {
+        setLoadingInStatus(true);
+        try {
+            let response = await fetchApi({ url: API_ENDPOINTS.ORDER, method: "PUT", data: { prd_ids: changeStatus, order_status: status }, isAuthRequired: true })
+            if (response.status === 200) {
+                let a = orders.map(ele => changeStatus.includes(ele.id) ? ({ ...ele, order_status: status }) : ele)
+                setOders(a);
+                setChangeStatus([]);
+            }
+        } catch (error) {
+            toast.error("Error to fetch data")
+        }
+        setLoadingInStatus(false)
     }
 
     return (
@@ -88,50 +91,53 @@ function AdminPage() {
                 {/* {(!isPageLoading && orders.length !== 0) ?  : null} */}
                 <div className="mt-2">
                     <div className="flow-root">
-                        <ul role="list" className="-my-6 divide-y divide-gray-200 py-4">
+                        <div>
                             {isPageLoading ? <div className=" mx-auto max-w-screen-xl gap-2 sm:gap-6">
                                 <Skeleton count={4} className="w-max h-44 sm:h-36 mb-3" />
-                            </div>
-                                : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> :
-                                    <>
-                                        <Menu as="div" className="relative px-3  mx-auto max-w-screen-xl flex justify-end">
-                                            <div>
-                                                <Menu.Button className="relative flex text-white bg-black rounded px-2 py-1 text-sm">
-                                                    Summary
-                                                </Menu.Button>
-                                            </div>
-                                            <Transition
-                                                as={Fragment}
-                                                enter="transition ease-out duration-100"
-                                                enterFrom="transform opacity-0 scale-95"
-                                                enterTo="transform opacity-100 scale-100"
-                                                leave="transition ease-in duration-75"
-                                                leaveFrom="transform opacity-100 scale-100"
-                                                leaveTo="transform opacity-0 scale-95"
-                                            >
-                                                <Menu.Items className="absolute top-7 right-90 z-10 mt-2 w-fit  origin-top-right rounded-md bg-white  text-black shadow-lg ring-1 ring-black  ring-opacity-5 focus:outline-none">
-                                                    <Menu.Item>
-                                                        <div className='p-2 '>
-                                                            <h1 className='mb-2 py-1 px-2  border rounded'>Total Users - {summaryDetails.total_users}</h1>
-                                                            <h1 className='mb-2 py-1 px-2  border rounded'>Total Items - {summaryDetails.total_items}</h1>
-                                                            <h1 className='mb-2 py-1 px-2  border rounded'>Total Quantity - {summaryDetails.total_quantity}</h1>
-                                                            <h1 className='mb-2 py-1 px-2  border rounded'>Total Amount - ₹{summaryDetails.total_amount} </h1>
-                                                        </div>
-                                                    </Menu.Item>
-                                                </Menu.Items>
-                                            </Transition>
-                                        </Menu>
-                                        <div className='flex items-center justify-between'>
-                                            <div className='px-3'>
-                                                <p onClick={() => handleChange({ type: "all" })}
-                                                    className='text-blue-700 hover:text-blue-500 cursor-pointer text-xl ms-6'
-                                                >select all</p>
-                                            </div>
-                                            <div className="flex justify-between pb-4">
-                                                <button disabled={changeStatus.length === 0} onClick={() => handleUpdateStatus("completed")} className={`sm:w-28 rounded-md px-3 py-2 text-md font-semibold text-white shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "bg-green-600" : "bg-gray-600"}`}>Accept</button>
-                                                <button disabled={changeStatus.length === 0} onClick={() => handleUpdateStatus("rejected")} className={`sm:w-28 rounded-md px-3 py-2 text-md font-semibold text-white shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "bg-red-600" : "bg-gray-600"}`}>Reject</button>
-                                            </div>
+                            </div> : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> :
+                                <>
+                                    <div className='flex items-center justify-between'>
+                                        <div className='px-3'>
+                                            <p onClick={() => handleChange({ type: "all" })}
+                                                className='text-blue-700 hover:text-blue-500 cursor-pointer text-sm sm:text-xl ms-6'
+                                            >select all</p>
                                         </div>
+                                        <div className='flex'>
+                                            {changeStatus.length > 0 && <div className="flex justify-between pb-4">
+                                                {/* <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("pending") }} className={`sm:w-28 rounded-md px-3 py-2 text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-blue-600 border-2 text-blue-600 hover:bg-blue-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Pending</button> */}
+                                                <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("completed") }} className={`w-20 sm:w-28 rounded-md sm:px-3 sm:py-2 text-sm md:text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-green-600 border-2 text-green-600 hover:bg-green-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Accept</button>
+                                                <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("rejected") }} className={`w-20 sm:w-28 rounded-md sm:px-3 sm:py-2 text-sm md:text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-red-600 border-2 text-red-600 hover:bg-red-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Reject</button>
+                                            </div>}
+                                            <Menu as="div" className="relative px-3  mx-auto max-w-screen-xl flex justify-end pb-4">
+                                                <div>
+                                                    <Menu.Button className="sm:w-28 rounded-md px-3 py-2 text-md font-semibold shadow-sm sm:ml-3 border-blue-600 border-2 text-blue-600 hover:bg-blue-600 hover:text-white transition-all">
+                                                        Summary
+                                                    </Menu.Button>
+                                                </div>
+                                                <Transition
+                                                    as={Fragment}
+                                                    enter="transition ease-out duration-100"
+                                                    enterFrom="transform opacity-0 scale-95"
+                                                    enterTo="transform opacity-100 scale-100"
+                                                    leave="transition ease-in duration-75"
+                                                    leaveFrom="transform opacity-100 scale-100"
+                                                    leaveTo="transform opacity-0 scale-95"
+                                                >
+                                                    <Menu.Items className="absolute top-7 right-90 z-10 mt-2 w-48  origin-top-right rounded-md bg-white  text-black shadow-lg ring-1 ring-black  ring-opacity-5 focus:outline-none">
+                                                        <Menu.Item>
+                                                            <div className='p-2'>
+                                                                <h1 className='mb-2 py-1 px-2  border rounded'>Total Users - {summaryDetails.total_users}</h1>
+                                                                <h1 className='mb-2 py-1 px-2  border rounded'>Total Items - {summaryDetails.total_items}</h1>
+                                                                <h1 className='mb-2 py-1 px-2  border rounded'>Total Quantity - {summaryDetails.total_quantity}</h1>
+                                                                <h1 className='mb-2 py-1 px-2  border rounded'>Total Amount - ₹{summaryDetails.total_amount} </h1>
+                                                            </div>
+                                                        </Menu.Item>
+                                                    </Menu.Items>
+                                                </Transition>
+                                            </Menu>
+                                        </div>
+                                    </div>
+                                    <ul role="list" className="-my-6 divide-y divide-gray-200 py-4">
                                         {orders.map((item, index) => (
                                             <div key={index}>
                                                 <li className="flex sm:flex py-6 items-center">
@@ -144,7 +150,11 @@ function AdminPage() {
                                                             name="" id="" />
                                                     </div>
                                                     <div className="h-28 w-20 mx-auto sm:h-36 sm:w-36 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 mb-4 sm:mb-0">
-                                                        <img src={item.product_details.prd_img} alt="Item"
+                                                        <img
+                                                            src={item.product_details.prd_img} alt="Item"
+                                                            onError={(e) => {
+                                                                e.target.src = 'images/download.png';
+                                                            }}
                                                             className="h-full w-full object-contain sm:object-cover object-center"
                                                         />
                                                     </div>
@@ -179,9 +189,7 @@ function AdminPage() {
                                                         </div>
                                                     </div>
                                                 </li>
-
-                                                <div className={`${showUser[item.product_details._id] ? "block" : "hidden"}
-                                     transition-all duration-300 ease-in-out overflow-hidden`}>
+                                                <div className={`${showUser[item.product_details._id] ? "block" : "hidden"} transition-all duration-300 ease-in-out overflow-hidden`}>
                                                     <ul role="list" className="divide-y divide-gray-100">
                                                         {item.users.map((person, index) => (
                                                             <li key={index} className="bloc sm:flex justify-between gap-x-6 py-2">
@@ -204,12 +212,14 @@ function AdminPage() {
                                                 </div>
                                             </div>
                                         ))}
-                                    </>
+                                    </ul>
+                                </>
                             }
-                        </ul>
+                        </div>
                     </div>
                 </div>
-            </div >
+            </div>
+            <ConfirmationModal show={show} setShow={setShow} handleSubmit={handleUpdateStatus} data={changedStatus} type={changedStatus} />
         </div >
     )
 }
