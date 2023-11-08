@@ -7,7 +7,6 @@ import Auth from './Component/auth/Auth';
 
 import Profile from './Component/user/profile/Profile';
 import Dashboard from './Component/user/Dashboard';
-import ProtectedHome from './route/ProtectedHome';
 
 
 import LogIn from './Component/auth/LogIn';
@@ -16,6 +15,7 @@ import Products from './Component/user/home/Products';
 import CartContext from './context/CartContext';
 import Order from './Component/user/order/Order';
 import AdminPage from './Component/admin/AdminPage';
+import PageNotFound from './Component/user/home/PageNotFound';
 
 
 
@@ -23,7 +23,7 @@ function App() {
   return (
     <CartContext>
       <BrowserRouter>
-        <ToastContainer pauseOnHover={false} autoClose={2000} position="top-left" />
+        <ToastContainer pauseOnHover={false} autoClose={1000} position="top-left" />
         <Routes>
           {/* Log In Routes */}
           <Route path="/" element={<ProtectedLogIn Component={Auth} />}>
@@ -32,45 +32,17 @@ function App() {
             <Route path="/register" element={<Registration />} />
           </Route>
           {/* Main Dashboard Routes */}
-          <Route path='/' element={<ProtectedHome Component={() => <Dashboard role={"admin"} />} />}>
+          <Route path='/' element={<ProtectedLogIn Component={Dashboard} />}>
             <Route path="/products" element={<Products />} />
             <Route path="/orders" element={<AdminPage />} />
             <Route path="/profile" element={<Profile />} />
-          </Route>
-          <Route path='/' element={<ProtectedHome Component={() => <Dashboard role={"user"} />} />}>
-            <Route path="/products" element={<Products />} />
             <Route path="/order" element={<Order />} />
-            <Route path="/history" element={<Products />} />
-            <Route path="/profile" element={<Profile />} />
           </Route>
+          <Route path='*' element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
-    </CartContext>
+    </CartContext >
   );
 }
 
 export default App;
-
-
-
-
-
-
-// import React from 'react';
-// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import ProtectedRoute from './route/ProtectedRoute';
-// // import Home from './Home';
-// // import Login from './Login';
-
-// function App() {
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="/login" component={LogIn} />
-//         <ProtectedRoute path="/" component={Home} />
-//       </Routes>
-//     </Router>
-//   );
-// }
-
-// export default App;

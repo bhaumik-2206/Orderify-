@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Header from './home/Header';
 import { Outlet } from 'react-router-dom';
+import Header from './home/Header';
 
-const Dashboard = ({ role }) => {
-    const [userData, setUserData] = useState(null);
+const Dashboard = ({userData}) => {
+    const [userDatas, setUserData] = useState(null);
 
     useEffect(() => {
         const storedUserData = JSON.parse(localStorage.getItem("userData"));
@@ -12,17 +12,14 @@ const Dashboard = ({ role }) => {
         }
     }, []);
 
-    // if (!role) {
-    //     return <p>Please provide a role.</p>;
-    // }
 
-    if (!userData) {
+    if (!userDatas) {
         return <p>Access denied.</p>;
     }
 
     return (
         <>
-            <Header role={userData.user_role} />
+            <Header role={userData.role} />
             <Outlet />
         </>
     );
