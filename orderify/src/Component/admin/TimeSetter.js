@@ -2,6 +2,7 @@ import React,{useEffect,useState} from 'react'
 import fetchApi from "../../util/helper";
 import { API_ENDPOINTS } from "../../config/api";
 import ConfirmationModal from '../common/ConfirmationModal';
+import { toast } from 'react-toastify';
 
 function TimeSetter({onClose}) {
     const [selectedTime, setSelectedTime] = useState({ start_time: "", end_time: "" })
@@ -17,7 +18,8 @@ function TimeSetter({onClose}) {
             await fetchApi({
                 url: API_ENDPOINTS.TIMER, method: "PUT", data: selectedTime, isAuthRequired: true
             })
-            onClose();
+            // onClose();
+            toast.success('Time set successfully')
         } catch (error) {
             console.log("ERROR: " + error)
         }
@@ -47,7 +49,7 @@ function TimeSetter({onClose}) {
         </div>
                     <button 
                     disabled={selectedTime.start_time > selectedTime.end_time}
-                     onClick={()=>{setIsSetTimeConfShow(true)}} className="p-1 my-2 px-3 text-white bg-blue-600 hover:bg-blue-700 text-center sm:text-lg text-xs rounded-md cursor-pointer">Set</button>
+                     onClick={()=>{setIsSetTimeConfShow(true)}} className={`p-1 ${selectedTime.start_time > selectedTime.end_time ? 'bg-gray-500' : 'bg-blue-600 hover:bg-blue-700'} my-2 px-3 text-white text-center sm:text-lg text-xs rounded-md cursor-pointer`}>{selectedTime.start_time > selectedTime.end_time ? 'Invalid' : 'Set'}</button>
                 </div>
     </div>
   )

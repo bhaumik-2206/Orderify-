@@ -75,10 +75,14 @@ const Order = () => {
     }
 
     function summaryDetailsFiller(arrayOfItem) {
+        console.log(arrayOfItem)
+        let pendingItems = arrayOfItem.reduce((total, item) => total + (item.order_status == "pending" ? 1 : 0), 0)
+        let completedItems = arrayOfItem.reduce((total, item) => total + (item.order_status == "completed" ? 1 : 0), 0)
+        let rejectedItems = arrayOfItem.reduce((total, item) => total + (item.order_status == "rejected" ? 1 : 0), 0)
         let items = arrayOfItem.length
         let amount = arrayOfItem.reduce((total, item) => total + item.prd_total_amount, 0)
         let quantity = arrayOfItem.reduce((total, item) => total + item.prd_total_qty, 0)
-        return { items, quantity, amount }
+        return { items, quantity, amount, pendingItems, completedItems, rejectedItems }
     }
 
     return (
@@ -126,6 +130,11 @@ const Order = () => {
                                                     <div className='p-2 text-start'>
                                                         {/* {console.log(orders[item])} */}
                                                         <h1 className='mb-2 py-1 px-2 w-44  border rounded'>Total Items - {summaryDetailsFiller(orders[item]).items}</h1>
+                                                        <div className='border mb-2 py-1 px-2'>
+                                                            <div className='text-blue-900'>Pending Items - {summaryDetailsFiller(orders[item]).pendingItems}</div>
+                                                            <div className='text-green-900 '>Completed Items - {summaryDetailsFiller(orders[item]).completedItems}</div>
+                                                            <div className='text-red-900 ' >Rejected Items - {summaryDetailsFiller(orders[item]).rejectedItems}</div>
+                                                        </div>
                                                         <h1 className='mb-2 py-1 px-2 w-44 border rounded'>Total Quantity - {summaryDetailsFiller(orders[item]).quantity}</h1>
                                                         <h1 className='mb-2 py-1 px-2 w-44 border rounded'>Total Amount - {summaryDetailsFiller(orders[item]).amount} ₹</h1>
                                                     </div>

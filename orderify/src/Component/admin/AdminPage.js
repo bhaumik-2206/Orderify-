@@ -32,11 +32,15 @@ function AdminPage() {
             console.log(userIds)
             return userIds
         }
+        console.log(data)
         let user = findUniqueUsers(data).length
         let items = data.length
+        let pendingItems = data.reduce((total, item) => total + (item.order_status == "pending" ? 1 : 0), 0)
+        let completedItems = data.reduce((total, item) => total + (item.order_status == "completed" ? 1 : 0), 0)
+        let rejectedItems = data.reduce((total, item) => total + (item.order_status == "rejected" ? 1 : 0), 0)
         let amount = data.reduce((total, item) => total + item.prd_total_amount, 0)
         let quantity = data.reduce((total, item) => total + item.prd_total_qty, 0)
-        setSummaryDetails({ total_users: user, total_items: items, total_amount: amount, total_quantity: quantity })
+        setSummaryDetails({ total_users: user, total_items: items, total_amount: amount, total_quantity: quantity,pendingItems, completedItems,rejectedItems})
     }
 
     const fetchOders = async () => {
@@ -123,6 +127,11 @@ function AdminPage() {
                                                             <div className='p-2'>
                                                                 <h1 className='mb-2 py-1 px-2  border rounded'>Total Users - {summaryDetails.total_users}</h1>
                                                                 <h1 className='mb-2 py-1 px-2  border rounded'>Total Items - {summaryDetails.total_items}</h1>
+                                                                <div className='border mb-2 py-1 px-2'>
+                                                            <div className='text-blue-900'>Pending Items - {summaryDetails.pendingItems}</div>
+                                                            <div className='text-green-900 '>Completed Items - {summaryDetails.completedItems}</div>
+                                                            <div className='text-red-900 ' >Rejected Items - {summaryDetails.rejectedItems}</div>
+                                                        </div>
                                                                 <h1 className='mb-2 py-1 px-2  border rounded'>Total Quantity - {summaryDetails.total_quantity}</h1>
                                                                 <h1 className='mb-2 py-1 px-2  border rounded'>Total Amount - ₹{summaryDetails.total_amount} </h1>
                                                             </div>
