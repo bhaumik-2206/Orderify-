@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 function AdminPage() {
     const [orders, setOders] = useState([]);
-    const [showUser, setShowUser] = useState({});
+    const [showUserDetails, setShowUserDetails] = useState({});
     const [changeStatus, setChangeStatus] = useState([]);
     const [isPageLoading, setIsPageLoading] = useState(false);
     const [summaryDetails, setSummaryDetails] = useState({ total_users: '', total_items: '', total_amount: '', total_quantity: '' });
@@ -181,16 +181,16 @@ function AdminPage() {
                                                                     className="font-medium text-indigo-600 hover:text-indigo-500 text-lg"
 
                                                                 >
-                                                                    <div className='flex text-sm sm:text-lg items-center gap-2' onClick={() => setShowUser(pre => !pre[item.product_details._id] && ({ [item.product_details._id]: true }))}>
+                                                                    <div className='flex text-sm sm:text-lg items-center gap-2' onClick={() => setShowUserDetails(pre => !pre[item.product_details._id] && ({ [item.product_details._id]: true }))}>
                                                                         <p>User</p>
-                                                                        <i style={{ transition: '0.2s', transform: `rotate(${!showUser[item.product_details._id] ? 180 : 0}deg)` }} className="fa-solid fa-chevron-up "></i>
+                                                                        <i style={{ transition: '0.2s', transform: `rotate(${!showUserDetails[item.product_details._id] ? 180 : 0}deg)` }} className="fa-solid fa-chevron-up "></i>
                                                                     </div>
                                                                 </button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <div className={`${showUser[item.product_details._id] ? "block" : "hidden"} transition-all duration-300 ease-in-out overflow-hidden`}>
+                                                <div className={`${showUserDetails[item.product_details._id] ? "block" : "hidden"} transition-all duration-300 ease-in-out overflow-hidden`}>
                                                     <ul role="list" className="divide-y divide-gray-100">
                                                         {item.users.map((person, index) => (
                                                             <li key={index} className="bloc sm:flex justify-between gap-x-6 py-2">

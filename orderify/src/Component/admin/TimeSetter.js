@@ -3,7 +3,7 @@ import fetchApi from "../../util/helper";
 import { API_ENDPOINTS } from "../../config/api";
 import ConfirmationModal from '../common/ConfirmationModal';
 
-function TimeSetter() {
+function TimeSetter({onClose}) {
     const [selectedTime, setSelectedTime] = useState({ start_time: "", end_time: "" })
     const [isSetTimeConfShow, setIsSetTimeConfShow] = useState(false);
     useEffect(() => {
@@ -17,9 +17,11 @@ function TimeSetter() {
             await fetchApi({
                 url: API_ENDPOINTS.TIMER, method: "PUT", data: selectedTime, isAuthRequired: true
             })
+            onClose();
         } catch (error) {
             console.log("ERROR: " + error)
         }
+        
     }
     const getTime = async () => {
         try {
@@ -43,7 +45,9 @@ function TimeSetter() {
         <label className='text-white' htmlFor='endTime'>End : </label>
                     <input value={selectedTime.end_time} id='endTime' onChange={(e) => setSelectedTime(pre => ({ ...pre, end_time: e.target.value + ":00" }))} className="border-2 bg-[#374151] text-white ms-2 rounded border-black px-3" type="time" />
         </div>
-                    <button onClick={()=>{setIsSetTimeConfShow(true)}} className="p-1 my-2 px-3 text-white bg-blue-600 hover:bg-blue-700 text-center sm:text-lg text-xs rounded-md cursor-pointer">Set</button>
+                    <button 
+                    disabled={selectedTime.start_time > selectedTime.end_time}
+                     onClick={()=>{setIsSetTimeConfShow(true)}} className="p-1 my-2 px-3 text-white bg-blue-600 hover:bg-blue-700 text-center sm:text-lg text-xs rounded-md cursor-pointer">Set</button>
                 </div>
     </div>
   )

@@ -29,7 +29,6 @@ const ProtectedLogIn = ({ Component }) => {
                     }
                 } else {
                     navigate('/login');
-                    toast.error("token not  found !")
                 }
             } catch (error) {
                 console.error('Invalid token:', error);
