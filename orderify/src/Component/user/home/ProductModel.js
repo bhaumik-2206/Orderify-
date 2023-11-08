@@ -1,8 +1,6 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { Field, Formik } from 'formik'
-import { initialProductAddValue } from '../../../config/InitialValue'
 import { ProductValidation } from '../../../config/Validation'
 import CommonInput from '../../auth/CommonInput'
 import fetchApi from '../../../util/helper'
@@ -12,6 +10,7 @@ import { toast } from 'react-toastify'
 export default function ProductModel({ open, setOpen, fetchData, mode, updateProduct, currentPageRef, setSearch }) {
     const cancelButtonRef = useRef(null);
     const [apiSend, setAPiSend] = useState(false);
+
     const value = updateProduct ? {
         prd_id: updateProduct._id,
         prd_name: updateProduct.prd_name,
@@ -19,6 +18,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
         prd_img: updateProduct.prd_img,
         prd_is_visible: updateProduct ? updateProduct.prd_is_visible : false
     } : null;
+
     const handleSubmit = async (values) => {
         setAPiSend(true);
         let value = {
@@ -31,8 +31,7 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
             ...value,
             prd_img: values.prd_img,
         } : value
-        // if (values.prd_img.trim() === "")
-        //     delete values.prd_img;
+
         try {
             const response = await fetchApi({
                 url: API_ENDPOINTS.PRODUCT_ADD,

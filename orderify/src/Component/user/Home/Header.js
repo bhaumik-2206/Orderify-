@@ -9,33 +9,33 @@ import Timer from './Timer';
 import fetchApi from '../../../util/helper';
 import { API_ENDPOINTS } from '../../../config/api';
 
-const navigationUser = [
+const userNavigation = [
     { name: 'Products', to: '/products', current: true },
     { name: 'Orders', to: '/order', current: false },
 ]
-const navigationAdmin = [
+const adminNavigation = [
     { name: 'Orders', to: '/orders', current: false },
     { name: 'Products', to: '/products', current: false },
 ]
 export default function Header({ role }) {
     const userData = JSON.parse(localStorage.getItem("userData"));
-    const [time, setTime] = useState({ startTime: "", endTime: "" })
+    const [timeData, setTimeData] = useState({ startTime: "", endTime: "" })
     const { cartData, setIsCartOpen, isCartOpen } = useContext(CartDataContext);
     const [isLogoutShow, setIsLogoutShow] = useState(false);
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const navigate = useNavigate();
     const timerRef = useRef(null);
-    const navigation = role === 'admin' ? navigationAdmin : navigationUser;
+    const navigation = role === 'admin' ? adminNavigation : userNavigation;
 
     useEffect(() => {
-        userData.user_role === "user" && getTime();
+        userData.user_role === "user" && fetchTimeData ();
     }, []);
 
-    const getTime = async () => {
+    const fetchTimeData  = async () => {
         try {
             let response = await fetchApi({ url: API_ENDPOINTS.TIMER, method: 'GET', isAuthRequired: true })
             console.log(response.data);
-            setTime({ endTime: response.data.end_time, startTime: response.data.start_time });
+            setTimeData({ endTime: response.data.end_time, startTime: response.data.start_time });
         } catch (error) {
             console.log(error)
         }
@@ -122,7 +122,7 @@ export default function Header({ role }) {
                     <div className=' bg-gray-700  shadow-xl py-1'>
                         <Menu as="div" className="relative px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl flex  justify-end">
                             <div>
-                                <Menu.Button disabled={time.endTime === ""} onClick={() => timerRef.current && timerRef.current.startCountDown()} className="relative flex text-white bg-black rounded px-2 py-1 text-sm">
+                                <Menu.Button disabled={timeData.endTime === ""} onClick={() => timerRef.current && timerRef.current.startCountDown()} className="relative flex text-white bg-black rounded px-2 py-1 text-sm">
                                     Timer
                                 </Menu.Button>
                             </div>
@@ -131,7 +131,7 @@ export default function Header({ role }) {
                             >
                                 <Menu.Items className="absolute top-6 right-90 z-10 mt-2 w-fit  origin-top-right rounded-md bg-gray-700  shadow-lg ring-1 ring-black     ring-opacity-5 focus:outline-none">
                                     <Menu.Item>
-                                        <Timer ref={timerRef} endTime={time.endTime} startTime={time.startTime} />
+                                        <Timer ref={timerRef} endTime={timeData.endTime} startTime={timeData.startTime} />
                                     </Menu.Item>
                                 </Menu.Items>
                             </Transition>
