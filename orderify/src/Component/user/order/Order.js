@@ -1,12 +1,11 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import {  Menu, Transition } from '@headlessui/react'
 import fetchApi from '../../../util/helper';
 import { API_ENDPOINTS } from '../../../config/api';
 import dayjs from 'dayjs'
 import { toast } from 'react-toastify';
 import { CartDataContext } from '../../../context/CartContext';
 import { groupBy, sortBy } from 'lodash';
-import { useNavigate } from 'react-router-dom'
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -16,7 +15,6 @@ const Order = () => {
     const [loading, setLoading] = useState(false);
     const [buyAgainLoading, setBuyAgainLoading] = useState(false);
     const { fetchCart, setIsCartOpen } = useContext(CartDataContext);
-    const navigate = useNavigate();
 
     useEffect(() => {
         fetchUserOrder();
@@ -43,9 +41,6 @@ const Order = () => {
                 setOrders(groupedOrders);
             } else {
                 toast.error('ERROR - Invalid status code');
-            }
-            if (response.message === "jwt expired") {
-                navigate("/login");
             }
         } catch (error) {
             toast.error('Error getting order history');
@@ -147,16 +142,16 @@ const Order = () => {
                                             onClick={() => handleBuyAgain()}
                                             className="absolute right-2 sm:right-8 -top-2 sm:w-auto mx-auto mt-2 bg-indigo-600 sm:ms-auto hover:bg-indigo-700 cursor-pointer flex items-center justify-center rounded-md border border-transparent sm:px-4 px-3 py-1 sm:py-2 text-md sm:text-lg font-medium text-white shadow-sm"
                                         >
-                                            {buyAgainLoading ? <div className="animate-spin me-2"><i className="fa-solid px-[9px] fa-spinner"></i></div> : "order"}
+                                            {buyAgainLoading ? <div className="animate-spin me-2"><i className="fa-solid px-[9px] fa-spinner"></i></div> : "Order"}
                                         </button>
                                     </div>}
                                 </div>
                             </div>
-                            <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2'>
+                            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2'>
                                 {orders[item].map((dateArray, index) => (
                                     <div onClick={() => dateArray.product_details.prd_is_visible && handleCheckBoxChange(dateArray.product_details._id, dateArray.prd_total_qty, item)} key={index}
                                         className={`${buyAgainOrder.find(ele => ele.cartitm_fk_prd_id === dateArray.product_details._id && ele.date === item) ? "bg-green-100 border border-green-700" : "border"} ${!dateArray.product_details.prd_is_visible && "bg-gray-200 text-gray-600 border"} m-2 py-1 rounded cursor-pointer border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center px-2`}>
-                                        <div className="sm:p-1 block text-center sm:text-left sm:flex">
+                                        <div className="sm:p-1 block text-center sm:text-left md:flex">
                                             <div className=" h-28 w-32  sm:mb-0 sm:w-40 sm:block mx-auto sm:h-40 flex-shrink-0 overflow-hidden rounded-md border">
                                                 <img
                                                     src={dateArray.product_details.prd_img}

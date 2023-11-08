@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import fetchApi from '../../util/helper'
 import { API_ENDPOINTS } from '../../config/api'
-import { useNavigate } from 'react-router-dom';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Menu, Transition } from '@headlessui/react'
@@ -17,7 +16,6 @@ function AdminPage() {
     const [loadingInStatus, setLoadingInStatus] = useState(false);
     const [changedStatus, setChangedStatus] = useState("")
     const [show, setShow] = useState(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
         fetchOders();
@@ -48,9 +46,6 @@ function AdminPage() {
             if (response.status === 200) {
                 setOders(response.data)
                 summaryDetailsFill(response.data);
-            }
-            if (response.message === "jwt expired") {
-                navigate("/login");
             }
         } catch (error) {
             console.log(error);

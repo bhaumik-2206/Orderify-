@@ -33,9 +33,6 @@ export default function Cart({ open, setOpen }) {
         let removedItem = cartData.find(ele => ele.cartitm_fk_prd_id._id === data[0]);
         setTotalAmount(pre => type === "all" ? 0 : pre - removedItem.cartitm_fk_prd_id.prd_price * removedItem.cartitm_prd_qty)
       }
-      if (response.message === "jwt expired") {
-        navigate("/login");
-      }
     } catch (error) {
       toast.error("Error to remove the item")
     }
@@ -59,9 +56,6 @@ export default function Cart({ open, setOpen }) {
       setOpen(false);
     } else {
       toast.error("Error to send order");
-    }
-    if (response.message === "jwt expired") {
-      navigate("/login");
     }
     setShow(false);
   }

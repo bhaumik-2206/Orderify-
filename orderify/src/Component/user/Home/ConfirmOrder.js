@@ -20,9 +20,6 @@ const ConfirmOrder = ({ show, setShow, setOpen }) => {
         } else {
             toast.error("Error to send order");
         }
-        if (response.message === "jwt expired") {
-            navigate("/login");
-        }
         setShow(false);
     }
 

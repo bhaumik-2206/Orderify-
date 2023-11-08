@@ -4,7 +4,6 @@ import { API_ENDPOINTS } from "../../../config/api";
 import { toast } from "react-toastify";
 import { CartDataContext } from "../../../context/CartContext";
 import PaginationComponent from "./PaginationComponent";
-import { useNavigate } from "react-router-dom";
 import "react-loading-skeleton/dist/skeleton.css";
 import ProductModel from './ProductModel'
 import ConfirmationModal from "../../common/ConfirmationModal";
@@ -41,9 +40,6 @@ function Products() {
 
     // User data
     const userData = JSON.parse(localStorage.getItem("userData"));
-
-    // Navigation
-    const navigate = useNavigate();
 
     // handle serch and product fetch 
     useEffect(() => {
@@ -103,9 +99,6 @@ function Products() {
             } else {
                 setProducts([])
             }
-            if (response.message === "jwt expired") {
-                navigate("/login");
-            }
         } catch (error) {
             console.log(error);
         } finally {
@@ -132,9 +125,6 @@ function Products() {
                     },
                 ]);
                 setTotalAmount((pre) => pre + products[index].prd_price);
-            }
-            if (response.message === "jwt expired") {
-                navigate("/login");
             }
             if (response.status === 400) {
                 toast.error("Maxinum Quantity");
