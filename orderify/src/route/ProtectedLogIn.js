@@ -22,11 +22,11 @@ const ProtectedLogIn = ({ Component }) => {
                     // setAuth(true);
                     setUserData(decodedToken);
 
-                    if (storedUserData.user_role === 'admin') {
-                        navigate('/orders');
-                    } else {
-                        navigate('/products');
-                    }
+                    // if (storedUserData.user_role === 'admin') {
+                    //     navigate('/orders');
+                    // } else {
+                    //     navigate('/products');
+                    // }
                 } else {
                     navigate('/login');
                 }
