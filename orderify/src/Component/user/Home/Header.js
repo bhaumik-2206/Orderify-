@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from 'react'
+import { Fragment, useContext, useEffect, useRef, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import LogOut from '../profile/LogOut';
@@ -6,6 +6,8 @@ import Cart from './Cart';
 import { CartDataContext } from '../../../context/CartContext';
 import ConfirmationModal from '../../common/ConfirmationModal';
 import Timer from './Timer';
+import fetchApi from '../../../util/helper';
+import { API_ENDPOINTS } from '../../../config/api';
 
 const navigationUser = [
     { name: 'Products', to: '/products', current: true },
@@ -17,11 +19,28 @@ const navigationAdmin = [
 ]
 export default function Header({ role }) {
     const userData = JSON.parse(localStorage.getItem("userData"));
+    const [time, setTime] = useState({ startTime: "", endTime: "" })
     const { cartData, setIsCartOpen, isCartOpen } = useContext(CartDataContext);
     const [isLogoutShow, setIsLogoutShow] = useState(false);
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const navigate = useNavigate();
+    const timerRef = useRef(null);
     const navigation = role === 'admin' ? navigationAdmin : navigationUser;
+
+    useEffect(() => {
+        userData.user_role === "user" && getTime();
+    }, []);
+
+    const getTime = async () => {
+        try {
+            let response = await fetchApi({ url: API_ENDPOINTS.TIMER, method: 'GET', isAuthRequired: true })
+            console.log(response.data);
+            setTime({ endTime: response.data.end_time, startTime: response.data.start_time });
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-10">
             <>
@@ -103,7 +122,7 @@ export default function Header({ role }) {
                     <div className=' bg-gray-700  shadow-xl py-1'>
                         <Menu as="div" className="relative px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl flex  justify-end">
                             <div>
-                                <Menu.Button className="relative flex text-white bg-black rounded px-2 py-1 text-sm">
+                                <Menu.Button disabled={time.endTime === ""} onClick={() => timerRef.current && timerRef.current.startCountDown()} className="relative flex text-white bg-black rounded px-2 py-1 text-sm">
                                     Timer
                                 </Menu.Button>
                             </div>
@@ -112,7 +131,7 @@ export default function Header({ role }) {
                             >
                                 <Menu.Items className="absolute top-6 right-90 z-10 mt-2 w-fit  origin-top-right rounded-md bg-gray-700  shadow-lg ring-1 ring-black     ring-opacity-5 focus:outline-none">
                                     <Menu.Item>
-                                        <Timer />
+                                        <Timer ref={timerRef} endTime={time.endTime} startTime={time.startTime} />
                                     </Menu.Item>
                                 </Menu.Items>
                             </Transition>

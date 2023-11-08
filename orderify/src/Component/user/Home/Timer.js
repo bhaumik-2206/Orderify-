@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
 
-const Timer = () => {
+const Timer = forwardRef(({ endTime, startTime }, ref) => {
   const [countDownTime, setCountDownTime] = useState({
     hours: "00",
     minutes: "00",
@@ -8,12 +8,18 @@ const Timer = () => {
   });
   const [isShopOpen, setIsShopOpen] = useState(true);
 
+  useImperativeHandle(ref, () => ({
+    startCountDown: startCountDown,
+  }));
+
   const getTimeDifference = () => {
+
     const currentDate = new Date();
     const targetDate = new Date();
-    targetDate.setHours(12, 30, 0); // Set the target time
+    targetDate.setHours(endTime.split(":")[0], endTime.split(":")[1], endTime.split(":")[2]); // Set the target time
     if (currentDate > targetDate) {
       targetDate.setDate(targetDate.getDate() + 1);
+      targetDate.setHours(startTime.split(":")[0], startTime.split(":")[1], startTime.split(":")[2])
       setIsShopOpen(false);
     }
     const timeDifference = targetDate - currentDate;
@@ -45,7 +51,7 @@ const Timer = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-  //   console.log('object')
+
   useEffect(() => {
     startCountDown();
   }, [startCountDown]);
@@ -58,17 +64,15 @@ const Timer = () => {
             <div className="text-white">Status</div>
             <div className="text-white">---{">"}</div>
             <div
-              className={`${
-                isShopOpen ? "bg-green-600" : "bg-red-600"
-              } text-white font-semibold px-2 rounded w-fit`}
+              className={`${isShopOpen ? "bg-green-600" : "bg-red-600"
+                } text-white font-semibold px-2 rounded w-fit`}
             >
               {isShopOpen ? "Open" : "Closed"}
             </div>
           </div>
           <div
-            className={`font-semibold mb-1 ${
-              !isShopOpen ? "text-green-600" : "text-red-600"
-            }`}
+            className={`font-semibold mb-1 ${!isShopOpen ? "text-green-600" : "text-red-600"
+              }`}
           >
             {isShopOpen ? "Closing In :-" : "Opening In :-"}
           </div>
@@ -91,7 +95,7 @@ const Timer = () => {
               </div>
             ))}
 
-             {/* clock------------------------  */}
+            {/* clock------------------------  */}
 
             <div className="flex flex-col shadow p-2 bg-gray-700 rounded -m-0.5 -mx-2 relative">
               <div className="h-10 w-10 sm:w-12 sm:h-12 lg:w-12 lg:h-12 flex justify-between items-center bg-[#111827] rounded-lg">
@@ -99,19 +103,19 @@ const Timer = () => {
                 <span className="relative lg:text-lg sm:text-6xl text-3xl font-semibold text-white">
 
 
-                    {/* clock wise */}
-                    <div style={{ transform: `rotate(${new Date().getHours() * 30}deg)`, transformOrigin: 'bottom center' }} className={`bg-[#B45309] w-1 h-2.5 sm:h-3  rounded-sm absolute bottom-1/2 `}></div>
-                    <div style={{ transform: `rotate(${new Date().getMinutes() * 6}deg)`, transformOrigin: 'bottom center' }} className={`bg-white w-1 h-3 sm:h-4 rounded absolute bottom-1/2 `}></div>
-                    <div style={{ transform: `rotate(${new Date().getSeconds() * 6}deg)`, transformOrigin: 'bottom center'}} className={`bg-yellow-400  w-0.5 bottom-1/2  h-4 sm:h-5 rounded absolute`}></div>
-                    <div className={`bg-yellow-400 translate-y-1/2 w-1 bottom-1/2  h-1 sm:h-1 rounded-full absolute`}></div>
+                  {/* clock wise */}
+                  <div style={{ transform: `rotate(${new Date().getHours() * 30}deg)`, transformOrigin: 'bottom center' }} className={`bg-[#B45309] w-1 h-2.5 sm:h-3  rounded-sm absolute bottom-1/2 `}></div>
+                  <div style={{ transform: `rotate(${new Date().getMinutes() * 6}deg)`, transformOrigin: 'bottom center' }} className={`bg-white w-1 h-3 sm:h-4 rounded absolute bottom-1/2 `}></div>
+                  <div style={{ transform: `rotate(${new Date().getSeconds() * 6}deg)`, transformOrigin: 'bottom center' }} className={`bg-yellow-400  w-0.5 bottom-1/2  h-4 sm:h-5 rounded absolute`}></div>
+                  <div className={`bg-yellow-400 translate-y-1/2 w-1 bottom-1/2  h-1 sm:h-1 rounded-full absolute`}></div>
 
-                    {/* anti-clock wise */}
-                    {/* <div style={{ transform: `rotate(${countDownTime.hours * 30}deg)`, transformOrigin: 'bottom center' }} className={`bg-[#B45309] w-1 h-2.5 sm:h-3  rounded-sm absolute bottom-1/2 `}></div>
+                  {/* anti-clock wise */}
+                  {/* <div style={{ transform: `rotate(${countDownTime.hours * 30}deg)`, transformOrigin: 'bottom center' }} className={`bg-[#B45309] w-1 h-2.5 sm:h-3  rounded-sm absolute bottom-1/2 `}></div>
                     <div style={{ transform: `rotate(${countDownTime.minutes * 6}deg)`, transformOrigin: 'bottom center' }} className={`bg-white w-1 h-3 sm:h-4 rounded absolute bottom-1/2 `}></div>
                     <div style={{ transform: `rotate(${countDownTime.seconds * 6}deg)`, transformOrigin: 'bottom center'}} className={`bg-yellow-400  w-0.5 bottom-1/2  h-4 sm:h-5 rounded absolute`}></div>
                     <div className={`bg-yellow-400 translate-y-1/2 w-1 bottom-1/2  h-1 sm:h-1 rounded-full absolute`}></div> */}
 
-                  </span>
+                </span>
                 <div className="relative h-1.5 w-1.5 sm:h-2 sm:w-2 -right-[6px] rounded-full bg-[#B45309]"></div>
               </div>
               <span className="text-white text-xs sm:text-sm text-center capitalize">
@@ -124,6 +128,6 @@ const Timer = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Timer;

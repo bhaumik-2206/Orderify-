@@ -16,12 +16,6 @@ export default function Cart({ open, setOpen }) {
   const [show, setShow] = useState(false);
   const { cartData, setCartData, totalAmount, changeQuantityContext, setTotalAmount } = useContext(CartDataContext);
 
-  useEffect(() => {
-    if (!open) {
-      setShow(false);
-    }
-  }, [open])
-
   const removeData = async (data, type) => {
     if (type === "all")
       setRemoveAllOrder(true)
@@ -36,7 +30,6 @@ export default function Cart({ open, setOpen }) {
     } catch (error) {
       toast.error("Error to remove the item")
     }
-
     setRemoveAllOrder(false);
   }
 
@@ -57,7 +50,6 @@ export default function Cart({ open, setOpen }) {
     } else {
       toast.error("Error to send order");
     }
-    setShow(false);
   }
 
 

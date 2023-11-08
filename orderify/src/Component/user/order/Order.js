@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import {  Menu, Transition } from '@headlessui/react'
+import { Menu, Transition } from '@headlessui/react'
 import fetchApi from '../../../util/helper';
 import { API_ENDPOINTS } from '../../../config/api';
 import dayjs from 'dayjs'
@@ -22,20 +22,16 @@ const Order = () => {
     const fetchUserOrder = async () => {
         setLoading(true);
         try {
-            const date = dayjs();
             const response = await fetchApi({
-                url: API_ENDPOINTS.USER_ORDER,
-                method: 'POST',
+                url: API_ENDPOINTS.USER_ORDER, method: 'POST',
                 data: {
-                    start_date: date.subtract(10, 'day').format('DD-MM-YYYY'),
-                    end_date: date.format('DD-MM-YYYY')
-                },
-                isAuthRequired: true
+                    start_date: dayjs().subtract(10, 'day').format('DD-MM-YYYY'),
+                    end_date: dayjs().format('DD-MM-YYYY')
+                }, isAuthRequired: true
             });
 
             if (response.status === 200) {
                 const order = response.data;
-
                 const sortedOrders = sortBy(order, (element) => new Date(element.createdAt)).reverse();
                 const groupedOrders = groupBy(sortedOrders, (element) => new Date(element.createdAt).toDateString());
                 setOrders(groupedOrders);
@@ -70,7 +66,7 @@ const Order = () => {
         let findDate = buyAgainOrder.find(ele => ele.cartitm_fk_prd_id === productId && ele.date !== item);
         if (findDate) {
             toast.error("Order already selected")
-            return
+            return;
         }
         setBuyAgainOrder(pre => findOrder && !findOrderInAgain ?
             [...pre, { cartitm_fk_prd_id: productId, cartitm_prd_qty: quantity > 5 ? 5 : quantity, date: item }]

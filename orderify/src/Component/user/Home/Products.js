@@ -7,7 +7,7 @@ import PaginationComponent from "./PaginationComponent";
 import "react-loading-skeleton/dist/skeleton.css";
 import ProductModel from './ProductModel'
 import ConfirmationModal from "../../common/ConfirmationModal";
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Menu, Transition } from '@headlessui/react'
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -41,6 +41,9 @@ function Products() {
     // User data
     const userData = JSON.parse(localStorage.getItem("userData"));
 
+    //Time 
+    const [selectedTime, setSelectedTime] = useState({ start_time: "", end_time: "" })
+
     // handle serch and product fetch 
     useEffect(() => {
         let timer
@@ -57,6 +60,11 @@ function Products() {
         }
         return () => clearTimeout(timer);
     }, [search.trim()]);
+
+    useEffect(() => {
+        userData.user_role === "admin" && getTime();
+    }, [])
+
 
     //PAGINATION FUNCTION
     const handlePageClick = (event) => {
@@ -108,6 +116,7 @@ function Products() {
 
     //  add prodect cart  user function 
     const orderProduct = async (itemData, id) => {
+        toggleLoadingState(id, true);
         try {
             const response = await fetchApi({
                 url: API_ENDPOINTS.CART,
@@ -125,9 +134,6 @@ function Products() {
                     },
                 ]);
                 setTotalAmount((pre) => pre + products[index].prd_price);
-            }
-            if (response.status === 400) {
-                toast.error("Maxinum Quantity");
             }
         } catch (error) {
             console.log("Error To Fetch API");
@@ -147,20 +153,21 @@ function Products() {
     };
 
     const toggleLoadingState = (productId, isLoading) => {
-        setLoadingStates((prevState) => ({
-            ...prevState,
-            [productId]: isLoading,
-        }));
+        setLoadingStates((prevState) => ({ ...prevState, [productId]: isLoading, }));
+    };
+
+    // multiple product select to delete functionality
+    const toggleProductSelection = (productId) => {
+        setSelectedProducts((prevSelected) => prevSelected.includes(productId) ? prevSelected.filter((id) => id !== productId) : [...prevSelected, productId]);
     };
 
     // search product functionality
     const handleSearch = async () => {
-        let Objdata = {
+        await fetchData({
             limit: itemsPerPage,
             page: 1,
             search
-        }
-        fetchData(Objdata);
+        });
     }
     // delete product functionality
     const deleteSelectedProducts = async (id) => {
@@ -172,13 +179,9 @@ function Products() {
                 data: { prd_ids: id ? [id] : selectedProducts }
             });
             if (response.status === 200) {
-                await fetchData({
-                    limit: 5,
-                    page: currentPageRef.current,
-                });
+                await fetchData({ limit: 5, page: currentPageRef.current });
                 toast.info("Deleted selected products");
                 setSelectedProducts([]);
-
             }
         } catch (error) {
             console.log(error);
@@ -187,20 +190,35 @@ function Products() {
         }
     };
 
-    // multiple product select to delete functionality
-    const toggleProductSelection = (productId) => {
-        setSelectedProducts((prevSelected) => {
-            if (prevSelected.includes(productId)) {
-                return prevSelected.filter((id) => id !== productId);
-            } else {
-                return [...prevSelected, productId];
+    const getTime = async () => {
+        try {
+            let response = await fetchApi({ url: API_ENDPOINTS.TIMER, method: "GET", isAuthRequired: true })
+            if (response.status === 200) {
+                setSelectedTime(pre => ({ start_time: response.data.start_time, end_time: response.data.end_time }))
             }
-        });
-    };
+        } catch (error) {
+            console.log("ERROR: " + error)
+        }
+    }
+
+    const handleChangeTime = async () => {
+        try {
+            await fetchApi({
+                url: API_ENDPOINTS.TIMER, method: "PUT", data: selectedTime, isAuthRequired: true
+            })
+        } catch (error) {
+            console.log("ERROR: " + error)
+        }
+    }
 
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-screen-xl sm:px-6 lg:px-8">
+                {userData.user_role === "admin" && <div className="text-center">
+                    <input value={selectedTime.start_time} onChange={(e) => setSelectedTime(pre => ({ ...pre, start_time: e.target.value + ":00" }))} className="border-2 border-black px-3" type="time" />
+                    <input value={selectedTime.end_time} onChange={(e) => setSelectedTime(pre => ({ ...pre, end_time: e.target.value + ":00" }))} className="border-2 border-black px-3" type="time" />
+                    <button onClick={handleChangeTime} className="px-8 py-1 text-white bg-blue-600 hover:bg-blue-700 text-center sm:text-lg text-xs font-bold rounded-md cursor-pointer">Set</button>
+                </div>}
                 <div className="flex items-center justify-center mb-2 sm:mb-3 w-72 sm:w-1/2 mx-3 sm:mx-auto relative border border-black rounded-lg my-2 sm:my-5 overflow-hidden">
                     <label htmlFor="search" className="bg-black cursor-pointer border-black border text-white py-2 px-4 ">
                         <i className="fas fa-search"></i>
@@ -259,10 +277,9 @@ function Products() {
                                 key={product._id}
                                 className={`flex relative flex-col pb-2  justify-between rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : "border-2"
                                     } ${!product.prd_is_visible ? "bg-gray-300" : "bg-white"}`} >
-                                <div >
+                                <div>
                                     <div
-                                        // onClick={ }
-                                        className="relative w-34 h-34 sm:w-60 sm:h-60 mx-auto pt-1">
+                                        className="relative w-34 h-34 sm:w-[220px] sm:h-60 mx-auto pt-1">
                                         <img
                                             src={product.prd_img}
                                             onError={(e) => {
@@ -326,10 +343,7 @@ function Products() {
                                         ) : (
                                             <div>
                                                 <button
-                                                    onClick={() => {
-                                                        addItem(product._id);
-                                                        toggleLoadingState(product._id, true);
-                                                    }}
+                                                    onClick={() => addItem(product._id)}
                                                     className="text-blue-700 text-center block w-full font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-md hover:bg-slate-100"
                                                     disabled={loadingStates[product._id]}
                                                 >

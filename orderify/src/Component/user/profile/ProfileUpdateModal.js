@@ -6,7 +6,6 @@ import CommonInput from '../../auth/CommonInput'
 import fetchApi from '../../../util/helper'
 import { API_ENDPOINTS } from '../../../config/api'
 import { toast } from 'react-toastify'
-import { useEffect } from 'react'
 
 export default function ProfileUpdateModal({ show, setShow, userData, setUserData }) {
     const cancelButtonRef = useRef(null);

@@ -91,7 +91,7 @@ function AdminPage() {
                                 <Skeleton count={4} className="w-max h-44 sm:h-36 mb-3" />
                             </div> : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> :
                                 <>
-                                    <div className='flex items-center justify-between mb-2'>
+                                    <div className='sticky z-50 flex items-center justify-between mb-2'>
                                         <div className='sm:px-3'>
                                             <p onClick={() => handleChange({ type: "all" })}
                                                 className='border-2 p-1 font-semibold text-blue-600 border-blue-700 rounded hover:text-blue-500 cursor-pointer text-sm sm:text-lg sm:px-3 sm:ms-6'
@@ -101,7 +101,6 @@ function AdminPage() {
                                             {changeStatus.length > 0 && <div className="flex justify-between sm:pb-4">
                                                 {/* <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("pending") }} className={`sm:w-28 rounded-md px-3 py-2 text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-blue-600 border-2 text-blue-600 hover:bg-blue-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Pending</button> */}
                                                 <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("completed") }} className={`p-1 sm:w-28 rounded-md sm:px-3 sm:py-2 mr-2 text-sm md:text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-green-600 border-2 text-green-600 hover:bg-green-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Accept</button>
-
                                                 <button disabled={changeStatus.length === 0 || loadingInStatus} onClick={() => { setShow(true); setChangedStatus("rejected") }} className={`p-1 sm:w-28 rounded-md sm:px-3 sm:py-2 text-sm md:text-md font-semibold shadow-sm sm:ml-3 ${changeStatus.length > 0 ? "border-red-600 border-2 text-red-600 hover:bg-red-600 hover:text-white transition-all" : "bg-gray-600 text-white"}`}>Reject</button>
                                             </div>}
                                             <Menu as="div" className="relative px-3  mx-auto max-w-screen-xl flex justify-end sm:pb-4">
@@ -173,8 +172,8 @@ function AdminPage() {
                                                             </div>
                                                         </div>
                                                         <div className="flex  items-center justify-between text-sm">
-                                                            
-                                                        <p className={`${item.order_status === "completed" && "bg-green-500"} ${item.order_status === "rejected" && "bg-red-500"} bg-gray-500 inline-block sm:mt-3 py-1 px-2 rounded text-white sm:text-sm text-xs`}>{item.order_status}</p>
+
+                                                            <p className={`${item.order_status === "completed" && "bg-green-500"} ${item.order_status === "rejected" && "bg-red-500"} bg-gray-500 inline-block sm:mt-3 py-1 px-2 rounded text-white sm:text-sm text-xs`}>{item.order_status}</p>
 
                                                             <div className="flex">
                                                                 <button
