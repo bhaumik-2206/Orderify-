@@ -55,10 +55,11 @@ function AdminPage() {
 
     const handleChange = ({ productId, type }) => {
         if (type === "all") {
+            let pendingData = orders.map(ele => ele.order_status === "pending" && ele.id);
             if (changeStatus.length === orders.length) {
                 setChangeStatus([]);
             } else {
-                setChangeStatus(orders.map(ele => ele.id))
+                setChangeStatus(pendingData);
             }
         } else {
             setChangeStatus(pre => pre.includes(productId) ? pre.filter(ele => ele !== productId) : [...pre, productId])
@@ -83,7 +84,6 @@ function AdminPage() {
     return (
         <div className="inset-0 overflow-hidden mx-auto max-w-7xl">
             <div className="flex-1 overflow-y-auto px-4 py-1 sm:py-6 sm:px-6">
-                {/* {(!isPageLoading && orders.length !== 0) ?  : null} */}
                 <div className="mt-2">
                     <div className="flow-root">
                         <div>
@@ -91,10 +91,10 @@ function AdminPage() {
                                 <Skeleton count={4} className="w-max h-44 sm:h-36 mb-3" />
                             </div> : orders.length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Empty Orders List</h1> :
                                 <>
-                                    <div className='sticky z-50 flex items-center justify-between mb-2'>
+                                    <div className='flex items-center justify-between mb-2'>
                                         <div className='sm:px-3'>
                                             <p onClick={() => handleChange({ type: "all" })}
-                                                className='border-2 p-1 font-semibold text-blue-600 border-blue-700 rounded hover:text-blue-500 cursor-pointer text-sm sm:text-lg sm:px-3 sm:ms-6'
+                                                className='sm:w-28 text-center rounded-md p-1 sm:px-3 sm:py-2 text-sm font-semibold shadow-sm sm:ml-3 border-blue-600 border-2 text-blue-600 hover:bg-blue-600 hover:text-white transition-all'
                                             >Select All</p>
                                         </div>
                                         <div className='flex'>
@@ -135,25 +135,15 @@ function AdminPage() {
                                     <ul role="list" className="-my-6 divide-y divide-gray-200 py-4">
                                         {orders.map((item, index) => (
                                             <div key={index}>
-                                                <li className="flex py-4  sm:py-6 sm:items-center">
-                                                    <div className='sm:px-3 pr-1'>
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={changeStatus.includes(item.id)}
-                                                            className='w-[14px] h-[14px] cursor-pointer'
-                                                            onChange={() => handleChange({ productId: item.id })}
-                                                            name="" id="" />
-                                                    </div>
+                                                <li onClick={() => item.order_status === "pending" ? handleChange({ productId: item.id }) : toast.error("Order status already done")}
+                                                    className={`${changeStatus.includes(item.id) ? "border-2 border-green-700 bg-green-100" : "border-2 border-white"} cursor-pointer my-2 flex p-4 sm:items-center`}>
                                                     <div className="h-28 w-20 mx-auto sm:h-36 sm:w-36 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 mb-4 sm:mb-0">
                                                         <img
                                                             src={item.product_details.prd_img} alt="Item"
-                                                            onError={(e) => {
-                                                                e.target.src = 'images/download.png';
-                                                            }}
+                                                            onError={(e) => e.target.src = 'images/download.png'}
                                                             className="h-full w-full object-contain sm:object-cover object-center"
                                                         />
                                                     </div>
-
                                                     <div className="sm:ml-7 ml-3 flex flex-1 flex-col">
                                                         <div>
                                                             <div className="block sm:flex justify-between text-base font-medium text-gray-900 ">
@@ -162,27 +152,21 @@ function AdminPage() {
                                                                     <p className='text-lg text-ellipsis overflow-hidden sm:text-xl'>{item.product_details.prd_name}</p>
                                                                     <p>₹ {item.product_details.prd_price}/item</p>
                                                                     <p className="sm:text-lg text-sm">Quantity: <b>{item.prd_total_qty}</b></p>
-
-
                                                                 </div>
-
                                                                 <div className='w-full text-left sm:text-right sm:w-1/2'>
                                                                     <p className='text-md sm:text-lg'>Total: ₹ <b className='text-md sm:text-lg'>{item.prd_total_amount}</b></p>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="flex  items-center justify-between text-sm">
-
+                                                        <div className="flex items-center justify-between text-sm">
                                                             <p className={`${item.order_status === "completed" && "bg-green-500"} ${item.order_status === "rejected" && "bg-red-500"} bg-gray-500 inline-block sm:mt-3 py-1 px-2 rounded text-white sm:text-sm text-xs`}>{item.order_status}</p>
-
                                                             <div className="flex">
                                                                 <button
                                                                     type="button"
                                                                     className="font-medium text-indigo-600 hover:text-indigo-500 text-lg"
-
                                                                 >
-                                                                    <div className='flex text-sm sm:text-lg items-center gap-2' onClick={() => setShowUserDetails(pre => !pre[item.product_details._id] && ({ [item.product_details._id]: true }))}>
-                                                                        <p>User</p>
+                                                                    <div className='flex text-sm sm:text-lg items-center gap-2' onClick={(e) => { setShowUserDetails(pre => !pre[item.product_details._id] && ({ [item.product_details._id]: true })); e.stopPropagation(); }}>
+                                                                        <p>Users</p>
                                                                         <i style={{ transition: '0.2s', transform: `rotate(${!showUserDetails[item.product_details._id] ? 180 : 0}deg)` }} className="fa-solid fa-chevron-up "></i>
                                                                     </div>
                                                                 </button>

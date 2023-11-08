@@ -1,4 +1,4 @@
-import { useContext,  useState } from "react";
+import { useContext, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import fetchApi from "../../../util/helper.js";
 import { API_ENDPOINTS } from "../../../config/api.js";
@@ -41,12 +41,15 @@ export default function Cart({ open, setOpen }) {
 
   const handleOrderSubmit = async () => {
     const response = await fetchApi({ url: API_ENDPOINTS.ORDER, method: "POST", isAuthRequired: true })
+    console.log(response)
     if (response.status === 200) {
       toast.success("Order sent successfully");
       setCartData([]);
       setTotalAmount(0);
       navigate("/order");
       setOpen(false);
+    } else if (response.status === "403") {
+      toast.error(response.message);
     } else {
       toast.error("Error to send order");
     }

@@ -50,7 +50,7 @@ function Products() {
         if (search) {
             timer = setTimeout(() => {
                 handleSearch();
-            }, 300);
+            }, 500);
         } else {
             fetchData({
                 limit: itemsPerPage,
@@ -214,20 +214,17 @@ function Products() {
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-screen-xl sm:px-6 lg:px-8">
-                {/* {userData.user_role === "admin" && <div className="text-center">
-                    <input value={selectedTime.start_time} onChange={(e) => setSelectedTime(pre => ({ ...pre, start_time: e.target.value + ":00" }))} className="border-2 border-black px-3" type="time" />
-                    <input value={selectedTime.end_time} onChange={(e) => setSelectedTime(pre => ({ ...pre, end_time: e.target.value + ":00" }))} className="border-2 border-black px-3" type="time" />
-                    <button onClick={handleChangeTime} className="px-8 py-1 text-white bg-blue-600 hover:bg-blue-700 text-center sm:text-lg text-xs font-bold rounded-md cursor-pointer">Set</button>
-                </div>} */}
-                <div className="flex items-center justify-center mb-2 sm:mb-3 w-72 sm:w-1/2 mx-3 sm:mx-auto relative border border-black rounded-lg my-2 sm:my-5 overflow-hidden">
-                    <label htmlFor="search" className="bg-black cursor-pointer border-black border text-white py-2 px-4 ">
-                        <i className="fas fa-search"></i>
-                    </label>
-                    <input type="text" id="search"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="w-full py-2 px-4 text-black bg-white border border-black rounded-r-lg focus:outline-none focus:ring focus:border-blue-300"
-                        placeholder="Search..." />
+                <div className="px-4">
+                    <div className="flex items-center justify-center mb-2 sm:mb-3 w-full sm:w-1/2 sm:mx-auto relative border border-black rounded-lg my-2 sm:my-5 overflow-hidden">
+                        <label htmlFor="search" className="bg-black cursor-pointer border-black border text-white py-2 px-4 ">
+                            <i className="fas fa-search"></i>
+                        </label>
+                        <input type="text" id="search"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="w-full py-2 px-4 text-black bg-white border border-black rounded-r-lg focus:outline-none focus:ring focus:border-blue-300"
+                            placeholder="Search..." />
+                    </div>
                 </div>
                 {userData.user_role === "admin" && <div className="flex px-2 justify-between items-center ">
                     <div>
