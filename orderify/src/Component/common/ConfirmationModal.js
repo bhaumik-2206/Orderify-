@@ -6,6 +6,14 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const values = {
+        setTime:{
+            title:'Set Time',
+            message:'Are you sure you want to set time',
+            button:'Set',
+            color: "bg-sky-600",
+            colorHover: "hover:bg-sky-500",
+            rounded:"bg-sky-100",
+        },
         delete: {
             title: "Invisible Item",
             message: "Are you sure you want to invisible this product?",

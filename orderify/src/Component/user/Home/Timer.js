@@ -16,12 +16,27 @@ const Timer = forwardRef(({ endTime, startTime }, ref) => {
 
     const currentDate = new Date();
     const targetDate = new Date();
+    const startDate = new Date();
+    
     targetDate.setHours(endTime.split(":")[0], endTime.split(":")[1], endTime.split(":")[2]); // Set the target time
-    if (currentDate > targetDate) {
-      targetDate.setDate(targetDate.getDate() + 1);
+    startDate.setHours(startTime.split(":")[0], startTime.split(":")[1], startTime.split(":")[2]); // Set the target time
+
+    // console.log(startDate)
+    // if(currentDate > targetDate)
+    if(currentDate < startDate){
+      // targetDate.setDate(targetDate.getDate());
       targetDate.setHours(startTime.split(":")[0], startTime.split(":")[1], startTime.split(":")[2])
       setIsShopOpen(false);
+    }else{
+      if (currentDate > targetDate) {
+        targetDate.setDate(targetDate.getDate() + 1);
+        targetDate.setHours(startTime.split(":")[0], startTime.split(":")[1], startTime.split(":")[2])
+        setIsShopOpen(false);
+      }else{
+        setIsShopOpen(true)
+      }
     }
+
     const timeDifference = targetDate - currentDate;
 
     const hours =

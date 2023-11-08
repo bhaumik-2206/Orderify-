@@ -8,6 +8,7 @@ import ConfirmationModal from '../../common/ConfirmationModal';
 import Timer from './Timer';
 import fetchApi from '../../../util/helper';
 import { API_ENDPOINTS } from '../../../config/api';
+import TimeSetter from '../../admin/TimeSetter';
 
 const navigationUser = [
     { name: 'Products', to: '/products', current: true },
@@ -118,12 +119,12 @@ export default function Header({ role }) {
                         </div>
                     </div>
                 </div>
-                {role === "user" ?
+                {/* {role === "user" ? */}
                     <div className=' bg-gray-700  shadow-xl py-1'>
-                        <Menu as="div" className="relative px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl flex  justify-end">
+                        <Menu as="div" className="relative z-50 px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl flex  justify-end">
                             <div>
-                                <Menu.Button disabled={time.endTime === ""} onClick={() => timerRef.current && timerRef.current.startCountDown()} className="relative flex text-white bg-black rounded px-2 py-1 text-sm">
-                                    Timer
+                                <Menu.Button  onClick={() => timerRef.current && timerRef.current.startCountDown()} className="relative flex text-white bg-black rounded px-2 py-1 text-sm">
+                                    {role !== 'admin' ? 'Timer' : 'Set Time'}
                                 </Menu.Button>
                             </div>
                             <Transition
@@ -131,13 +132,15 @@ export default function Header({ role }) {
                             >
                                 <Menu.Items className="absolute top-6 right-90 z-10 mt-2 w-fit  origin-top-right rounded-md bg-gray-700  shadow-lg ring-1 ring-black     ring-opacity-5 focus:outline-none">
                                     <Menu.Item>
+                                        {role === 'admin' ? <TimeSetter /> : 
                                         <Timer ref={timerRef} endTime={time.endTime} startTime={time.startTime} />
+                                        }
                                     </Menu.Item>
                                 </Menu.Items>
                             </Transition>
                         </Menu>
-                    </div> : null
-                }
+                    </div>
+                {/* } */}
                 {isOpenMenu &&
                     <div className='block sm:hidden space-y-1 px-2 pb-3 pt-2'>
                         {navigation.map((item, index) => (
