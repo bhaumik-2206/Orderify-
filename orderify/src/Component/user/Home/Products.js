@@ -67,24 +67,21 @@ function Products() {
 
 
     //PAGINATION FUNCTION
-    const handlePageClick = (event) => {
-        const newOffset =
-            (event.selected * itemsPerPage) % data.total_products;
+    const handlePageClick = async (event) => {
+        const newOffset = (event.selected * itemsPerPage) % data.total_products;
         setItemOffset(newOffset);
-        const pageObj = search ? {
-            limit: itemsPerPage,
-            page: Number(event.selected + 1),
-            search
-        } : {
-            limit: itemsPerPage,
-            page: Number(event.selected + 1),
+
+        const newPage = Number(event.selected + 1);
+        console.log(newPage, currentPageRef.current)
+        if (newPage !== currentPageRef.current) {
+            // Check if the selected page is different from the current page
+            const pageObj = search
+                ? { limit: itemsPerPage, page: newPage, search }
+                : { limit: itemsPerPage, page: newPage };
+            fetchData(pageObj);
+            setLoading(true);
+            currentPageRef.current = newPage;
         }
-        fetchData(pageObj);
-        currentPageRef.current = event.selected + 1;
-        setLoading(true);
-        console.log(newOffset + ' newofset')
-        console.log(itemOffset + ' itemofset')
-        console.log(currentPageRef.current + ' curr')
     };
 
     //open  product  add and edit model 
@@ -417,9 +414,7 @@ function Products() {
                     <div className=" fixed xl:static bottom-0 w-full xl:shadow-none shadow-[0_35px_60px_-15px_rgba(0,0,0,0.7)] bg-white flex justify-between items-center px-3 sm:pt-0 pt-2 flex-col md:flex-row max-w-7xl mx-auto sm:px-8 ">
 
                         <div className="sm:text-lg text-sm ">
-                            {search ?
-                                <p>Showing  {data.total_products} results</p> :
-                                <p>
+                            <p>
                                 Showing{" "}
                                 {currentPageRef.current > 1
                                     ? (currentPageRef.current - 1) * itemsPerPage + 1
@@ -431,7 +426,6 @@ function Products() {
                                 )}{" "}
                                 of {data.total_products} results
                             </p>
-                            }
                         </div>
                         <PaginationComponent
                             handlePageClick={handlePageClick}
