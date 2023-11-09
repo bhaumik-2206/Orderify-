@@ -29,10 +29,10 @@ function AdminPage() {
                     userIds.includes(user.user_data._id) || userIds.push(user.user_data._id)
                 })
             })
-            console.log(userIds)
+            // console.log(userIds)
             return userIds
         }
-        console.log(data)
+        // console.log(data)
         let user = findUniqueUsers(data).length
         let items = data.length
         let pendingItems = data.reduce((total, item) => total + (item.order_status == "pending" ? 1 : 0), 0)
@@ -40,7 +40,7 @@ function AdminPage() {
         let rejectedItems = data.reduce((total, item) => total + (item.order_status == "rejected" ? 1 : 0), 0)
         let amount = data.reduce((total, item) => total + item.prd_total_amount, 0)
         let quantity = data.reduce((total, item) => total + item.prd_total_qty, 0)
-        setSummaryDetails({ total_users: user, total_items: items, total_amount: amount, total_quantity: quantity,pendingItems, completedItems,rejectedItems})
+        setSummaryDetails({ total_users: user, total_items: items, total_amount: amount, total_quantity: quantity, pendingItems, completedItems, rejectedItems })
     }
 
     const fetchOders = async () => {
@@ -59,15 +59,16 @@ function AdminPage() {
 
     const handleChange = ({ productId, type }) => {
         if (type === "all") {
-            let pendingData = orders.map(ele => ele.order_status === "pending" && ele.id);
-            if (changeStatus.length === orders.length) {
+            let pendingData = orders.filter(ele => ele.order_status === "pending" && ele.id);
+            if (changeStatus.length === pendingData.length) {
                 setChangeStatus([]);
             } else {
-                setChangeStatus(pendingData);
+                setChangeStatus(pendingData.map(ele => ele.id));
             }
         } else {
             setChangeStatus(pre => pre.includes(productId) ? pre.filter(ele => ele !== productId) : [...pre, productId])
         }
+        console.log(changeStatus)
     }
 
     const handleUpdateStatus = async (status) => {
@@ -78,6 +79,7 @@ function AdminPage() {
                 let a = orders.map(ele => changeStatus.includes(ele.id) ? ({ ...ele, order_status: status }) : ele)
                 setOders(a);
                 setChangeStatus([]);
+                summaryDetailsFill(a)
             }
         } catch (error) {
             toast.error("Error to fetch data")
@@ -98,7 +100,7 @@ function AdminPage() {
                                     <div className='flex items-center justify-between mb-2'>
                                         <div className='sm:px-3'>
                                             <p onClick={() => handleChange({ type: "all" })}
-                                                className='sm:w-28 text-center rounded-md p-1 sm:px-3 sm:py-2 text-sm font-semibold shadow-sm sm:ml-3 border-blue-600 border-2 text-blue-600 hover:bg-blue-600 hover:text-white transition-all'
+                                                className='cursor-pointer sm:w-28 text-center rounded-md p-1 sm:px-3 sm:py-2 text-sm font-semibold shadow-sm sm:ml-3 border-blue-600 border-2 text-blue-600 hover:bg-blue-600 hover:text-white transition-all'
                                             >Select All</p>
                                         </div>
                                         <div className='flex'>
@@ -122,16 +124,16 @@ function AdminPage() {
                                                     leaveFrom="transform opacity-100 scale-100"
                                                     leaveTo="transform opacity-0 scale-95"
                                                 >
-                                                    <Menu.Items className="absolute top-7 right-90 z-10 mt-2 w-48  origin-top-right rounded-md bg-white  text-black shadow-lg ring-1 ring-black  ring-opacity-5 focus:outline-none">
+                                                    <Menu.Items className="absolute top-7 right-90 mt-2 w-48  origin-top-right rounded-md bg-white  text-black shadow-lg ring-1 ring-black  ring-opacity-5 focus:outline-none">
                                                         <Menu.Item>
                                                             <div className='p-2'>
                                                                 <h1 className='mb-2 py-1 px-2  border rounded'>Total Users - {summaryDetails.total_users}</h1>
                                                                 <h1 className='mb-2 py-1 px-2  border rounded'>Total Items - {summaryDetails.total_items}</h1>
                                                                 <div className='border mb-2 py-1 px-2'>
-                                                            <div className='text-blue-900'>Pending Items - {summaryDetails.pendingItems}</div>
-                                                            <div className='text-green-900 '>Completed Items - {summaryDetails.completedItems}</div>
-                                                            <div className='text-red-900 ' >Rejected Items - {summaryDetails.rejectedItems}</div>
-                                                        </div>
+                                                                    <div className='text-blue-900'>Pending Items - {summaryDetails.pendingItems}</div>
+                                                                    <div className='text-green-900 '>Completed Items - {summaryDetails.completedItems}</div>
+                                                                    <div className='text-red-900 ' >Rejected Items - {summaryDetails.rejectedItems}</div>
+                                                                </div>
                                                                 <h1 className='mb-2 py-1 px-2  border rounded'>Total Quantity - {summaryDetails.total_quantity}</h1>
                                                                 <h1 className='mb-2 py-1 px-2  border rounded'>Total Amount - ₹{summaryDetails.total_amount} </h1>
                                                             </div>

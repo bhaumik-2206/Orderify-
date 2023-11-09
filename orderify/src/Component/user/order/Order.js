@@ -76,9 +76,9 @@ const Order = () => {
 
     function summaryDetailsFiller(arrayOfItem) {
         console.log(arrayOfItem)
-        let pendingItems = arrayOfItem.reduce((total, item) => total + (item.order_status == "pending" ? 1 : 0), 0)
-        let completedItems = arrayOfItem.reduce((total, item) => total + (item.order_status == "completed" ? 1 : 0), 0)
-        let rejectedItems = arrayOfItem.reduce((total, item) => total + (item.order_status == "rejected" ? 1 : 0), 0)
+        let pendingItems = arrayOfItem.reduce((total, item) => total + (item.order_status === "pending" ? 1 : 0), 0)
+        let completedItems = arrayOfItem.reduce((total, item) => total + (item.order_status === "completed" ? 1 : 0), 0)
+        let rejectedItems = arrayOfItem.reduce((total, item) => total + (item.order_status === "rejected" ? 1 : 0), 0)
         let items = arrayOfItem.length
         let amount = arrayOfItem.reduce((total, item) => total + item.prd_total_amount, 0)
         let quantity = arrayOfItem.reduce((total, item) => total + item.prd_total_qty, 0)
@@ -99,12 +99,6 @@ const Order = () => {
             : Object.keys(orders).length === 0 ? <h1 className="text-center m-3 text-3xl text-blue-900">Data is Empty</h1>
                 :
                 <div className='mx-auto max-w-screen-xl relative w-full px-2 sm:px-6 lg:px-8'>
-                    {/* {buyAgainOrder.length > 0 && <div>
-                        <button
-                            onClick={() => handleBuyAgain()}
-                            className="absolute -top-3 right-10 sm:w-auto mx-auto mt-3 bg-indigo-600 sm:ms-auto hover:bg-indigo-700 cursor-pointer flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-lg font-medium text-white shadow-sm"
-                        >Order</button>
-                    </div>} */}
                     {Object.keys(orders).map((item, index) => (
                         <div key={index}>
                             <div className='max-w-7xl mx-auto m-2 block text-center sm:h-12 sm:flex justify-between items-center mt-3'>
@@ -125,7 +119,7 @@ const Order = () => {
                                             leaveFrom="transform opacity-100 scale-100"
                                             leaveTo="transform opacity-0 scale-95"
                                         >
-                                            <Menu.Items className="absolute top-7 right-90 z-10 mt-2 w-fit  origin-top-right rounded-md bg-white  text-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            <Menu.Items className="absolute top-7 right-90 mt-2 w-fit  origin-top-right rounded-md bg-white  text-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                 <Menu.Item>
                                                     <div className='p-2 text-start'>
                                                         {/* {console.log(orders[item])} */}

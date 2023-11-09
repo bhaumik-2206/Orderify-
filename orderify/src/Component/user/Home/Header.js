@@ -100,7 +100,7 @@ export default function Header({ role }) {
                                 <Transition
                                     as={Fragment}
                                 >
-                                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <Menu.Items className="absolute right-0 z-20 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <Menu.Item>
                                             <Link
                                                 to="/profile"
@@ -121,7 +121,7 @@ export default function Header({ role }) {
                 </div>
                 {/* {role === "user" ? */}
                     <div className=' bg-gray-700  shadow-xl py-1'>
-                        <Menu as="div" className="relative z-50 px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl flex  justify-end">
+                        <Menu as="div" className="relative z-10 px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl flex  justify-end">
                             <div>
                                 <Menu.Button  onClick={() => timerRef.current && timerRef.current.startCountDown()} className="relative flex text-white bg-black rounded px-2 py-1 text-sm">
                                     {role !== 'admin' ? 'Timer' : 'Set Time'}
