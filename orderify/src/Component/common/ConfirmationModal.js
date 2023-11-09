@@ -6,13 +6,13 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const values = {
-        setTime:{
-            title:'Set Time',
-            message:'Are you sure you want to set time',
-            button:'Set',
+        setTime: {
+            title: 'Set Time',
+            message: 'Are you sure you want to set time',
+            button: 'Set',
             color: "bg-sky-600",
             colorHover: "hover:bg-sky-500",
-            rounded:"bg-sky-100",
+            rounded: "bg-sky-100",
         },
         delete: {
             title: "Invisible Item",
@@ -20,7 +20,7 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
             button: "invisible",
             color: "bg-red-600",
             colorHover: "hover:bg-red-500",
-            rounded:"bg-red-100",
+            rounded: "bg-red-100",
         },
         order: {
             title: "Order Item",
@@ -28,7 +28,7 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
             button: "Order",
             color: "bg-sky-700",
             colorHover: "hover:bg-sky-600",
-            rounded:"bg-sky-100",
+            rounded: "bg-sky-100",
         },
         logOut: {
             title: "Log out account",
@@ -36,7 +36,7 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
             button: "Log out",
             color: "bg-red-600",
             colorHover: "hover:bg-red-500",
-            rounded:"bg-red-100",
+            rounded: "bg-red-100",
         },
         remove: {
             title: "Remove Item",
@@ -44,7 +44,7 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
             button: "Remove",
             color: "bg-red-600",
             colorHover: "hover:bg-red-500",
-            rounded:"bg-red-100",
+            rounded: "bg-red-100",
         },
         completed: {
             title: "Accept Item",
@@ -52,7 +52,7 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
             button: "Accept",
             color: "bg-green-600",
             colorHover: "hover:bg-green-500",
-            rounded:"bg-green-100",
+            rounded: "bg-green-100",
         },
         rejected: {
             title: "Reject Item",
@@ -60,7 +60,7 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
             button: "Reject",
             color: "bg-red-600",
             colorHover: "hover:bg-red-500",
-            rounded:"bg-red-100",
+            rounded: "bg-red-100",
         },
         pending: {
             title: "Pending Item",
@@ -68,7 +68,7 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
             button: "Pending",
             color: "bg-blue-600",
             colorHover: "hover:bg-blue-500",
-            rounded:"bg-blue-100",
+            rounded: "bg-blue-100",
         },
     }
 
@@ -114,7 +114,7 @@ const ConfirmationModal = ({ show, setShow, handleSubmit, data = null, type }) =
                                                     values[type].button
                                             }
                                         </button>
-                                        <button type="button" onClick={() => setShow(false)} className={`mt-3 w-full sm:w-28 inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover-bg-gray-50 sm:mt-0`}>Cancel</button>
+                                        <button disabled={loading} type="button" onClick={() => setShow(false)} className={`${loading && "cursor-not-allowed"} mt-3 w-full sm:w-28 inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover-bg-gray-50 sm:mt-0`}>Cancel</button>
                                     </div>
                                 </div>
                             </div>

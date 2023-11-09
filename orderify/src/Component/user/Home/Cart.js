@@ -48,7 +48,7 @@ export default function Cart({ open, setOpen }) {
       setTotalAmount(0);
       navigate("/order");
       setOpen(false);
-    } else if (response.status === "403") {
+    } else if (response.status === 403) {
       toast.error(response.message);
     } else {
       toast.error("Error to send order");

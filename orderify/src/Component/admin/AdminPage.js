@@ -100,7 +100,7 @@ function AdminPage() {
                                     <div className='flex items-center justify-between mb-2'>
                                         <div className='sm:px-3'>
                                             <p onClick={() => handleChange({ type: "all" })}
-                                                className='cursor-pointer sm:w-28 text-center rounded-md p-1 sm:px-3 sm:py-2 text-sm font-semibold shadow-sm sm:ml-3 border-blue-600 border-2 text-blue-600 hover:bg-blue-600 hover:text-white transition-all'
+                                                className={`${changeStatus.length > 0 && "hover:bg-blue-600 hover:text-white  "} cursor-pointer sm:w-28 text-center rounded-md p-1 sm:px-3 sm:py-2 text-sm font-semibold shadow-sm sm:ml-3 border-blue-600 border-2 text-blue-600 transition-all`}
                                             >Select All</p>
                                         </div>
                                         <div className='flex'>
@@ -124,7 +124,7 @@ function AdminPage() {
                                                     leaveFrom="transform opacity-100 scale-100"
                                                     leaveTo="transform opacity-0 scale-95"
                                                 >
-                                                    <Menu.Items className="absolute top-7 right-90 mt-2 w-48  origin-top-right rounded-md bg-white  text-black shadow-lg ring-1 ring-black  ring-opacity-5 focus:outline-none">
+                                                    <Menu.Items className="absolute top-7 right-90 z-[5] mt-2 w-48  origin-top-right rounded-md bg-white  text-black shadow-lg ring-1 ring-black  ring-opacity-5 focus:outline-none">
                                                         <Menu.Item>
                                                             <div className='p-2'>
                                                                 <h1 className='mb-2 py-1 px-2  border rounded'>Total Users - {summaryDetails.total_users}</h1>

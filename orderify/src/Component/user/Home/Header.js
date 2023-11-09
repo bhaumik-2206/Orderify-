@@ -47,13 +47,13 @@ export default function Header({ role }) {
             <>
                 <div className="mx-auto max-w-7xl py-0 px-2 sm:px-6 lg:px-8">
                     <div className="relative flex h-16 items-center justify-between">
-                        <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                        <div className="inset-y-0 left-0 flex items-center sm:hidden">
                             {/* Mobile menu button*/}
                             <button className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'>
                                 <i onClick={() => setIsOpenMenu(!isOpenMenu)} className={`block text-lg text-white fa-solid ${isOpenMenu ? "fa-xmark" : "fa-bars"}`}></i>
                             </button>
                         </div>
-                        <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                        <div className="flex ps-5 flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                             <div>
                                 <div onClick={() => navigate("/products")} className='cursor-pointer flex justify-center align-baseline'>
                                     <img className="h-10" alt="Your Company" src="images/LOGO.png" />
@@ -70,29 +70,45 @@ export default function Header({ role }) {
                                 </div>
                             </div>
                         </div>
-                        <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                        <div className="inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                            <Menu as="div" className="relative z-10 mx-auto max-w-7xl flex ps-1.5 sm:ps-2.5 justify-end">
+                                <div>
+                                    <Menu.Button onClick={() => { timerRef.current && timerRef.current.startCountDown(); }} className="relative bg-black w-9 h-9 sm:w-11 sm:h-11 rounded-full text-white text-lg sm:text-xl">
+                                        {/* {role !== 'admin' ? 'Timer' : 'Set Time'} */}
+                                        <i className="fa-regular fa-clock absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></i>
+                                    </Menu.Button>
+                                </div>
+                                <Transition as={Fragment}>
+                                    <Menu.Items className="absolute top-10 -right-16 z-10 mt-2 w-fit  origin-top-right rounded-md bg-gray-700  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <Menu.Item>
+                                            {role === 'admin' ? <TimeSetter /> :
+                                                <Timer ref={timerRef} endTime={time.endTime} startTime={time.startTime} />
+                                            }
+                                        </Menu.Item>
+                                    </Menu.Items>
+                                </Transition>
+                            </Menu>
                             {
                                 role === "user" ? (
-                                    <button type="button"
-                                        onClick={() => { setIsCartOpen(true); }}
-                                        className="relative rounded-full bg-black py-2 px-3 text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                                    >{cartData.length > 0 &&
-                                        <p className='absolute z-10 text-sm bg-orange-500 rounded-full px-1.5 -top-2 -right-2'>
-                                            {cartData.length}
-                                        </p>
-                                        }<i className={`fa-solid text-sm sm:text-xl ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping`}></i>
+                                    <button type="button" onClick={() => { setIsCartOpen(true); }}
+                                        className="ps-1.5 sm:ps-2.5 relative">
+                                        {cartData.length > 0 && <p className='absolute w-6 h-6 z-10 text-sm bg-orange-500 rounded-full px-1.5 -top-2 -right-2.5'>
+                                            <p className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>{cartData.length}</p>
+                                        </p>}
+                                        <div className='relative bg-black w-9 h-9 sm:w-11 sm:h-11 rounded-full text-white text-lg sm:text-xl'>
+                                            <i className={`fa-solid text-sm sm:text-xl ${cartData.length > 0 ? "text-orange-500" : "text-white"} fa-cart-shopping absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}></i>
+                                        </div>
                                     </button>
                                 ) : null
                             }
-
                             <Cart open={isCartOpen} setOpen={setIsCartOpen} />
 
                             {/* Profile dropdown */}
-                            <Menu as="div" className="relative ml-3">
+                            <Menu as="div" className="relative ps-1.5 sm:ps-2.5">
                                 <div>
                                     <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                         {/* <i className="fa-solid fa-user bg-black px-3 sm:px-3 py-2 sm:py-1.5 text-white rounded-full text-sm sm:text-lg"></i> */}
-                                        <div className='relative bg-black w-11 h-11 rounded-full text-white text-xl'>
+                                        <div className='relative bg-black w-9 h-9 sm:w-11 sm:h-11 rounded-full text-white text-lg sm:text-xl'>
                                             <p className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>{userData.user_fname.charAt(0).toUpperCase() + userData.user_lname.charAt(0).toUpperCase()}</p>
                                         </div>
                                     </Menu.Button>
@@ -119,28 +135,6 @@ export default function Header({ role }) {
                         </div>
                     </div>
                 </div>
-                {/* {role === "user" ? */}
-                    <div className=' bg-gray-700  shadow-xl py-1'>
-                        <Menu as="div" className="relative z-10 px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl flex  justify-end">
-                            <div>
-                                <Menu.Button  onClick={() => timerRef.current && timerRef.current.startCountDown()} className="relative flex text-white bg-black rounded px-2 py-1 text-sm">
-                                    {role !== 'admin' ? 'Timer' : 'Set Time'}
-                                </Menu.Button>
-                            </div>
-                            <Transition
-                                as={Fragment}
-                            >
-                                <Menu.Items className="absolute top-6 right-90 z-10 mt-2 w-fit  origin-top-right rounded-md bg-gray-700  shadow-lg ring-1 ring-black     ring-opacity-5 focus:outline-none">
-                                    <Menu.Item>
-                                        {role === 'admin' ? <TimeSetter /> : 
-                                        <Timer ref={timerRef} endTime={time.endTime} startTime={time.startTime} />
-                                        }
-                                    </Menu.Item>
-                                </Menu.Items>
-                            </Transition>
-                        </Menu>
-                    </div>
-                {/* } */}
                 {isOpenMenu &&
                     <div className='block sm:hidden space-y-1 px-2 pb-3 pt-2'>
                         {navigation.map((item, index) => (

@@ -40,7 +40,7 @@ const TimeSetter = forwardRef(({ }, ref) => {
         }
     }
     return (
-        <div className='flex h-30 flex-col md:flex-row justify-center items-center bg-gray-800 w-fit rounded px-5 py-3'>
+        <div className='flex h-30 w-52 flex-col md:flex-row justify-center items-center bg-gray-800 rounded px-5 py-3'>
             <ConfirmationModal show={isSetTimeConfShow} setShow={setIsSetTimeConfShow} handleSubmit={handleChangeTime} type='setTime' />
             <div className="text-start flex flex-col gap-2">
                 <div>
