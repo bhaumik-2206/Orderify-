@@ -82,6 +82,9 @@ function Products() {
         fetchData(pageObj);
         currentPageRef.current = event.selected + 1;
         setLoading(true);
+        console.log(newOffset + ' newofset')
+        console.log(itemOffset + ' itemofset')
+        console.log(currentPageRef.current + ' curr')
     };
 
     //open  product  add and edit model 
@@ -268,11 +271,11 @@ function Products() {
                         currentPageRef={currentPageRef}
                         setSearch={setSearch}
                     />
-                    {(products.length !== 0) ? <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-6">
+                    {(products.length !== 0) ? <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-6 md:pb-10 pb-20  xl:pb-auto">
                         {products.map((product) => (
                             <div
                                 key={product._id}
-                                className={`flex relative flex-col pb-2  justify-between rounded-lg overflow-hidden shadow-lg transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : "border-2"
+                                className={`flex relative flex-col pb-2  justify-between rounded-lg overflow-hidden shadow-md transition-transform ${selectedProducts.includes(product._id) ? "border-2 border-blue-600" : "border-2"
                                     } ${!product.prd_is_visible ? "bg-gray-300" : "bg-white"}`} >
                                 <div>
                                     <div
@@ -411,16 +414,23 @@ function Products() {
             }
             {
                 products.length > 0 && <div className={`${loading ? "hidden" : "block"}`}>
-                    <div className="flex justify-between items-center px-3 flex-col md:flex-row max-w-7xl mx-auto ps-8">
+                    <div className=" fixed xl:static bottom-0 w-full xl:shadow-none shadow-[0_35px_60px_-15px_rgba(0,0,0,0.7)] bg-white flex justify-between items-center px-3 sm:pt-0 pt-2 flex-col md:flex-row max-w-7xl mx-auto sm:px-8 ">
 
                         <div className="sm:text-lg text-sm ">
                             {search ?
                                 <p>Showing  {data.total_products} results</p> :
-                                <p>Showing {itemOffset + 1} to{" "}
-                                    {totalPerPage > data.total_products
-                                        ? data.total_products
-                                        : totalPerPage}{" "}
-                                    of {data.total_products} results</p>
+                                <p>
+                                Showing{" "}
+                                {currentPageRef.current > 1
+                                    ? (currentPageRef.current - 1) * itemsPerPage + 1
+                                    : 1}{" "}
+                                to{" "}
+                                {Math.min(
+                                    currentPageRef.current * itemsPerPage,
+                                    data.total_products
+                                )}{" "}
+                                of {data.total_products} results
+                            </p>
                             }
                         </div>
                         <PaginationComponent
