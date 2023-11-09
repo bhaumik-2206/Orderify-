@@ -28,10 +28,10 @@ const ProtectedLogIn = ({ Component}) => {
                     if (storedUserData.user_role === 'admin') {
                         // navigate('/orders');
                         // location.pathname==="/login" ? navigate("/orders") : navigate(loacation.pathname)
-                        navigate(location.pathname === "/login" || "/" || "/order" ? "/orders"  : location.pathname);
+                        navigate(location.pathname === "/login" ||location.pathname === "/"  ? "/orders"  : location.pathname);
                     } else {
                         // navigate('/products');
-                        navigate(location.pathname === "/login"|| "/" || "/orders" ? "/products" : location.pathname);
+                        navigate(location.pathname === "/login"||location.pathname === "/"  ? "/products" : location.pathname);
 
                     }
                 } else {
