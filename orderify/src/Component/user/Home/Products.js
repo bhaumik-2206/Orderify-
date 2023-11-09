@@ -414,21 +414,18 @@ function Products() {
                     <div className=" fixed xl:static bottom-0 w-full xl:shadow-none shadow-[0_35px_60px_-15px_rgba(0,0,0,0.7)] bg-white flex justify-between items-center px-3 sm:pt-0 pt-2 flex-col md:flex-row max-w-7xl mx-auto sm:px-8 ">
 
                         <div className="sm:text-lg text-sm ">
-                            {search ?
-                                <p>Showing  {data.total_products} results</p> :
-                                <p>
-                                    Showing{" "}
-                                    {currentPageRef.current > 1
-                                        ? (currentPageRef.current - 1) * itemsPerPage + 1
-                                        : 1}{" "}
-                                    to{" "}
-                                    {Math.min(
-                                        currentPageRef.current * itemsPerPage,
-                                        data.total_products
-                                    )}{" "}
-                                    of {data.total_products} results
-                                </p>
-                            }
+                            <p>
+                                Showing{" "}
+                                {currentPageRef.current > 1
+                                    ? (currentPageRef.current - 1) * itemsPerPage + 1
+                                    : 1}{" "}
+                                to{" "}
+                                {Math.min(
+                                    currentPageRef.current * itemsPerPage,
+                                    data.total_products
+                                )}{" "}
+                                of {data.total_products} results
+                            </p>
                         </div>
                         <PaginationComponent
                             handlePageClick={handlePageClick}
