@@ -1,10 +1,13 @@
 import jwtDecode from 'jwt-decode';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const ProtectedLogIn = ({ Component }) => {
+const ProtectedLogIn = ({ Component}) => {
+
     const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location)
     // const [auth, setAuth] = useState('');
     const [userData, setUserData] = useState({});
     const token = localStorage.getItem('auth');
@@ -21,10 +24,15 @@ const ProtectedLogIn = ({ Component }) => {
                 if (decodedToken) {
                     // setAuth(true);
                     setUserData(decodedToken);
+
                     if (storedUserData.user_role === 'admin') {
-                        navigate('/orders');
+                        // navigate('/orders');
+                        // location.pathname==="/login" ? navigate("/orders") : navigate(loacation.pathname)
+                        navigate(location.pathname === "/login" || location.pathname === "/"  ? "/orders" : location.pathname);
                     } else {
-                        navigate('/products');
+                        // navigate('/products');
+                        navigate(location.pathname === "/login"|| location.pathname === "/" ? "/products" : location.pathname);
+
                     }
                 } else {
                     navigate('/login');
@@ -33,12 +41,11 @@ const ProtectedLogIn = ({ Component }) => {
                 console.error('Invalid token:', error);
                 toast.error("Invalid or Expire token ")
                 navigate('/login');
-                // setAuth(false)
             }
         } else {
             navigate('/login');
         }
-    }, [token]);
+    }, [token,location.pathname]);
     return (
         userData ? <Component userData={userData} /> :null  
     );

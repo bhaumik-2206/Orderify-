@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './home/Header';
 
-const Dashboard = ({userData}) => {
+const Dashboard = ({ userData }) => {
     const [userDatas, setUserData] = useState(null);
 
     useEffect(() => {
@@ -12,10 +12,6 @@ const Dashboard = ({userData}) => {
         }
     }, []);
 
-
-    if (!userDatas) {
-        return <p>Access denied.</p>;
-    }
 
     return (
         <>
