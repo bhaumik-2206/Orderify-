@@ -57,7 +57,7 @@ export default function Header({ role }) {
                             <div>
                                 <div onClick={() => navigate("/products")} className='cursor-pointer flex justify-center align-baseline'>
                                     <img className="h-10" alt="Your Company" src="images/LOGO.png" />
-                                    <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1 mr-10 sm:mr-0 select-none'>rderify</p>
+                                    <p className='text-3xl font-bold ms-0.5 text-amber-700 pt-1 mr-[26px] sm:mr-0 select-none'>rderify</p>
                                 </div>
                             </div>
                             <div className="hidden sm:ml-6 sm:block">
