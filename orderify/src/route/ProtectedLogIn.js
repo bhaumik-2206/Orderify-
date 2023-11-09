@@ -7,7 +7,7 @@ const ProtectedLogIn = ({ Component}) => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location)
+    // console.log(location)
     // const [auth, setAuth] = useState('');
     const [userData, setUserData] = useState({});
     const token = localStorage.getItem('auth');
@@ -45,7 +45,7 @@ const ProtectedLogIn = ({ Component}) => {
         } else {
             navigate('/login');
         }
-    }, [token,location.pathname]);
+    }, [token]);
     return (
         userData ? <Component userData={userData} /> :null  
     );
