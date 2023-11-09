@@ -75,7 +75,6 @@ const Order = () => {
     }
 
     function summaryDetailsFiller(arrayOfItem) {
-        console.log(arrayOfItem)
         let pendingItems = arrayOfItem.reduce((total, item) => total + (item.order_status === "pending" ? 1 : 0), 0)
         let completedItems = arrayOfItem.reduce((total, item) => total + (item.order_status === "completed" ? 1 : 0), 0)
         let rejectedItems = arrayOfItem.reduce((total, item) => total + (item.order_status === "rejected" ? 1 : 0), 0)

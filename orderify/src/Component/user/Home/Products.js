@@ -61,10 +61,6 @@ function Products() {
         return () => clearTimeout(timer);
     }, [search.trim()]);
 
-    // useEffect(() => {
-    //     userData.user_role === "admin" && getTime();
-    // }, [])
-
 
     //PAGINATION FUNCTION
     const handlePageClick = async (event) => {
@@ -72,7 +68,6 @@ function Products() {
         setItemOffset(newOffset);
 
         const newPage = Number(event.selected + 1);
-        console.log(newPage, currentPageRef.current)
         if (newPage !== currentPageRef.current) {
             // Check if the selected page is different from the current page
             const pageObj = search
@@ -412,7 +407,6 @@ function Products() {
             {
                 products.length > 0 && <div className={`${loading ? "hidden" : "block"}`}>
                     <div className=" fixed xl:static bottom-0 w-full xl:shadow-none shadow-[0_35px_60px_-15px_rgba(0,0,0,0.7)] bg-white flex justify-between items-center px-3 sm:pt-0 pt-2 flex-col md:flex-row max-w-7xl mx-auto sm:px-8 ">
-
                         <div className="sm:text-lg text-sm ">
                             <p>
                                 Showing{" "}
