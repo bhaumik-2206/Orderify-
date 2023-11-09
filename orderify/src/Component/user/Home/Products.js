@@ -67,24 +67,21 @@ function Products() {
 
 
     //PAGINATION FUNCTION
-    const handlePageClick = (event) => {
-        const newOffset =
-            (event.selected * itemsPerPage) % data.total_products;
+    const handlePageClick = async (event) => {
+        const newOffset = (event.selected * itemsPerPage) % data.total_products;
         setItemOffset(newOffset);
-        const pageObj = search ? {
-            limit: itemsPerPage,
-            page: Number(event.selected + 1),
-            search
-        } : {
-            limit: itemsPerPage,
-            page: Number(event.selected + 1),
+
+        const newPage = Number(event.selected + 1);
+        console.log(newPage, currentPageRef.current)
+        if (newPage !== currentPageRef.current) {
+            // Check if the selected page is different from the current page
+            const pageObj = search
+                ? { limit: itemsPerPage, page: newPage, search }
+                : { limit: itemsPerPage, page: newPage };
+            fetchData(pageObj);
+            setLoading(true);
+            currentPageRef.current = newPage;
         }
-        fetchData(pageObj);
-        currentPageRef.current = event.selected + 1;
-        setLoading(true);
-        console.log(newOffset + ' newofset')
-        console.log(itemOffset + ' itemofset')
-        console.log(currentPageRef.current + ' curr')
     };
 
     //open  product  add and edit model 
@@ -420,17 +417,17 @@ function Products() {
                             {search ?
                                 <p>Showing  {data.total_products} results</p> :
                                 <p>
-                                Showing{" "}
-                                {currentPageRef.current > 1
-                                    ? (currentPageRef.current - 1) * itemsPerPage + 1
-                                    : 1}{" "}
-                                to{" "}
-                                {Math.min(
-                                    currentPageRef.current * itemsPerPage,
-                                    data.total_products
-                                )}{" "}
-                                of {data.total_products} results
-                            </p>
+                                    Showing{" "}
+                                    {currentPageRef.current > 1
+                                        ? (currentPageRef.current - 1) * itemsPerPage + 1
+                                        : 1}{" "}
+                                    to{" "}
+                                    {Math.min(
+                                        currentPageRef.current * itemsPerPage,
+                                        data.total_products
+                                    )}{" "}
+                                    of {data.total_products} results
+                                </p>
                             }
                         </div>
                         <PaginationComponent
