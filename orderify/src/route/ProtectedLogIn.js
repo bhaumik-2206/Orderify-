@@ -45,7 +45,7 @@ const ProtectedLogIn = ({ Component }) => {
         } else {
             navigate('/login');
         }
-    }, [token]);
+    }, [token,location.pathname]);
     return (
         userData ? <Component userData={userData} /> : null
     );
