@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
 
-const Timer = forwardRef(({ endTime, startTime }, ref) => {
+const Timer = forwardRef(({ end_time, start_time }, ref) => {
   const [countDownTime, setCountDownTime] = useState({
     hours: "00",
     minutes: "00",
@@ -18,19 +18,19 @@ const Timer = forwardRef(({ endTime, startTime }, ref) => {
     const targetDate = new Date();
     const startDate = new Date();
     
-    targetDate.setHours(endTime.split(":")[0], endTime.split(":")[1], endTime.split(":")[2]); // Set the target time
-    startDate.setHours(startTime.split(":")[0], startTime.split(":")[1], startTime.split(":")[2]); // Set the target time
+    targetDate.setHours(end_time.split(":")[0], end_time.split(":")[1], end_time.split(":")[2]); // Set the target time
+    startDate.setHours(start_time.split(":")[0], start_time.split(":")[1], start_time.split(":")[2]); // Set the target time
 
     // console.log(startDate)
     // if(currentDate > targetDate)
     if(currentDate < startDate){
       // targetDate.setDate(targetDate.getDate());
-      targetDate.setHours(startTime.split(":")[0], startTime.split(":")[1], startTime.split(":")[2])
+      targetDate.setHours(start_time.split(":")[0], start_time.split(":")[1], start_time.split(":")[2])
       setIsShopOpen(false);
     }else{
       if (currentDate > targetDate) {
         targetDate.setDate(targetDate.getDate() + 1);
-        targetDate.setHours(startTime.split(":")[0], startTime.split(":")[1], startTime.split(":")[2])
+        targetDate.setHours(start_time.split(":")[0], start_time.split(":")[1], start_time.split(":")[2])
         setIsShopOpen(false);
       }else{
         setIsShopOpen(true)

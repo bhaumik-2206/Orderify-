@@ -12,7 +12,7 @@ import TimeSetter from '../../admin/TimeSetter';
 
 const navigationUser = [
     { name: 'Products', to: '/products', current: true },
-    { name: 'Orders', to: '/order', current: false },
+    { name: 'Orders', to: '/order-history', current: false },
 ]
 const navigationAdmin = [
     { name: 'Orders', to: '/orders', current: false },
@@ -20,7 +20,7 @@ const navigationAdmin = [
 ]
 export default function Header({ role }) {
     const userData = JSON.parse(localStorage.getItem("userData"));
-    const [time, setTime] = useState({ startTime: "", endTime: "" })
+    const [time, setTime] = useState({ start_time: "", end_time: "" })
     const { cartData, setIsCartOpen, isCartOpen } = useContext(CartDataContext);
     const [isLogoutShow, setIsLogoutShow] = useState(false);
     const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -29,14 +29,14 @@ export default function Header({ role }) {
     const navigation = role === 'admin' ? navigationAdmin : navigationUser;
 
     useEffect(() => {
-        userData.user_role === "user" && getTime();
+        getTime();
     }, []);
 
     const getTime = async () => {
         try {
             let response = await fetchApi({ url: API_ENDPOINTS.TIMER, method: 'GET', isAuthRequired: true })
-            console.log(response.data);
-            setTime({ endTime: response.data.end_time, startTime: response.data.start_time });
+            // console.log(response.data);
+            setTime({ end_time: response.data.end_time, start_time: response.data.start_time });
         } catch (error) {
             console.log(error)
         }
@@ -73,7 +73,7 @@ export default function Header({ role }) {
                         <div className="inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                             <Menu as="div" className="relative z-10 mx-auto max-w-7xl flex ps-1.5 sm:ps-2.5 justify-end">
                                 <div>
-                                    <Menu.Button onClick={() => { timerRef.current && timerRef.current.startCountDown(); }} className="relative bg-black w-9 h-9 sm:w-11 sm:h-11 rounded-full text-white text-lg sm:text-xl">
+                                    <Menu.Button disabled={time.start_time === ""} onClick={() => { timerRef.current && timerRef.current.startCountDown(); }} className="relative bg-black w-9 h-9 sm:w-11 sm:h-11 rounded-full text-white text-lg sm:text-xl">
                                         {/* {role !== 'admin' ? 'Timer' : 'Set Time'} */}
                                         <i className="fa-regular fa-clock absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></i>
                                     </Menu.Button>
@@ -81,8 +81,8 @@ export default function Header({ role }) {
                                 <Transition as={Fragment}>
                                     <Menu.Items className="absolute top-10 -right-16 z-10 mt-2 w-fit  origin-top-right rounded-md bg-gray-700  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <Menu.Item>
-                                            {role === 'admin' ? <TimeSetter /> :
-                                                <Timer ref={timerRef} endTime={time.endTime} startTime={time.startTime} />
+                                            {role === 'admin' ? <TimeSetter time={time} setTime={setTime} /> :
+                                                <Timer ref={timerRef} end_time={time.end_time} start_time={time.start_time} />
                                             }
                                         </Menu.Item>
                                     </Menu.Items>

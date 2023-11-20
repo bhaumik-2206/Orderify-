@@ -21,22 +21,22 @@ export default function ProductModel({ open, setOpen, fetchData, mode, updatePro
 
     const handleSubmit = async (values) => {
         setAPiSend(true);
-        let value = {
-            prd_id: values.prd_id,
-            prd_name: values.prd_name,
-            prd_price: values.prd_price,
-            prd_is_visible: values ? values.prd_is_visible : false
-        }
-        let postData = values.prd_img.trim() ? {
-            ...value,
-            prd_img: values.prd_img,
-        } : value
+        // let value = {
+        //     prd_id: values.prd_id,
+        //     prd_name: values.prd_name,
+        //     prd_price: values.prd_price,
+        //     prd_is_visible: values ? values.prd_is_visible : false
+        // }
+        // let postData = values.prd_img.trim() ? {
+        //     ...value,
+        //     prd_img: values.prd_img,
+        // } : value
 
         try {
             const response = await fetchApi({
                 url: API_ENDPOINTS.PRODUCT_ADD,
                 method: mode === "add" ? 'POST' : 'PUT',
-                data: postData, isAuthRequired: true
+                data: values, isAuthRequired: true
             });
             if (response.status === 200) {
                 await fetchData({

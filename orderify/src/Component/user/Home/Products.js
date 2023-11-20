@@ -56,7 +56,6 @@ function Products() {
                 limit: itemsPerPage,
                 page: currentPageRef.current,
             });
-
         }
         return () => clearTimeout(timer);
     }, [search.trim()]);

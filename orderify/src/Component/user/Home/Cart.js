@@ -46,7 +46,7 @@ export default function Cart({ open, setOpen }) {
       toast.success("Order sent successfully");
       setCartData([]);
       setTotalAmount(0);
-      navigate("/order");
+      navigate("/order-history");
       setOpen(false);
     } else if (response.status === 403) {
       toast.error(response.message);

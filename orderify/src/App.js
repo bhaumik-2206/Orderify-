@@ -36,7 +36,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/orders" element={<AdminPage />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/order" element={<Order />} />
+            <Route path="/order-history" element={<Order />} />
           </Route>
           <Route path='*' element={<PageNotFound />} />
         </Routes>
