@@ -15,20 +15,25 @@ const ProtectedLogIn = ({ Component }) => {
         if (token) {
             try {
                 const decodedToken = jwtDecode(token);
-                if (decodedToken) {
+                console.log(decodedToken);
+
+                const isTokenExpired = decodedToken.exp < Date.now() / 1000;
+
+                if (!isTokenExpired) {
                     setUserData(decodedToken);
 
                     if (storedUserData.user_role === 'admin') {
-                        navigate(location.pathname === "/login" || location.pathname === "/" || location.pathname === "/order-history" ? "/orders" : location.pathname);
+                        navigate(location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/" || location.pathname === "/order-history" ? "/orders" : location.pathname);
                     } else {
-                        navigate(location.pathname === "/login" || location.pathname === "/" || location.pathname === "/orders" ? "/products" : location.pathname);
+                        navigate(location.pathname === "/login" || location.pathname === "/register"  || location.pathname === "/" || location.pathname === "/orders" ? "/products" : location.pathname);
                     }
                 } else {
+                    toast.error("Token has expired");
                     navigate('/login');
                 }
             } catch (error) {
                 console.error('Invalid token:', error);
-                toast.error("Invalid or Expire token ")
+                toast.error("Invalid or Expired token");
                 navigate('/login');
             }
         } else {
