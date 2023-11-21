@@ -21,7 +21,7 @@ const Timer = forwardRef(({ end_time, start_time }, ref) => {
     targetDate.setHours(end_time.split(":")[0], end_time.split(":")[1], end_time.split(":")[2]); // Set the target time
     startDate.setHours(start_time.split(":")[0], start_time.split(":")[1], start_time.split(":")[2]); // Set the target time
 
-    // console.log(startDate)
+    // console.log(start_time)
     // if(currentDate > targetDate)
     if(currentDate < startDate){
       // targetDate.setDate(targetDate.getDate());
@@ -73,7 +73,7 @@ const Timer = forwardRef(({ end_time, start_time }, ref) => {
 
   return (
     <div className="flex h-30 flex-col md:flex-row justify-center items-center bg-gray-800 w-fit rounded px-5 py-3">
-      <div className="flex flex-col items-center justify-center w-full h-full gap-8 sm:gap-16">
+      <div className="flex flex-col items-center  w-full h-full gap-2">
         <div className="flex flex-col justify-center gap-1 sm:gap-1">
           <div className="flex justify-between">
             <div className="text-white">Status</div>
@@ -140,6 +140,7 @@ const Timer = forwardRef(({ end_time, start_time }, ref) => {
 
           </div>
         </div>
+        <h1 className={`${isShopOpen?'text-red-600':'text-green-600'} font-semibold`}>{isShopOpen?'End Time :- '+end_time:'Start Time :- '+start_time}</h1>
       </div>
     </div>
   );
