@@ -16,7 +16,7 @@ export default function ProfileUpdateModal({ show, setShow, userData, setUserDat
         let data = {
             user_fname: values.user_fname,
             user_lname: values.user_lname,
-            user_email: values.user_email,
+            user_email: userData.user_email,
             user_phone: String(values.user_phone),
         }
         try {
@@ -80,7 +80,13 @@ export default function ProfileUpdateModal({ show, setShow, userData, setUserDat
                                                                 <form onSubmit={formik.handleSubmit}>
                                                                     <CommonInput name="user_fname" label="First Name" type="text" formik={formik} />
                                                                     <CommonInput name="user_lname" label="Last Name" type="text" formik={formik} />
-                                                                    <CommonInput name="user_email" label="Email" type="email" formik={formik} disabled={true} />
+                                                                    {/* <CommonInput name="user_email" label="Email" type="email" formik={formik} disabled={true} /> */}
+                                                                    <div>
+                                                                        <label className=" text-lg font-medium leading-5 text-gray-700 p-0.5">
+                                                                            Email
+                                                                        </label>
+                                                                        <p className='block bg-slate-100 focus:ring-indigo-600 w-full rounded-md border-0 py-1.5 ps-4  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6' >{formik.values.user_email}</p>
+                                                                    </div>
                                                                     <CommonInput name="user_phone" label="Mobile Number" type="number" formik={formik} />
                                                                     <div>
                                                                         <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
