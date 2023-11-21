@@ -15,31 +15,37 @@ const ProtectedLogIn = ({ Component }) => {
         if (token) {
             try {
                 const decodedToken = jwtDecode(token);
-                console.log(decodedToken);
 
                 const isTokenExpired = decodedToken.exp < Date.now() / 1000;
 
                 if (!isTokenExpired) {
                     setUserData(decodedToken);
+                    const adminRedirectPaths = ["/login", "/register", "/", "/order-history"];
+                    const userRedirectPaths = ["/login", "/register", "/", "/orders"];
 
-                    if (storedUserData.user_role === 'admin') {
-                        navigate(location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/" || location.pathname === "/order-history" ? "/orders" : location.pathname);
-                    } else {
-                        navigate(location.pathname === "/login" || location.pathname === "/register"  || location.pathname === "/" || location.pathname === "/orders" ? "/products" : location.pathname);
-                    }
+                    const redirectPath = storedUserData.user_role === 'admin'
+                        ? adminRedirectPaths.includes(location.pathname) ?  "/orders"  : location.pathname
+                        : userRedirectPaths.includes(location.pathname) ? "/products" : location.pathname;
+
+                    navigate(redirectPath);
+                    // if (storedUserData.user_role === 'admin') {
+                    //     navigate(location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/" || location.pathname === "/order-history" ? "/orders" : location.pathname);
+                    // } else {
+                    //     navigate(location.pathname === "/login" || location.pathname === "/register"  || location.pathname === "/" || location.pathname === "/orders" ? "/products" : location.pathname);
+                    // }
                 } else {
                     toast.error("Token has expired");
                     navigate('/login');
                 }
             } catch (error) {
                 console.error('Invalid token:', error);
-                toast.error("Invalid or Expired token");
+                toast.error("Invalid  token");
                 navigate('/login');
             }
         } else {
             navigate('/login');
         }
-    }, [token]);
+    }, [token,location.pathname]);
     return (
         userData ? <Component userData={userData} /> : null
     );
