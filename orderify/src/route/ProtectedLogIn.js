@@ -1,5 +1,6 @@
-import jwtDecode from 'jwt-decode';
 import React, { useEffect, useState } from 'react';
+
+import jwtDecode from 'jwt-decode';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -15,7 +16,6 @@ const ProtectedLogIn = ({ Component }) => {
         if (token) {
             try {
                 const decodedToken = jwtDecode(token);
-
                 const isTokenExpired = decodedToken.exp < Date.now() / 1000;
 
                 if (!isTokenExpired) {
@@ -24,7 +24,7 @@ const ProtectedLogIn = ({ Component }) => {
                     const userRedirectPaths = ["/login", "/register", "/", "/orders"];
 
                     const redirectPath = storedUserData.user_role === 'admin'
-                        ? adminRedirectPaths.includes(location.pathname) ?  "/orders"  : location.pathname
+                        ? adminRedirectPaths.includes(location.pathname) ? "/orders" : location.pathname
                         : userRedirectPaths.includes(location.pathname) ? "/products" : location.pathname;
 
                     navigate(redirectPath);
@@ -43,9 +43,16 @@ const ProtectedLogIn = ({ Component }) => {
                 navigate('/login');
             }
         } else {
+
+        }
+    }, [token, location.pathname]);
+
+    useEffect(() => {
+        if (!token) {
             navigate('/login');
         }
-    }, [token,location.pathname]);
+    }, [token])
+
     return (
         userData ? <Component userData={userData} /> : null
     );
